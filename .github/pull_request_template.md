@@ -1,5 +1,5 @@
 ---
-name: "PR Form"
+name: "[PR]"
 about: Pull Request
 title: "[Feat] 기능 요약을 작성하세요"
 ---
