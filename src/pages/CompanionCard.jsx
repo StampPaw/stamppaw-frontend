@@ -1,3 +1,6 @@
+import { User } from "lucide-react";
+import UserAvatar from "../components/ui/UserAvatar";
+
 export default function CompanionCard({
   title,
   description,
@@ -28,13 +31,9 @@ export default function CompanionCard({
 
         <div className="flex items-center justify-between mt-3">
           <div className="flex items-center gap-2">
-            <img
-              src="https://randomuser.me/api/portraits/women/65.jpg"
-              alt="author"
-              className="w-6 h-6 rounded-full object-cover"
-            />
+            <UserAvatar image={user?.profileImage} size="sm" />
             <span className="text-xs font-medium text-text">
-              {user?.nickName}
+              {user.nickName}
             </span>
           </div>
         </div>

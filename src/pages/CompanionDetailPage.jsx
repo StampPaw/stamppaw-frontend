@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import Header from "../components/ui/Header";
 import NavBar from "../components/ui/NavBar";
+import UserAvatar from "../components/ui/UserAvatar";
 
 export default function CompanionDetailPage() {
   const { id } = useParams();
@@ -35,7 +36,8 @@ export default function CompanionDetailPage() {
     <div className="min-h-screen bg-[#FFF8EE] text-text font-sans flex justify-center">
       <div className="w-full sm:max-w-[500px] flex flex-col relative mx-auto h-screen">
         {/* ✅ 상단 고정 헤더 */}
-        <div className="sticky top-0 bg-[#FFF8EE] z-20 flex items-center gap-3 p-4 shadow-sm border-b border-gray-200">
+        <Header />
+        <div className="sticky top-0 bg-[#FFF8EE] z-30 flex items-center gap-3 p-4 shadow-sm border-b border-gray-200">
           <button
             onClick={() => navigate(-1)}
             className="p-2 rounded-full hover:bg-gray-100 transition"
@@ -68,14 +70,7 @@ export default function CompanionDetailPage() {
             {/* 작성자 정보 */}
             <div className="flex items-center justify-between mb-4 text-sm text-gray-500">
               <div className="flex items-center gap-2">
-                <img
-                  src={
-                    companion.user?.profileImage ||
-                    "https://cdn-icons-png.flaticon.com/512/3177/3177440.png"
-                  }
-                  alt="author"
-                  className="w-7 h-7 rounded-full object-cover"
-                />
+                <UserAvatar image={companion.user?.profileImage} size="md" />
                 <span className="font-medium">
                   {companion.user?.nickName || "익명"}
                 </span>
