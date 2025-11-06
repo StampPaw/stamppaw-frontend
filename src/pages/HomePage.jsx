@@ -1,9 +1,7 @@
-import React from "react";
-
-// lucide-react 아이콘 (BottomNavBar 내부에서도 사용)
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { House, PawPrint, MessageCircle, Store, UserRound } from "lucide-react";
 
-// 🧩 UI 컴포넌트 import
 import Button from "../components/ui/Button";
 import Input from "../components/ui/Input";
 import Tag from "../components/ui/Tag";
@@ -20,6 +18,11 @@ import CartList from "../components/ui/CartList";
 import Carousel from "../components/ui/Carousel";
 
 export default function HomePage() {
+  const navigate = useNavigate();
+
+  // ✅ 현재 선택된 태그 상태 추가
+  const [selectedTag, setSelectedTag] = useState("전체");
+
   // 📌 하단 메뉴 데이터
   const menus = [
     { name: "홈", icon: House },
@@ -30,16 +33,28 @@ export default function HomePage() {
   ];
   const activeIndex = 0;
 
+  // ✅ 태그 클릭 핸들러
+  const handleTagClick = (tag) => {
+    setSelectedTag(tag); // 색상 반응을 위해 상태 변경
+
+    if (tag === "동행 모집") {
+      navigate("/companion");
+    } else if (tag === "전체") {
+      navigate("/"); // ✅ 전체 클릭 시 홈으로 이동
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white text-text font-sans flex justify-center">
       <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto">
-        {/* ✅ 헤더 고정 */}
         <Header />
 
-        {/* ✅ 스크롤 영역 */}
         <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-10">
           <SearchBar />
-          <Tag />
+
+          {/* ✅ 선택 상태를 전달 */}
+          <Tag selectedTag={selectedTag} onTagClick={handleTagClick} />
+
           <Button />
           <Input />
           <Card />
@@ -52,7 +67,6 @@ export default function HomePage() {
           <Profile />
         </main>
 
-        {/* ✅ 하단 네비게이션 (같은 너비로 고정) */}
         <nav className="sticky bottom-0 w-full shadow-soft">
           <NavBar menus={menus} activeIndex={activeIndex} />
         </nav>

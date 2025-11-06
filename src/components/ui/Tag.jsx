@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 
-export default function Tag() {
+export default function Tag({ selectedTag, onTagClick }) {
   const tags = ["전체", "자유", "알바 구인", "동행 모집"];
-  const [selectedTag, setSelectedTag] = useState("자유");
 
   return (
     <section>
@@ -13,7 +12,7 @@ export default function Tag() {
           return (
             <button
               key={tag}
-              onClick={() => setSelectedTag(tag)}
+              onClick={() => onTagClick(tag)}
               className={`px-3 py-1 rounded-full text-sm font-medium border transition
                 ${
                   isActive
