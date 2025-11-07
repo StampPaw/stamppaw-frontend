@@ -1,43 +1,43 @@
 import React from "react";
-import { House, PawPrint, MessageCircle, Store, UserRound } from "lucide-react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-export default function NavBar() {
-  // 메뉴 구성
-  const menus = [
-    { name: "홈", icon: House },
-    { name: "산책", icon: PawPrint },
-    { name: "채팅", icon: MessageCircle },
-    { name: "마켓", icon: Store },
-    { name: "프로필", icon: UserRound },
-  ];
+export default function NavBar({ menus = [] }) {
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const activeIndex = 0; // 예시: 홈 탭 활성화
+  // ✅ "/"는 정확히 일치해야, 나머지는 startsWith로 매칭
+  const activeIndex = menus.findIndex((menu) =>
+    menu.path === "/"
+      ? location.pathname === "/"
+      : location.pathname.startsWith(menu.path)
+  );
 
   return (
-    <section className="w-full">
-      <h2 className="text-xl font-semibold mb-4">NavBar</h2>
-      <div className="w-full border-t border-border bg-white/80 backdrop-blur-md flex justify-around py-3 shadow-soft rounded-t-xl">
-        {menus.map((menu, i) => {
-          const Icon = menu.icon;
-          const isActive = i === activeIndex;
-          return (
-            <button
-              key={menu.name}
-              className={`flex flex-col items-center text-sm transition ${
+    <div className="w-full border-t border-border bg-white/80 backdrop-blur-md flex justify-around py-3 shadow-soft rounded-t-xl">
+      {menus.map((menu, i) => {
+        const Icon = menu.icon;
+        const isActive = i === activeIndex;
+
+        return (
+          <button
+            key={menu.name}
+            onClick={() => navigate(menu.path)}
+            className={`flex flex-col items-center text-sm transition transform ${
+              isActive ? "text-primary scale-105" : "text-muted"
+            }`}
+          >
+            <Icon
+              className={`w-6 h-6 mb-1 transition-all ${
                 isActive ? "text-primary" : "text-muted"
               }`}
-            >
-              <Icon
-                className={`w-6 h-6 mb-1 transition ${
-                  isActive ? "text-primary" : "text-muted"
-                }`}
-                strokeWidth={isActive ? 2.5 : 2}
-              />
+              strokeWidth={isActive ? 2.5 : 2}
+            />
+            <span className={`${isActive ? "text-primary" : "text-muted"}`}>
               {menu.name}
-            </button>
-          );
-        })}
-      </div>
-    </section>
+            </span>
+          </button>
+        );
+      })}
+    </div>
   );
 }
