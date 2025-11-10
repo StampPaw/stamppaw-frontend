@@ -21,6 +21,8 @@ import WalkRecordPage from "./pages/walk/WalkRecordPage";
 import CompanionListPage from "./pages/CompanionListPage";
 import CompanionWritePage from "./pages/CompanionWritePage";
 import CompanionDetailPage from "./pages/CompanionDetailPage";
+import ChatRoomPage from "./pages/ChatRoomPage";
+import ChatListPage from "./pages/ChatListPage";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -31,7 +33,7 @@ export default function App() {
   return (
     <Router>
       {/* 전체 컨테이너 */}
-      <div className="relative min-h-screen bg-bg text-text font-sans overflow-hidden">
+      <div className="relative min-h-screen bg-white text-text font-sans overflow-hidden">
         {/* ✅ Header */}
         <header className="fixed top-0 left-0 w-full z-50">
           <div className="w-full sm:max-w-[500px] mx-auto">
@@ -75,6 +77,10 @@ function AppLayout() {
       <Route path="/companion" element={<CompanionListPage />} />
       <Route path="/companion/write" element={<CompanionWritePage />} />
       <Route path="/companion/:id" element={<CompanionDetailPage />} />
+
+      {/* ✅ 채팅 관련 */}
+      <Route path="/chat" element={<ChatListPage />} />
+      <Route path="/chat/:roomId" element={<ChatRoomPage />} />
     </Routes>
   );
 }

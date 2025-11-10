@@ -45,7 +45,6 @@ export default function CompanionWritePage() {
     <div className="min-h-screen bg-[#FFF8EE] text-text font-sans flex justify-center">
       <div className="w-full sm:max-w-[500px] flex flex-col relative mx-auto h-screen">
         {/* ✅ 상단 헤더 */}
-        <Header />
         <div className="flex items-center gap-3 p-4">
           <button onClick={() => navigate(-1)}>
             <ArrowLeft className="text-gray-600" />

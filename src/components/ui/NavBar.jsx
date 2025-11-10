@@ -1,4 +1,5 @@
 import React from "react";
+import { House, PawPrint, MessageCircle, Store, UserRound } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 export default function NavBar({ menus = [] }) {
