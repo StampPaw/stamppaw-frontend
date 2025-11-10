@@ -57,8 +57,6 @@ export default function App() {
         </nav>
       </div>
     </Router>
-        <Route path="/chat" element={<ChatListPage />} />
-        <Route path="/chat/:roomId" element={<ChatRoomPage />} />
   );
 }
 
@@ -79,6 +77,10 @@ function AppLayout() {
       <Route path="/companion" element={<CompanionListPage />} />
       <Route path="/companion/write" element={<CompanionWritePage />} />
       <Route path="/companion/:id" element={<CompanionDetailPage />} />
+
+      {/* ✅ 채팅 관련 */}
+      <Route path="/chat" element={<ChatListPage />} />
+      <Route path="/chat/:roomId" element={<ChatRoomPage />} />
     </Routes>
   );
 }
