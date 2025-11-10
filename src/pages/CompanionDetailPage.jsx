@@ -100,7 +100,6 @@ export default function CompanionDetailPage() {
   return (
     <div className="min-h-screen bg-white text-text font-sans flex justify-center">
       <div className="w-full sm:max-w-[500px] flex flex-col relative mx-auto h-screen">
-        <Header />
         <div className="sticky top-0 bg-[#FFF8EE] z-30 flex items-center gap-3 p-4 shadow-sm border-b border-gray-200">
           <button
             onClick={() => navigate(-1)}

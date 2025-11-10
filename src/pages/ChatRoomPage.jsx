@@ -109,7 +109,6 @@ export default function ChatRoomPage() {
 
   return (
     <div className="max-w-[500px] mx-auto bg-[#FFF9F3] min-h-screen flex flex-col">
-      <Header />
       <div className="sticky top-0 bg-[#FFF8EE] z-30 flex items-center gap-3 p-4 shadow-sm border-b border-gray-200">
         <button
           onClick={() => navigate(-1)}

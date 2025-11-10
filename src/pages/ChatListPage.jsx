@@ -35,7 +35,6 @@ export default function ChatListPage() {
     if (activeTab === "동행") {
       // ✅ 처음 들어올 때 한 번
       fetchChatRooms();
-      // ✅ 이후 3초마다 자동 업데이트
       intervalId = setInterval(fetchChatRooms, 1000);
     } else if (activeTab === "아르바이트") {
       setChatRooms([]);
@@ -49,8 +48,6 @@ export default function ChatListPage() {
   return (
     <div className="min-h-screen bg-white text-text font-sans flex justify-center">
       <div className="w-full sm:max-w-[500px] flex flex-col relative mx-auto h-screen">
-        <Header />
-
         {/* 상단 탭 */}
         <div className="sticky top-0 bg-[#FFF8EE] z-30 flex flex-col gap-3 p-4 shadow-sm border-b border-gray-200">
           <h2 className="text-lg font-semibold text-gray-800">내 채팅방</h2>
