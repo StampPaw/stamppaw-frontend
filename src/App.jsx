@@ -16,6 +16,7 @@ import useKakaoLoaderOnce from "./hooks/useKakaoLoaderOnce";
 import HomePage from "./pages/HomePage";
 import WalkPage from "./pages/walk/WalkPage";
 import WalkRecordPage from "./pages/walk/WalkRecordPage";
+import Market from "./pages/Market";
 
 // ✅ 반려동물 관련 페이지
 import CompanionListPage from "./pages/CompanionListPage";
@@ -70,6 +71,8 @@ function AppLayout() {
       {/* ✅ 산책 관련 */}
       <Route path="/walk" element={<WalkPage />} />
       <Route path="/walk/:walkId" element={<WalkRecordPage />} />
+
+      <Route path="/market" element={<Market />} />
 
       {/* ✅ 반려동물 관련 */}
       <Route path="/companion" element={<CompanionListPage />} />
