@@ -151,7 +151,15 @@ export default function CompanionDetailPage() {
                   </span>
                 )}
               </div>
-              <span>{new Date(companion.registeredAt).toLocaleString()}</span>
+              <span>
+                {new Date(companion.registeredAt).toLocaleString([], {
+                  year: "numeric",
+                  month: "2-digit",
+                  day: "2-digit",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
             </div>
 
             <p className="text-gray-700 text-base leading-relaxed whitespace-pre-line">
