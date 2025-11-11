@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Header from "../../components/ui/Header";
-import NavBar from "../../components/ui/NavBar";
 
 export default function CompanionWritePage() {
   const navigate = useNavigate();
@@ -106,11 +104,6 @@ export default function CompanionWritePage() {
             등록하기
           </button>
         </form>
-
-        {/* ✅ 하단 네비게이션 바 */}
-        <nav className="sticky bottom-0 w-full shadow-soft bg-[#FFF8EE]">
-          <NavBar />
-        </nav>
       </div>
     </div>
   );

@@ -18,11 +18,11 @@ import WalkPage from "./pages/walk/WalkPage";
 import WalkRecordPage from "./pages/walk/WalkRecordPage";
 
 // ✅ 반려동물 관련 페이지
-import CompanionListPage from "./pages/CompanionListPage";
-import CompanionWritePage from "./pages/CompanionWritePage";
-import CompanionDetailPage from "./pages/CompanionDetailPage";
-import ChatRoomPage from "./pages/ChatRoomPage";
-import ChatListPage from "./pages/ChatListPage";
+import CompanionListPage from "./pages/companion/CompanionListPage";
+import CompanionWritePage from "./pages/companion/CompanionWritePage";
+import CompanionDetailPage from "./pages/companion/CompanionDetailPage";
+import ChatRoomPage from "./pages/companion/ChatRoomPage";
+import ChatListPage from "./pages/companion/ChatListPage";
 
 export default function App() {
   useKakaoLoaderOnce({

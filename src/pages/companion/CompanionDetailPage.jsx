@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Header from "../../components/ui/Header";
-import NavBar from "../../components/ui/NavBar";
 import UserAvatar from "../../components/ui/UserAvatar";
 
 export default function CompanionDetailPage() {
@@ -161,10 +159,6 @@ export default function CompanionDetailPage() {
             </p>
           </div>
         </main>
-
-        <nav className="sticky bottom-0 w-full shadow-lg bg-[#FFF8EE] border-t border-gray-200">
-          <NavBar />
-        </nav>
       </div>
     </div>
   );
