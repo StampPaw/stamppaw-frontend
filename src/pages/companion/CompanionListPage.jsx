@@ -2,12 +2,12 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react";
 
-import Header from "../components/ui/Header";
-import NavBar from "../components/ui/NavBar";
-import SearchBar from "../components/ui/SearchBar";
-import Tag from "../components/ui/Tag";
+import Header from "../../components/ui/Header";
+import NavBar from "../../components/ui/NavBar";
+import SearchBar from "../../components/ui/SearchBar";
+import Tag from "../../components/ui/Tag";
 
-import { getAllCompanions } from "../services/companionService";
+import { getAllCompanions } from "../../services/companionService";
 import CompanionCard from "./CompanionCard";
 
 export default function CompanionListPage() {

@@ -1,5 +1,5 @@
 import { User } from "lucide-react";
-import UserAvatar from "../components/ui/UserAvatar";
+import UserAvatar from "../../components/ui/UserAvatar";
 
 export default function CompanionCard({
   title,

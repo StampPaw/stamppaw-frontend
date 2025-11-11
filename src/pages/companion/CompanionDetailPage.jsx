@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Header from "../components/ui/Header";
-import NavBar from "../components/ui/NavBar";
-import UserAvatar from "../components/ui/UserAvatar";
+import Header from "../../components/ui/Header";
+import NavBar from "../../components/ui/NavBar";
+import UserAvatar from "../../components/ui/UserAvatar";
 
 export default function CompanionDetailPage() {
   const { id } = useParams();

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/ui/Header";
-import NavBar from "../components/ui/NavBar";
-import UserAvatar from "../components/ui/UserAvatar";
+import Header from "../../components/ui/Header";
+import NavBar from "../../components/ui/NavBar";
+import UserAvatar from "../../components/ui/UserAvatar";
 
 export default function ChatListPage() {
   const [chatRooms, setChatRooms] = useState([]);

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Header from "../components/ui/Header";
-import NavBar from "../components/ui/NavBar";
+import Header from "../../components/ui/Header";
+import NavBar from "../../components/ui/NavBar";
 
 export default function CompanionWritePage() {
   const navigate = useNavigate();
