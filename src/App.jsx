@@ -24,6 +24,10 @@ import CompanionDetailPage from "./pages/CompanionDetailPage";
 import ChatRoomPage from "./pages/ChatRoomPage";
 import ChatListPage from "./pages/ChatListPage";
 
+// ✅ 로그인/회원가입 페이지
+import Login from "./pages/Auth/Login";
+import Signup from "./pages/Auth/Signup";
+
 export default function App() {
   useKakaoLoaderOnce({
     appkey: import.meta.env.VITE_KAKAO_MAP_KEY,
@@ -32,30 +36,7 @@ export default function App() {
 
   return (
     <Router>
-      {/* 전체 컨테이너 */}
-      <div className="relative min-h-screen bg-white text-text font-sans overflow-hidden">
-        {/* ✅ Header */}
-        <header className="fixed top-0 left-0 w-full z-50">
-          <div className="w-full sm:max-w-[500px] mx-auto">
-            <Header />
-          </div>
-        </header>
-
-        {/* ✅ 메인 컨텐츠 (라우팅 영역) */}
-        <main className="relative z-0 pt-[60px] pb-[80px]">
-          {/* padding으로 Header/NavBar 영역 확보 */}
-          <div className="w-full sm:max-w-[500px] mx-auto">
-            <AppLayout />
-          </div>
-        </main>
-
-        {/* ✅ NavBar */}
-        <nav className="fixed bottom-0 left-0 w-full z-50">
-          <div className="w-full sm:max-w-[500px] mx-auto shadow-soft">
-            <AppNavBar />
-          </div>
-        </nav>
-      </div>
+      <AppLayout /> {/* ✅ Router 안쪽으로 이동 */}
     </Router>
   );
 }
@@ -63,32 +44,61 @@ export default function App() {
 // 📌 내부 라우팅 설정
 function AppLayout() {
   const location = useLocation();
+  const hideLayout = ["/login", "/signup"].includes(location.pathname);
 
   return (
-    <Routes>
-      {/* ✅ 홈 */}
-      <Route path="/" element={<HomePage />} />
+    <div className="relative min-h-screen bg-white text-text font-sans overflow-hidden">
+      {/* ✅ Header (로그인/회원가입 화면에서는 숨김) */}
+      {!hideLayout && (
+        <header className="fixed top-0 left-0 w-full z-50">
+          <div className="w-full sm:max-w-[500px] mx-auto">
+            <Header />
+          </div>
+        </header>
+      )}
 
-      {/* ✅ 산책 관련 */}
-      <Route path="/walk" element={<WalkPage />} />
-      <Route path="/walk/:walkId" element={<WalkRecordPage />} />
+      {/* ✅ 메인 컨텐츠 (라우팅 영역) */}
+      <main className={`relative z-0 ${hideLayout ? "" : "pt-[60px] pb-[80px]"}`}>
+        <div className="w-full sm:max-w-[500px] mx-auto">
+          <Routes>
+            {/* ✅ 홈 */}
+            <Route path="/" element={<HomePage />} />
 
-      {/* ✅ 반려동물 관련 */}
-      <Route path="/companion" element={<CompanionListPage />} />
-      <Route path="/companion/write" element={<CompanionWritePage />} />
-      <Route path="/companion/:id" element={<CompanionDetailPage />} />
+            {/* ✅ 산책 관련 */}
+            <Route path="/walk" element={<WalkPage />} />
+            <Route path="/walk/:walkId" element={<WalkRecordPage />} />
 
-      {/* ✅ 채팅 관련 */}
-      <Route path="/chat" element={<ChatListPage />} />
-      <Route path="/chat/:roomId" element={<ChatRoomPage />} />
-    </Routes>
+            {/* ✅ 반려동물 관련 */}
+            <Route path="/companion" element={<CompanionListPage />} />
+            <Route path="/companion/write" element={<CompanionWritePage />} />
+            <Route path="/companion/:id" element={<CompanionDetailPage />} />
+
+            {/* ✅ 채팅 관련 */}
+            <Route path="/chat" element={<ChatListPage />} />
+            <Route path="/chat/:roomId" element={<ChatRoomPage />} />
+
+            {/* ✅ 로그인/회원가입 */}
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+          </Routes>
+        </div>
+      </main>
+
+      {/* ✅ NavBar (로그인/회원가입 화면에서는 숨김) */}
+      {!hideLayout && (
+        <nav className="fixed bottom-0 left-0 w-full z-50">
+          <div className="w-full sm:max-w-[500px] mx-auto shadow-soft">
+            <AppNavBar />
+          </div>
+        </nav>
+      )}
+    </div>
   );
 }
 
 // 📌 하단 네비게이션
 function AppNavBar() {
   const navigate = useNavigate();
-  const location = useLocation();
 
   const menus = [
     { name: "홈", icon: House, path: "/" },
