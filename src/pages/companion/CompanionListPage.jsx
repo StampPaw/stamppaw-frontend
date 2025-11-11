@@ -50,6 +50,7 @@ export default function CompanionListPage() {
                 description={c.content}
                 image={c.image}
                 user={c.user}
+                status={c.status}
                 onClick={() => navigate(`/companion/${c.id}`)}
               />
             ))
