@@ -71,6 +71,9 @@ function AppLayout() {
             <Route path="/walk" element={<WalkPage />} />
             <Route path="/walk/:walkId" element={<WalkRecordPage />} />
 
+            {/* ✅ 마켓 관련 */}
+            <Route path="/market" element={<Market />} />
+
             {/* ✅ 반려동물 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />
             <Route path="/companion/write" element={<CompanionWritePage />} />
@@ -108,7 +111,7 @@ function AppNavBar() {
     { name: "산책", icon: PawPrint, path: "/walk" },
     { name: "마켓", icon: Store, path: "/market" },
     { name: "채팅", icon: MessageCircle, path: "/chat" },
-    { name: "프로필", icon: UserRound, path: "/profile" },
+    { name: "프로필", icon: UserRound, path: "/login" },
   ];
 
   return <NavBar menus={menus} />;

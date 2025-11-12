@@ -10,7 +10,6 @@ const useMarketStore = create((set) => ({
   loading: false,
   error: null,
 
-  // 🔍 상품 검색
   searchProducts: async (keyword, page = 0, size = 12) => {
     set({ loading: true, error: null });
     try {
@@ -31,7 +30,6 @@ const useMarketStore = create((set) => ({
     }
   },
 
-  // 📄 상품 상세 조회
   fetchProductDetail: async (productId) => {
     set({ loading: true, error: null });
     try {
@@ -45,7 +43,6 @@ const useMarketStore = create((set) => ({
     }
   },
 
-  // 🆕 최신 메인 이미지 리스트 조회
   fetchLatestMainImages: async () => {
     set({ loading: true, error: null });
     try {
@@ -63,7 +60,6 @@ const useMarketStore = create((set) => ({
     }
   },
 
-  // 🗂️ 카테고리별 상품 조회
   fetchProductsByCategory: async (category) => {
     set({ loading: true, error: null });
     try {
