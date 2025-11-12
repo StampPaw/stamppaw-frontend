@@ -2,12 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react";
 
-import Header from "../components/ui/Header";
-import NavBar from "../components/ui/NavBar";
-import SearchBar from "../components/ui/SearchBar";
-import Tag from "../components/ui/Tag";
+import SearchBar from "../../components/ui/SearchBar";
+import Tag from "../../components/ui/Tag";
 
-import { getAllCompanions } from "../services/companionService";
+import { getAllCompanions } from "../../services/companionService";
 import CompanionCard from "./CompanionCard";
 
 export default function CompanionListPage() {
@@ -52,6 +50,7 @@ export default function CompanionListPage() {
                 description={c.content}
                 image={c.image}
                 user={c.user}
+                status={c.status}
                 onClick={() => navigate(`/companion/${c.id}`)}
               />
             ))
@@ -68,10 +67,6 @@ export default function CompanionListPage() {
         >
           <Pencil size={20} />
         </button>
-
-        <nav className="sticky bottom-0 w-full shadow-soft bg-[#FFF8EE]">
-          <NavBar />
-        </nav>
       </div>
     </div>
   );

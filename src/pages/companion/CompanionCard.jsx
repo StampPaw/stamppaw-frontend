@@ -1,5 +1,4 @@
-import { User } from "lucide-react";
-import UserAvatar from "../components/ui/UserAvatar";
+import UserAvatar from "../../components/ui/UserAvatar";
 
 export default function CompanionCard({
   title,
@@ -7,7 +6,14 @@ export default function CompanionCard({
   image,
   user,
   onClick,
+  status,
 }) {
+  const statusLabel =
+    {
+      ONGOING: "모집중",
+      CLOSED: "마감",
+    }[status] || status;
+
   return (
     <div
       onClick={onClick} // ✅ 추가
@@ -21,9 +27,20 @@ export default function CompanionCard({
       {/* ✅ 오른쪽 내용 */}
       <div className="flex flex-col justify-between p-4 flex-1">
         <div>
-          <h3 className="font-semibold text-base text-text line-clamp-1">
-            {title}
-          </h3>
+          <div className="flex items-center mb-1">
+            <h3 className="font-semibold text-base text-text line-clamp-1">
+              {title}
+            </h3>
+            <span
+              className={`text-xs font-medium px-2 py-0.5 rounded-full ml-2 ${
+                status === "ONGOING"
+                  ? "bg-green-100 text-green-700"
+                  : "bg-gray-200 text-gray-600"
+              }`}
+            >
+              {statusLabel}
+            </span>
+          </div>
           <p className="text-muted text-sm leading-relaxed line-clamp-2">
             {description}
           </p>

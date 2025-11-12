@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../components/ui/Header";
-import NavBar from "../components/ui/NavBar";
-import UserAvatar from "../components/ui/UserAvatar";
+import UserAvatar from "../../components/ui/UserAvatar";
 
 export default function ChatListPage() {
   const [chatRooms, setChatRooms] = useState([]);
@@ -157,10 +155,6 @@ export default function ChatListPage() {
             })
           )}
         </main>
-
-        <nav className="sticky bottom-0 w-full shadow-lg bg-[#FFF8EE] border-t border-gray-200">
-          <NavBar />
-        </nav>
       </div>
     </div>
   );
