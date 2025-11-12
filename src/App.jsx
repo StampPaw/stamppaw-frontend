@@ -16,6 +16,7 @@ import useKakaoLoaderOnce from "./hooks/useKakaoLoaderOnce";
 import HomePage from "./pages/HomePage";
 import WalkPage from "./pages/walk/WalkPage";
 import WalkRecordPage from "./pages/walk/WalkRecordPage";
+import Market from "./pages/Market";
 
 // ✅ 반려동물 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
@@ -58,7 +59,9 @@ function AppLayout() {
       )}
 
       {/* ✅ 메인 컨텐츠 (라우팅 영역) */}
-      <main className={`relative z-0 ${hideLayout ? "" : "pt-[60px] pb-[80px]"}`}>
+      <main
+        className={`relative z-0 ${hideLayout ? "" : "pt-[60px] pb-[80px]"}`}
+      >
         <div className="w-full sm:max-w-[500px] mx-auto">
           <Routes>
             {/* ✅ 홈 */}
