@@ -1,15 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signup } from "@/services/authService";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Signup() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    nickname: "", 
+    nickname: "",
     email: "",
     password: "",
     agree: false,
   });
+
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -45,9 +48,7 @@ export default function Signup() {
     >
       {/* 상단 헤더 */}
       <div className="text-center mb-10">
-        <h1 className="text-5xl font-bold text-[#4B3F2F] mb-3">
-          회원가입
-        </h1>
+        <h1 className="text-5xl font-bold text-[#4B3F2F] mb-3">회원가입</h1>
         <p className="text-[#6B3E1E] text-base font-medium">
           계정을 생성하여 시작해 볼까요?
         </p>
@@ -62,12 +63,14 @@ export default function Signup() {
         <div>
           <label className="block mb-1 font-semibold">닉네임</label>
           <input
-            name="nickname" 
+            name="nickname"
             type="text"
             placeholder="닉네임을 입력해주세요"
             value={formData.nickname}
             onChange={handleChange}
-            className="w-full border border-[#FFD18E] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF9F43] bg-white placeholder:text-[#A38B6D]"
+            required
+            className="w-full border border-[#FFD18E] rounded-lg px-4 py-2 focus:outline-none 
+                       focus:ring-2 focus:ring-[#FF9F43] bg-white placeholder:text-[#A38B6D]"
           />
         </div>
 
@@ -80,21 +83,39 @@ export default function Signup() {
             placeholder="name@email.com"
             value={formData.email}
             onChange={handleChange}
-            className="w-full border border-[#FFD18E] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF9F43] bg-white placeholder:text-[#A38B6D]"
+            required
+            className="w-full border border-[#FFD18E] rounded-lg px-4 py-2 focus:outline-none 
+                       focus:ring-2 focus:ring-[#FF9F43] bg-white placeholder:text-[#A38B6D]"
           />
         </div>
 
         {/* 비밀번호 입력 */}
         <div>
           <label className="block mb-1 font-semibold">비밀번호</label>
-          <input
-            name="password"
-            type="password"
-            placeholder="비밀번호를 입력해주세요"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full border border-[#FFD18E] rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-[#FF9F43] bg-white placeholder:text-[#A38B6D]"
-          />
+          <div className="relative w-full">
+            <input
+              name="password"
+              type={showPassword ? "text" : "password"}
+              placeholder="비밀번호를 입력해주세요 (6자리 이상)"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              minLength={6}
+              className="w-full border border-[#FFD18E] rounded-lg px-4 py-2 pr-10 focus:outline-none 
+                         focus:ring-2 focus:ring-[#FF9F43] bg-white placeholder:text-[#A38B6D]"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#FF9F43]"
+            >
+              {showPassword ? (
+                <EyeOff className="w-5 h-5" />
+              ) : (
+                <Eye className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </div>
 
         {/* 약관 동의 체크 */}
@@ -118,7 +139,8 @@ export default function Signup() {
         {/* 가입 버튼 */}
         <button
           type="submit"
-          className="w-full bg-[#F6C343] hover:bg-[#F5B72E] text-black font-semibold rounded-xl py-3 mt-4 shadow-soft transition-all"
+          className="w-full bg-[#F6C343] hover:bg-[#F5B72E] text-black font-semibold 
+                     rounded-lg py-2 mt-4 shadow-soft transition-all"
         >
           가입하기
         </button>
