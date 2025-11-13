@@ -2,30 +2,32 @@ import api from "./api";
 
 const marketService = {
   searchProducts: async ({ keyword, page = 0, size = 12 }) => {
-    const response = await api.post(`/api/market/products/search`, {
+    const response = await api.post(`/market/products/search`, {
       keyword,
       page,
       size,
     });
-    return response.data; // Page<ProductListRow>
+    return response.data;
   },
 
   getProductDetail: async (productId) => {
-    const response = await api.get(`/api/market/products/${productId}`);
-    return response.data; // ProductDetailResponse
+    const response = await api.get(`/market/products/${productId}`);
+    return response.data;
   },
 
   getLatestMainImageUrls: async () => {
-    const response = await api.get(`/api/market/products/latest`);
-    console.log("✅ [marketService] latest response:", response.data);
-    return response.data; // List<String>
+    const response = await api.get(`/market/products/latest`);
+    return response.data;
   },
 
-  getProductsByCategory: async (category) => {
-    const response = await api.get(`/api/market/products/category`, {
-      params: { category },
-    });
-    return response.data; // List<ProductListResponse>
+  getProductsByCategory: async () => {
+    const response = await api.get(`/market/products/grouped`);
+    return response.data;
+  },
+
+  getCategory: async () => {
+    const response = await api.get(`/market/categories`);
+    return response.data;
   },
 };
 

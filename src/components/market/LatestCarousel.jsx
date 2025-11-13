@@ -8,7 +8,7 @@ export default function LatestCarousel({ images }) {
   const prevSlide = () => setCurrent((prev) => Math.max(prev - 1, 0));
   const nextSlide = () => setCurrent((prev) => Math.min(prev + 1, total - 1));
 
-  console.log("LatestCarousel images:", images);
+  //console.log("LatestCarousel images:", images);
 
   // ✅ 4초마다 자동 슬라이드 전환
   // useEffect(() => {

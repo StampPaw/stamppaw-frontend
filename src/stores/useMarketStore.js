@@ -48,9 +48,9 @@ const useMarketStore = create((set) => ({
     try {
       const images = await marketService.getLatestMainImageUrls();
       set({ latestMainImages: images, loading: false });
-      console.log("✅ [useMarketStore] fetched images:", images);
+      //console.log("✅ [useMarketStore] fetched images:", images);
     } catch (err) {
-      console.error("🔴 [useMarketStore] fetchLatestMainImages failed:", err);
+      //console.error("🔴 [useMarketStore] fetchLatestMainImages failed:", err);
       set({
         error:
           err.response?.data?.message ||
@@ -60,15 +60,28 @@ const useMarketStore = create((set) => ({
     }
   },
 
-  fetchProductsByCategory: async (category) => {
+  fetchProductsByCategory: async () => {
     set({ loading: true, error: null });
     try {
-      const list = await marketService.getProductsByCategory(category);
+      const list = await marketService.getProductsByCategory();
       set({ categoryProducts: list, loading: false });
     } catch (err) {
       set({
         error:
           err.response?.data?.message || "Failed to fetch products by category",
+        loading: false,
+      });
+    }
+  },
+
+  fetchCategories: async () => {
+    set({ loading: true, error: null });
+    try {
+      const categories = await marketService.getCategory();
+      set({ categories: categories, loading: false });
+    } catch (err) {
+      set({
+        error: err.response?.data?.message || "Failed to fetch categories",
         loading: false,
       });
     }
