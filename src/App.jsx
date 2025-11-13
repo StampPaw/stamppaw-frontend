@@ -28,6 +28,12 @@ import ChatListPage from "./pages/companion/ChatListPage";
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 
+// ✅ 프로필 관련 페이지
+import ProfilePage from "./pages/Profile/ProfilePage";
+import ProfileEditPage from "./pages/Profile/ProfileEditPage";
+import SettingsPage from "./pages/Profile/SettingsPage";
+
+
 export default function App() {
   useKakaoLoaderOnce({
     appkey: import.meta.env.VITE_KAKAO_MAP_KEY,
@@ -80,6 +86,13 @@ function AppLayout() {
             {/* ✅ 로그인/회원가입 */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
+
+            {/* ✅ 프로필 관련 */}
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/profile/edit" element={<ProfileEditPage />} />
+            <Route path="/profile/settings" element={<SettingsPage />} />
+            <Route path="/users/me" element={<ProfilePage />} />
+
           </Routes>
         </div>
       </main>
