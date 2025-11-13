@@ -1,21 +1,13 @@
 import api from "./api";
 
+// 내 정보 조회
 export const getMyInfo = async () => {
-  try {
-    const response = await api.get("/users/me");
-    return response.data;
-  } catch (error) {
-    console.error("[userService] getMyInfo error:", error.response?.data || error);
-    throw error;
-  }
+  const res = await api.get("/users/me");
+  return res.data;
 };
 
-export const updateUserInfo = async (userId, data) => {
-  try {
-    const response = await api.patch(`/users/${userId}`, data);
-    return response.data;
-  } catch (error) {
-    console.error("[userService] updateUserInfo error:", error.response?.data || error);
-    throw error;
-  }
+// 내 정보 수정
+export const updateUserInfo = async (formData) => {
+  const res = await api.patch("/users/me", formData);
+  return res.data;
 };

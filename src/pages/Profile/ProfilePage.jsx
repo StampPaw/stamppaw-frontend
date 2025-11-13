@@ -6,81 +6,144 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [tokenChecked, setTokenChecked] = useState(false);
 
-  const fetchUser = async () => {
-    try {
-      const data = await getMyInfo();
-      setUser(data);
-    } catch (error) {
-      console.error("유저 정보 요청 실패:", error);
-
-      // 실제 토큰이 없는 401일 때만 로그인으로 이동
-      const token = localStorage.getItem("token");
-      if (!token) navigate("/login");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // 🔥 토큰 체크 먼저 (getMyInfo()보다 먼저 실행)
+  // 🔐 토큰 + 유저정보 로딩을 하나의 useEffect로 처리 (원래 네 스타일)
   useEffect(() => {
     const token = localStorage.getItem("token");
 
+    // 1) 토큰 자체가 없으면 → 즉시 로그인 이동 (무한 로딩 방지)
     if (!token) {
       navigate("/login");
       return;
     }
 
-    // 🔥 axios 인터셉터가 token을 읽을 시간을 만들어줌
-    setTimeout(() => {
-      setTokenChecked(true);
-    }, 0);
-  }, []);
+    // 2) 토큰은 있는데 유효성 문제로 401이면 → remove + login 이동
+    const fetchUser = async () => {
+      try {
+        const data = await getMyInfo();
+        setUser(data);
+      } catch (err) {
+        console.error("유저 조회 실패:", err);
 
-  // 🔥 토큰 준비 완료 후에만 API 호출
-  useEffect(() => {
-    if (!tokenChecked) return;
+        // 백엔드가 401 줬을 때
+        if (err.response?.status === 401) {
+          localStorage.removeItem("token");
+          navigate("/login");
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchUser();
-  }, [tokenChecked]);
+  }, [navigate]);
 
   if (loading) return <p className="text-center mt-10">로딩 중...</p>;
   if (!user) return null;
 
   return (
-    <div className="flex flex-col items-center mt-8">
-      <div
-        className="relative w-24 h-24 mb-4"
-        onClick={() => navigate("/profile/edit")}
-      >
-        <img
-          src={user.profileImage || "/default-profile.png"}
-          alt="프로필 이미지"
-          className="w-full h-full rounded-full object-cover border border-gray-200 cursor-pointer"
-        />
-        <span className="absolute bottom-1 right-1 bg-primary text-white text-xs px-2 py-1 rounded">
-          수정
-        </span>
+    <div className="w-full min-h-screen bg-[#FFFDF6]">
+
+      {/* 🔶 프로필 전체 블록 */}
+      <div className="px-5 pt-10 flex items-start gap-6">
+        
+        {/* 🔸 왼쪽: 프로필 이미지 */}
+        <div className="relative w-24 h-24 flex-shrink-0">
+          <img
+            src={
+              user.profileImage
+                ? `http://localhost:8080/uploads/profile/${user.profileImage}`
+                : "/default-profile.png"
+            }
+
+            className="w-full h-full rounded-full object-cover border border-gray-200"
+          />
+
+          {/* ✏ 수정 아이콘 */}
+          <button
+            onClick={() => navigate("/profile/edit")}
+            className="
+              absolute bottom-0 right-0 
+              w-9 h-9 bg-[#F6C343] rounded-full shadow 
+              flex items-center justify-center overflow-hidden
+            "
+          >
+            <img src="/Edit.svg" className="w-[60%]" />
+          </button>
+        </div>
+
+        {/* 🔸 오른쪽: 닉네임 + 버튼 + 소개 + 기록 */}
+        <div className="flex flex-col w-full">
+
+          {/* 닉네임 + 팔로우 버튼 */}
+          <div className="flex items-center justify-between">
+            <p className="text-2xl font-bold text-[#4C3728]">{user.nickname}</p>
+
+            <button className="px-6 py-2 bg-[#EDA258] text-white rounded-full text-lg font-semibold">
+              팔로우
+            </button>
+          </div>
+
+          {/* 자기소개 */}
+          <p className="text-[#6B5B4A] text-lg mt-1">
+            {user.bio || "자기소개를 입력해 보세요!"}
+          </p>
+
+          {/* 기록 / 팔로워 / 팔로잉 */}
+          <div className="mt-4 flex flex-row items-center gap-10">
+
+            <div className="text-center">
+              <p className="text-lg font-semibold">{user.recordCount ?? 0}</p>
+              <p className="text-xs text-[#B38A6A]">기록</p>
+            </div>
+
+            <div className="text-center">
+              <p className="text-lg font-semibold">{user.followerCount ?? 0}</p>
+              <p className="text-xs text-[#B38A6A]">팔로워</p>
+            </div>
+
+            <div className="text-center">
+              <p className="text-lg font-semibold">{user.followingCount ?? 0}</p>
+              <p className="text-xs text-[#B38A6A]">팔로잉</p>
+            </div>
+
+          </div>
+
+        </div>
       </div>
 
-      <h2 className="text-xl font-semibold mb-1">{user.nickname}</h2>
-      <p className="text-gray-500 mb-4">{user.email}</p>
+      {/* 🔶 강아지 썸네일 영역 */}
+      <div className="mt-6 px-5 flex gap-3 overflow-x-auto pb-2">
+        {(user.dogs ?? []).length > 0 ? (
+          user.dogs.map((dog) => (
+            <div
+              key={dog.id}
+              className="w-14 h-14 rounded-full overflow-hidden shadow bg-[#FFF7E3]"
+            >
+              <img src={dog.imageUrl} alt={dog.name} className="w-full h-full object-cover" />
+            </div>
+          ))
+        ) : (
+          <div className="text-sm text-[#B38A6A]">
+            등록된 반려견이 없어요 🐶
+          </div>
+        )}
+      </div>
 
-      <div className="flex gap-2">
-        <button
-          onClick={() => navigate("/profile/settings")}
-          className="bg-primary text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#ff8a1e] transition"
-        >
-          설정
+      {/* 🔶 탭 메뉴 */}
+      <div className="flex px-5 mt-8 border-b border-[#F4E4C2]">
+        <button className="px-4 pb-3 text-sm text-[#8D7B6C]" onClick={() => navigate("/profile/free")}>
+          자유
         </button>
-
-        <button
-          onClick={() => navigate("/dogs")}
-          className="border border-primary text-primary font-medium px-6 py-2 rounded-lg hover:bg-primary hover:text-white transition"
-        >
-          내 반려견
+        <button className="px-4 pb-3 text-sm text-[#8D7B6C]" onClick={() => navigate("/profile/walk")}>
+          산책
+        </button>
+        <button className="px-4 pb-3 text-sm text-[#8D7B6C]" onClick={() => navigate("/profile/accompany")}>
+          동행
         </button>
       </div>
+
+      <div className="h-20" />
     </div>
   );
 }

@@ -26,3 +26,8 @@ export const login = async (credentials) => {
 
   return token;
 };
+
+export const logout = async () => {
+  await api.post("/auth/logout");  // 🔥 여기만 수정
+  localStorage.removeItem("token");
+};
