@@ -1,0 +1,18 @@
+import { useParams } from "react-router-dom";
+import useMarketStore from "../../stores/useMarketStore";
+import ProductCard from "../../components/market/ProductCard";
+
+export default function ProductDetail() {
+  const { productId } = useParams();
+
+  return (
+    <div className="bg-white text-text font-sans ">
+      <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto">
+        <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-10">
+          상세보기 (상품 번호: {productId})
+          <ProductCard productId={productId} />
+        </main>
+      </div>
+    </div>
+  );
+}

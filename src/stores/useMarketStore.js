@@ -6,6 +6,7 @@ const useMarketStore = create((set) => ({
   productDetail: null,
   latestMainImages: [],
   categoryProducts: [],
+  categories: [],
 
   loading: false,
   error: null,

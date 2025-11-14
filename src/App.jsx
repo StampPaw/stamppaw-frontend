@@ -16,7 +16,9 @@ import useKakaoLoaderOnce from "./hooks/useKakaoLoaderOnce";
 import HomePage from "./pages/HomePage";
 import WalkPage from "./pages/walk/WalkPage";
 import WalkRecordPage from "./pages/walk/WalkRecordPage";
-import Market from "./pages/Market";
+import Market from "./pages/market/Market";
+import ProductList from "./pages/market/ProductList";
+import ProductDetail from "./pages/market/ProductDetail";
 
 // ✅ 반려동물 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
@@ -73,6 +75,11 @@ function AppLayout() {
 
             {/* ✅ 마켓 관련 */}
             <Route path="/market" element={<Market />} />
+            <Route path="/market/products" element={<ProductList />} />
+            <Route
+              path="/market/product/:productId"
+              element={<ProductDetail />}
+            />
 
             {/* ✅ 반려동물 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />

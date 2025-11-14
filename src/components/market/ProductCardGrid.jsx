@@ -1,16 +1,26 @@
-import React from "react";
-import { Heart, MessageSquare } from "lucide-react";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function CardGrid({ key, products, category }) {
+export default function CardGrid({ products, category }) {
+  const navigate = useNavigate();
+
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-4">{category}</h2>
+      <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
+        {category}
+        <span
+          className="text-xs text-primary cursor-pointer"
+          onClick={() => navigate("/market/products")}
+        >
+          더보기
+        </span>
+      </h2>
 
       {/* ✅ 반응형 1~2열 그리드 */}
       <div className="grid grid-cols-2 gap-5">
         {products.map((post) => (
-          <div
+          <Link
             key={post.id}
+            to={`/market/product/${post.id}`}
             className="bg-white rounded-xl shadow-soft overflow-hidden border border-border cursor-pointer hover:shadow-md transition-all"
           >
             {/* 이미지 */}
@@ -34,7 +44,7 @@ export default function CardGrid({ key, products, category }) {
                 {post.description}
               </p>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </section>
