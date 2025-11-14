@@ -44,7 +44,7 @@ export default function CompanionDetailPage() {
           "http://localhost:8080/api/companion/chat/rooms",
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
         );
