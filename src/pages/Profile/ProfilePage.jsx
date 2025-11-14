@@ -43,15 +43,14 @@ export default function ProfilePage() {
       {/* 프로필 전체 블록 */}
       <div className="px-5 pt-10 flex items-start gap-6">
         
-        {/* 왼쪽: 프로필 이미지 */}
+        {/* 프로필 이미지 */}
         <div className="relative w-24 h-24 flex-shrink-0">
           <img
             src={user.profileImage ? user.profileImage : "/default-profile.png"}
-
             className="w-full h-full rounded-full object-cover border border-gray-200"
           />
 
-          {/* ✏ 수정 아이콘 */}
+          {/* 수정 아이콘 */}
           <button
             onClick={() => navigate("/profile/edit")}
             className="
@@ -64,10 +63,10 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        {/* 오른쪽: 닉네임 + 버튼 + 소개 + 기록 */}
+        {/* 닉네임/소개/기록 */}
         <div className="flex flex-col w-full">
 
-          {/* 닉네임 + 팔로우 버튼 */}
+          {/* 닉네임 + 팔로우 */}
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold text-[#4C3728]">{user.nickname}</p>
 
@@ -83,41 +82,64 @@ export default function ProfilePage() {
 
           {/* 기록 / 팔로워 / 팔로잉 */}
           <div className="mt-4 flex flex-row items-center gap-10">
-
             <div className="text-center">
               <p className="text-lg font-semibold">{user.recordCount ?? 0}</p>
               <p className="text-xs text-[#B38A6A]">기록</p>
             </div>
-
             <div className="text-center">
               <p className="text-lg font-semibold">{user.followerCount ?? 0}</p>
               <p className="text-xs text-[#B38A6A]">팔로워</p>
             </div>
-
             <div className="text-center">
               <p className="text-lg font-semibold">{user.followingCount ?? 0}</p>
               <p className="text-xs text-[#B38A6A]">팔로잉</p>
             </div>
-
           </div>
 
         </div>
       </div>
 
-      {/* 강아지 썸네일 영역 */}
-      <div className="mt-6 px-5 flex gap-3 overflow-x-auto pb-2">
+      {/* 반려견 영역 */}
+      <div className="mt-1 px-5">
+
+        {/* 타이틀 (작게 조정) */}
+        <p className="text-base font-semibold text-[#6B5B4A] mb-3">
+          나의 반려동물 🐾
+        </p>
+
         {(user.dogs ?? []).length > 0 ? (
-          user.dogs.map((dog) => (
-            <div
-              key={dog.id}
-              className="w-14 h-14 rounded-full overflow-hidden shadow bg-[#FFF7E3]"
+          /* 강아지가 있는 경우 */
+          <div className="flex items-center gap-4 overflow-x-auto pb-2">
+            {user.dogs.map((dog) => (
+              <div key={dog.id} className="flex flex-col items-center">
+                <div className="w-16 h-16 rounded-full overflow-hidden shadow bg-[#FFF7E3]">
+                  <img
+                    src={dog.imageUrl}
+                    alt={dog.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <p className="text-xs text-[#6B5B4A] mt-1">{dog.name}</p>
+              </div>
+            ))}
+
+            {/* + 버튼 (축소 버전) */}
+            <button
+              onClick={() => navigate("/dogs/add")}
+              className="w-14 h-14 rounded-full bg-[#F3E9D2] flex items-center justify-center shadow"
             >
-              <img src={dog.imageUrl} alt={dog.name} className="w-full h-full object-cover" />
-            </div>
-          ))
+              <span className="text-[#D4A055] text-3xl font-bold">+</span>
+            </button>
+          </div>
         ) : (
-          <div className="text-sm text-[#B38A6A]">
-            등록된 반려견이 없어요 🐶
+          /* 강아지가 없는 경우 — 문구 제거하고 버튼만 */
+          <div className="flex flex-col items-start gap-3">
+            <button
+              onClick={() => navigate("/dogs/add")}
+              className="w-14 h-14 rounded-full bg-[#F3E9D2] flex items-center justify-center shadow"
+            >
+              <span className="text-[#D4A055] text-3xl font-bold">+</span>
+            </button>
           </div>
         )}
       </div>

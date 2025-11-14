@@ -7,36 +7,34 @@ import {
 } from "react-router-dom";
 import { House, PawPrint, MessageCircle, Store, UserRound } from "lucide-react";
 
-// ✅ 공통 컴포넌트
+// 공통 컴포넌트
 import Header from "./components/ui/Header";
 import NavBar from "./components/ui/NavBar";
 import useKakaoLoaderOnce from "./hooks/useKakaoLoaderOnce";
 
-// ✅ 주요 페이지
+// 주요 페이지
 import HomePage from "./pages/HomePage";
 import WalkPage from "./pages/walk/WalkPage";
 import WalkRecordPage from "./pages/walk/WalkRecordPage";
 
-// ✅ 동행 관련 페이지
+// 동행 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
 import CompanionWritePage from "./pages/companion/CompanionWritePage";
 import CompanionDetailPage from "./pages/companion/CompanionDetailPage";
 import ChatRoomPage from "./pages/companion/ChatRoomPage";
 import ChatListPage from "./pages/companion/ChatListPage";
 
-// ✅ 로그인/회원가입 페이지
+// 로그인/회원가입 페이지
 import Login from "./pages/Auth/Login";
 import Signup from "./pages/Auth/Signup";
 
-// ✅ 프로필 관련 페이지
+// 프로필 관련 페이지
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import SettingsPage from "./pages/Profile/SettingsPage";
 
-// // ✅ 반려견 페이지
-// import DogListPage from "./pages/dog/DogListPage";
-// import DogCreatePage from "./pages/dog/DogCreatePage";
-// import DogEditPage from "./pages/dog/DogEditPage";
+// 반려견 페이지
+import DogAddPage from "./pages/dog/DogAddPage";
 
 
 export default function App() {
@@ -47,19 +45,20 @@ export default function App() {
 
   return (
     <Router>
-      <AppLayout /> {/* ✅ Router 안쪽으로 이동 */}
+      <AppLayout />
     </Router>
   );
 }
 
-// 📌 내부 라우팅 설정
+// 내부 라우팅 설정
 function AppLayout() {
   const location = useLocation();
   const hideLayout = ["/login", "/signup"].includes(location.pathname);
 
   return (
     <div className="relative min-h-screen bg-white text-text font-sans overflow-hidden">
-      {/* ✅ Header (로그인/회원가입 화면에서는 숨김) */}
+
+      {/* Header (로그인/회원가입 화면에서는 숨김) */}
       {!hideLayout && (
         <header className="fixed top-0 left-0 w-full z-50">
           <div className="w-full sm:max-w-[500px] mx-auto">
@@ -68,46 +67,44 @@ function AppLayout() {
         </header>
       )}
 
-      {/* ✅ 메인 컨텐츠 (라우팅 영역) */}
+      {/* 메인 컨텐츠 (라우팅 영역) */}
       <main className={`relative z-0 ${hideLayout ? "" : "pt-[60px] pb-[80px]"}`}>
         <div className="w-full sm:max-w-[500px] mx-auto">
           <Routes>
-            {/* ✅ 홈 */}
+            {/* 홈 */}
             <Route path="/" element={<HomePage />} />
 
-            {/* ✅ 산책 관련 */}
+            {/* 산책 관련 */}
             <Route path="/walk" element={<WalkPage />} />
             <Route path="/walk/:walkId" element={<WalkRecordPage />} />
 
-            {/* ✅ 동행 관련 */}
+            {/* 동행 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
 
-            {/* ✅ 채팅 관련 */}
+            {/* 채팅 관련 */}
             <Route path="/chat" element={<ChatListPage />} />
             <Route path="/chat/:roomId" element={<ChatRoomPage />} />
 
-            {/* ✅ 로그인/회원가입 */}
+            {/* 로그인/회원가입 */}
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
 
-            {/* ✅ 프로필 */}
+            {/* 프로필 */}
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/edit" element={<ProfileEditPage />} />
             <Route path="/profile/settings" element={<SettingsPage />} />
             <Route path="/users/me" element={<ProfilePage />} />
 
-             {/* ✅ 반려견(Dog) CRUD
-            <Route path="/dogs" element={<DogListPage />} />
-            <Route path="/dogs/new" element={<DogCreatePage />} />
-            <Route path="/dogs/:id/edit" element={<DogEditPage />} /> */}
+             {/* 반려견 */}
+            <Route path="/dogs/add" element={<DogAddPage />} />
 
           </Routes>
         </div>
       </main>
 
-      {/* ✅ NavBar (로그인/회원가입 화면에서는 숨김) */}
+      {/* NavBar (로그인/회원가입 화면에서는 숨김) */}
       {!hideLayout && (
         <nav className="fixed bottom-0 left-0 w-full z-50">
           <div className="w-full sm:max-w-[500px] mx-auto shadow-soft">
@@ -119,7 +116,7 @@ function AppLayout() {
   );
 }
 
-// 📌 하단 네비게이션
+// 하단 네비게이션
 function AppNavBar() {
   const navigate = useNavigate();
 
