@@ -1,9 +1,15 @@
-import React, { useState } from "react";
-import { ShoppingBasket } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { ShoppingBasket, Plus } from "lucide-react";
 import { OptionTag } from "./OptionTag.jsx";
+import useCartStore from "../../stores/useCartStore.js";
 
 export default function ProductCard({ product }) {
   const [selectedOptions, setSelectedOptions] = useState({});
+  const { cart, fetchCart, updateQuantity, removeItem } = useCartStore();
+  const navigate = useNavigate();
+  //const cartCount = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+  const cartCount = 0;
 
   const handleSelectOption = (name, value) => {
     setSelectedOptions((prev) => ({
@@ -12,9 +18,12 @@ export default function ProductCard({ product }) {
     }));
   };
 
+  useEffect(() => {
+    fetchCart();
+  }, []);
+
   const handleAddToCart = () => {
-    if (product.options.length > 0) {
-      // 옵션 선택 여부 확인
+    if (product.options?.length > 0) {
       const missing = product.options.filter(
         (opt) => !selectedOptions[opt.name]
       );
@@ -26,7 +35,6 @@ export default function ProductCard({ product }) {
       }
     }
 
-    // 실제로 보내야 할 데이터 예시
     const cartItem = {
       productId: product.id,
       quantity: 1,
@@ -40,7 +48,27 @@ export default function ProductCard({ product }) {
 
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-4">{product.name}</h2>
+      <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
+        {product.name}
+        <span
+          onClick={() => navigate(`/cart`)}
+          className="relative inline-flex items-center justify-center 
+             w-8 h-8 rounded-full bg-white shadow 
+             cursor-pointer hover:bg-gray-50 transition"
+        >
+          <ShoppingBasket className="text-primary" />
+
+          {cartCount > 0 && (
+            <span
+              className="absolute -top-1 -right-1 bg-red-500 text-white 
+                 text-[10px] font-bold w-4 h-4 flex items-center justify-center 
+                 rounded-full shadow"
+            >
+              {cartCount}
+            </span>
+          )}
+        </span>
+      </h2>
 
       <div className="bg-white rounded-xl shadow-soft overflow-hidden border border-border w-full">
         <div className="relative">
@@ -55,15 +83,13 @@ export default function ProductCard({ product }) {
         </div>
 
         <div className="p-4 space-y-4">
-          <h3 className="font-semibold text-lg text-text">
-            {product.name}
-            <span className="text-base">
-              {Math.floor(product.price).toLocaleString()}원
-            </span>
-          </h3>
+          <h3 className="font-semibold text-lg text-text">{product.name}</h3>
+          <span className="text-base font-semibold">
+            {Math.floor(product.price).toLocaleString()}원
+          </span>
+
           <p className="text-muted text-sm">{product.description}</p>
 
-          {/* 옵션 영역 */}
           <div className="space-y-3">
             {product.options?.map((opt) => (
               <div key={opt.id}>
@@ -77,11 +103,29 @@ export default function ProductCard({ product }) {
             ))}
           </div>
 
+          <div>
+            {cart?.items?.map((item) => (
+              <div key={item.cartItemId}>
+                {item.name} - {item.quantity}
+                <button
+                  onClick={() =>
+                    updateQuantity(item.cartItemId, item.quantity + 1)
+                  }
+                >
+                  +
+                </button>
+                <button onClick={() => removeItem(item.cartItemId)}>
+                  삭제
+                </button>
+              </div>
+            ))}
+          </div>
+
           <button
             onClick={handleAddToCart}
             className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#ff8a1e] transition"
           >
-            <ShoppingBasket /> 장바구니에 추가하기
+            <Plus /> 장바구니에 추가하기
           </button>
         </div>
       </div>
