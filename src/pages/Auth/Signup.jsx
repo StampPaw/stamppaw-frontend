@@ -1,16 +1,20 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { signup } from "@/services/authService";
 import { Eye, EyeOff } from "lucide-react";
 
 export default function Signup() {
   const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     nickname: "",
     email: "",
     password: "",
     agree: false,
   });
+
+  const nicknameRef = useRef(null);
+  const emailRef = useRef(null);
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -24,29 +28,47 @@ export default function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!formData.agree) {
       alert("이용 약관 및 개인정보 처리방침에 동의해주세요.");
       return;
     }
+
     try {
       await signup({
         nickname: formData.nickname,
         email: formData.email,
         password: formData.password,
       });
+
       alert("회원가입이 완료되었습니다!");
       navigate("/login");
-    } catch (error) {
+
+    } catch (err) {
+      console.log("Signup error:", err);
+
+      const errorMsg = err.response?.data?.message;
+
+      if (errorMsg?.includes("닉네임")) {
+        nicknameRef.current.setCustomValidity(errorMsg);
+        nicknameRef.current.reportValidity();
+        return;
+      }
+
+      if (errorMsg?.includes("이메일")) {
+        emailRef.current.setCustomValidity(errorMsg);
+        emailRef.current.reportValidity();
+        return;
+      }
+
       alert("회원가입 실패! 입력 정보를 확인해주세요.");
     }
   };
 
   return (
-    <div
-      className="flex flex-col items-center justify-center min-h-screen px-6 py-8"
-      style={{ backgroundColor: "#FFF8E7" }}
-    >
-      {/* 상단 헤더 */}
+    <div className="flex flex-col items-center justify-center min-h-screen px-6 py-8" 
+         style={{ backgroundColor: "#FFF8E7" }}>
+
       <div className="text-center mb-10">
         <h1 className="text-5xl font-bold text-[#4B3F2F] mb-3">회원가입</h1>
         <p className="text-[#6B3E1E] text-base font-medium">
@@ -54,42 +76,46 @@ export default function Signup() {
         </p>
       </div>
 
-      {/* 회원가입 폼 */}
-      <form
-        onSubmit={handleSubmit}
-        className="w-full max-w-sm flex flex-col gap-4 text-[#4B3F2F]"
-      >
-        {/* 닉네임 입력 */}
+      <form onSubmit={handleSubmit}
+        className="w-full max-w-sm flex flex-col gap-4 text-[#4B3F2F]">
+        
+        {/* 닉네임 */}
         <div>
           <label className="block mb-1 font-semibold">닉네임</label>
           <input
+            ref={nicknameRef}
             name="nickname"
             type="text"
-            placeholder="닉네임을 입력해주세요"
             value={formData.nickname}
-            onChange={handleChange}
+            placeholder="닉네임을 입력해주세요"
+            onChange={(e) => {
+              nicknameRef.current.setCustomValidity("");  
+              handleChange(e);
+            }}
             required
-            className="w-full border border-[#FFD18E] rounded-lg px-4 py-2 focus:outline-none 
-                       focus:ring-2 focus:ring-[#FF9F43] bg-white placeholder:text-[#A38B6D]"
+            className="w-full border border-[#FFD18E] rounded-lg px-4 py-2 bg-white"
           />
         </div>
 
-        {/* 이메일 입력 */}
+        {/* 이메일 */}
         <div>
           <label className="block mb-1 font-semibold">이메일</label>
           <input
+            ref={emailRef}
             name="email"
             type="email"
-            placeholder="name@email.com"
             value={formData.email}
-            onChange={handleChange}
+            placeholder="name@email.com"
+            onChange={(e) => {
+              emailRef.current.setCustomValidity("");  
+              handleChange(e);
+            }}
             required
-            className="w-full border border-[#FFD18E] rounded-lg px-4 py-2 focus:outline-none 
-                       focus:ring-2 focus:ring-[#FF9F43] bg-white placeholder:text-[#A38B6D]"
+            className="w-full border border-[#FFD18E] rounded-lg px-4 py-2 bg-white"
           />
         </div>
 
-        {/* 비밀번호 입력 */}
+        {/* 비밀번호 */}
         <div>
           <label className="block mb-1 font-semibold">비밀번호</label>
           <div className="relative w-full">
@@ -101,24 +127,19 @@ export default function Signup() {
               onChange={handleChange}
               required
               minLength={6}
-              className="w-full border border-[#FFD18E] rounded-lg px-4 py-2 pr-10 focus:outline-none 
-                         focus:ring-2 focus:ring-[#FF9F43] bg-white placeholder:text-[#A38B6D]"
+              className="w-full border border-[#FFD18E] rounded-lg px-4 py-2 pr-10 bg-white"
             />
             <button
               type="button"
-              onClick={() => setShowPassword((prev) => !prev)}
+              onClick={() => setShowPassword(v => !v)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-[#FF9F43]"
             >
-              {showPassword ? (
-                <EyeOff className="w-5 h-5" />
-              ) : (
-                <Eye className="w-5 h-5" />
-              )}
+              {showPassword ? <EyeOff /> : <Eye />}
             </button>
           </div>
         </div>
 
-        {/* 약관 동의 체크 */}
+        {/* 동의 */}
         <div className="flex items-center gap-2 mt-2 text-sm">
           <input
             type="checkbox"
@@ -128,33 +149,19 @@ export default function Signup() {
             className="w-4 h-4 accent-[#FF9F43]"
           />
           <span>
-            이용 약관 및{" "}
-            <span className="text-[#E49B25] font-semibold cursor-pointer">
+            이용 약관 및 <span className="text-[#E49B25] font-semibold cursor-pointer">
               개인정보 처리방침
-            </span>
-            에 동의합니다.
+            </span> 에 동의합니다.
           </span>
         </div>
 
-        {/* 가입 버튼 */}
         <button
           type="submit"
-          className="w-full bg-[#F6C343] hover:bg-[#F5B72E] text-black font-semibold 
-                     rounded-lg py-2 mt-4 shadow-soft transition-all"
+          className="w-full bg-[#F6C343] hover:bg-[#F5B72E] rounded-lg py-2 mt-4 text-black font-semibold"
         >
           가입하기
         </button>
 
-        {/* 로그인 이동 */}
-        <p className="text-center text-sm mt-6 text-gray-600">
-          이미 계정이 있으신가요?{" "}
-          <span
-            onClick={() => navigate("/login")}
-            className="text-[#E49B25] font-semibold cursor-pointer hover:underline"
-          >
-            로그인
-          </span>
-        </p>
       </form>
     </div>
   );

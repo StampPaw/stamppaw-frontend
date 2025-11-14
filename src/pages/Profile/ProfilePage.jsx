@@ -7,17 +7,14 @@ export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔐 토큰 + 유저정보 로딩을 하나의 useEffect로 처리 (원래 네 스타일)
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    // 1) 토큰 자체가 없으면 → 즉시 로그인 이동 (무한 로딩 방지)
     if (!token) {
       navigate("/login");
       return;
     }
 
-    // 2) 토큰은 있는데 유효성 문제로 401이면 → remove + login 이동
     const fetchUser = async () => {
       try {
         const data = await getMyInfo();
@@ -25,7 +22,6 @@ export default function ProfilePage() {
       } catch (err) {
         console.error("유저 조회 실패:", err);
 
-        // 백엔드가 401 줬을 때
         if (err.response?.status === 401) {
           localStorage.removeItem("token");
           navigate("/login");
@@ -44,17 +40,13 @@ export default function ProfilePage() {
   return (
     <div className="w-full min-h-screen bg-[#FFFDF6]">
 
-      {/* 🔶 프로필 전체 블록 */}
+      {/* 프로필 전체 블록 */}
       <div className="px-5 pt-10 flex items-start gap-6">
         
-        {/* 🔸 왼쪽: 프로필 이미지 */}
+        {/* 왼쪽: 프로필 이미지 */}
         <div className="relative w-24 h-24 flex-shrink-0">
           <img
-            src={
-              user.profileImage
-                ? `http://localhost:8080/uploads/profile/${user.profileImage}`
-                : "/default-profile.png"
-            }
+            src={user.profileImage ? user.profileImage : "/default-profile.png"}
 
             className="w-full h-full rounded-full object-cover border border-gray-200"
           />
@@ -72,7 +64,7 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        {/* 🔸 오른쪽: 닉네임 + 버튼 + 소개 + 기록 */}
+        {/* 오른쪽: 닉네임 + 버튼 + 소개 + 기록 */}
         <div className="flex flex-col w-full">
 
           {/* 닉네임 + 팔로우 버튼 */}
@@ -112,7 +104,7 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* 🔶 강아지 썸네일 영역 */}
+      {/* 강아지 썸네일 영역 */}
       <div className="mt-6 px-5 flex gap-3 overflow-x-auto pb-2">
         {(user.dogs ?? []).length > 0 ? (
           user.dogs.map((dog) => (
@@ -130,7 +122,7 @@ export default function ProfilePage() {
         )}
       </div>
 
-      {/* 🔶 탭 메뉴 */}
+      {/* 탭 메뉴 */}
       <div className="flex px-5 mt-8 border-b border-[#F4E4C2]">
         <button className="px-4 pb-3 text-sm text-[#8D7B6C]" onClick={() => navigate("/profile/free")}>
           자유

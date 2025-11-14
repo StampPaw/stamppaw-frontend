@@ -17,7 +17,7 @@ import HomePage from "./pages/HomePage";
 import WalkPage from "./pages/walk/WalkPage";
 import WalkRecordPage from "./pages/walk/WalkRecordPage";
 
-// ✅ 반려동물 관련 페이지
+// ✅ 동행 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
 import CompanionWritePage from "./pages/companion/CompanionWritePage";
 import CompanionDetailPage from "./pages/companion/CompanionDetailPage";
@@ -32,6 +32,11 @@ import Signup from "./pages/Auth/Signup";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import SettingsPage from "./pages/Profile/SettingsPage";
+
+// // ✅ 반려견 페이지
+// import DogListPage from "./pages/dog/DogListPage";
+// import DogCreatePage from "./pages/dog/DogCreatePage";
+// import DogEditPage from "./pages/dog/DogEditPage";
 
 
 export default function App() {
@@ -74,7 +79,7 @@ function AppLayout() {
             <Route path="/walk" element={<WalkPage />} />
             <Route path="/walk/:walkId" element={<WalkRecordPage />} />
 
-            {/* ✅ 반려동물 관련 */}
+            {/* ✅ 동행 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
@@ -87,11 +92,16 @@ function AppLayout() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
 
-            {/* ✅ 프로필 관련 */}
+            {/* ✅ 프로필 */}
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/profile/edit" element={<ProfileEditPage />} />
             <Route path="/profile/settings" element={<SettingsPage />} />
             <Route path="/users/me" element={<ProfilePage />} />
+
+             {/* ✅ 반려견(Dog) CRUD
+            <Route path="/dogs" element={<DogListPage />} />
+            <Route path="/dogs/new" element={<DogCreatePage />} />
+            <Route path="/dogs/:id/edit" element={<DogEditPage />} /> */}
 
           </Routes>
         </div>

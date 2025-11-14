@@ -1,10 +1,12 @@
 import api from "./api";
 
+// 회원가입
 export const signup = async (userData) => {
   const response = await api.post("/auth/signup", userData);
   return response.data;
 };
 
+// 로그인
 export const login = async (credentials) => {
   const response = await api.post("/auth/login", credentials);
 
@@ -27,7 +29,15 @@ export const login = async (credentials) => {
   return token;
 };
 
+// 로그아웃
 export const logout = async () => {
-  await api.post("/auth/logout");  // 🔥 여기만 수정
+  await api.post("/auth/logout");
   localStorage.removeItem("token");
+};
+
+export const checkNickname = async (nickname) => {
+  const response = await api.get("/auth/check-nickname", {
+    params: { nickname },
+  });
+  return response.data; // true 중복 / false 가능
 };

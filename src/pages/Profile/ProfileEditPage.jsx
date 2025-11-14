@@ -11,6 +11,9 @@ export default function ProfileEditPage() {
   const [profileImage, setProfileImage] = useState(null);
   const [preview, setPreview] = useState("");
 
+  // ⭐ 오류 메시지 상태
+  const [nicknameError, setNicknameError] = useState("");
+
   // 유저 정보 불러오기
   useEffect(() => {
     const fetchUser = async () => {
@@ -18,9 +21,7 @@ export default function ProfileEditPage() {
       setUser(data);
       setNickname(data.nickname);
 
-      if (data.profileImage) {
-        setPreview(`http://localhost:8080/uploads/profile/${data.profileImage}`);
-      }
+      if (data.profileImage) setPreview(data.profileImage);
     };
     fetchUser();
   }, []);
@@ -47,19 +48,23 @@ export default function ProfileEditPage() {
 
     try {
       await updateUserInfo(formData);
-      alert("프로필이 수정되었습니다!");
+      // alert 제거 → 자연스럽게 페이지 이동
       navigate("/profile");
+
     } catch (err) {
-      alert("수정 중 오류가 발생했습니다.");
+      if (err.response?.data?.message) {
+        setNicknameError(err.response.data.message);
+        return;
+      }
+      setNicknameError("수정 중 오류가 발생했습니다.");
     }
   };
 
   // 로그아웃
   const handleLogout = async () => {
     try {
-      await logout(); // optional: 백엔드에 요청
+      await logout();
     } catch (_) {}
-
     localStorage.removeItem("token");
     navigate("/login");
   };
@@ -80,7 +85,7 @@ export default function ProfileEditPage() {
               preview
                 ? preview
                 : user.profileImage
-                ? `http://localhost:8080/uploads/profile/${user.profileImage}`
+                ? user.profileImage
                 : "/default-profile.png"
             }
             className="w-32 h-32 rounded-full object-cover"
@@ -102,38 +107,57 @@ export default function ProfileEditPage() {
       <div className="px-8 mt-10">
 
         {/* 닉네임 */}
-        <div className="mb-6">
-          <label className="block text-sm text-[#6B5B4A] mb-1">닉네임</label>
+        <div className="mb-6 relative">
+          <label className="block mb-1 font-semibold text-[#6B5B4A]">
+            닉네임
+          </label>
+
           <input
             type="text"
             value={nickname}
-            onChange={(e) => setNickname(e.target.value)}
-            className="w-full p-3 rounded-md border border-[#F6C343] bg-white focus:outline-none"
+            required
+            minLength={2}
+            maxLength={20}
+            onChange={(e) => {
+              setNickname(e.target.value);
+              setNicknameError(""); // 입력 시 오류 제거
+            }}
+            className={`w-full border ${
+              nicknameError ? "border-red-400" : "border-[#FFD18E]"
+            } rounded-lg px-4 py-2 bg-white focus:outline-none 
+                       focus:ring-2 focus:ring-[#FF9F43]`}
           />
+
+          {/* 닉네임 오류 메시지 */}
+          {nicknameError && (
+            <p className="text-sm text-red-500 mt-1">{nicknameError}</p>
+          )}
         </div>
 
         {/* 이메일 */}
         <div className="mb-6">
-          <label className="block text-sm text-[#6B5B4A] mb-1">이메일</label>
+          <label className="block mb-1 font-semibold text-[#6B5B4A]">
+            이메일
+          </label>
           <input
             type="text"
             value={user.email}
             disabled
-            className="w-full p-3 rounded-md border border-gray-300 bg-[#FFF5E0] text-gray-500"
+            className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-[#FFF5E0] text-gray-500"
           />
         </div>
 
         {/* 저장 버튼 */}
         <button
           onClick={handleSave}
-          className="w-full py-3 bg-primary text-white font-semibold rounded-lg hover:bg-[#ff8a1e] transition"
+          className="w-full bg-[#F6C343] hover:bg-[#F5B72E] text-black font-semibold 
+                     rounded-lg py-2 mt-4 shadow-soft transition-all"
         >
           저장하기
         </button>
-
       </div>
 
-      {/* 🔥 카카오 스타일 “로그아웃” 텍스트 */}
+      {/* 로그아웃 */}
       <div className="flex justify-center mt-12">
         <button
           onClick={handleLogout}
