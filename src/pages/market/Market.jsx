@@ -5,8 +5,13 @@ import ProductCardGrid from "../../components/market/ProductCardGrid";
 import useMarketStore from "../../stores/useMarketStore";
 
 export default function Market() {
-  const { latestMainImages, fetchLatestMainImages, loading } = useMarketStore();
-  const { categoryProductsAll, fetchProductsAllCategory } = useMarketStore();
+  const {
+    latestMainImages,
+    fetchLatestMainImages,
+    loading,
+    categoryProductsAll,
+    fetchProductsAllCategory,
+  } = useMarketStore();
 
   useEffect(() => {
     fetchLatestMainImages();
@@ -33,6 +38,7 @@ export default function Market() {
                 key={categoryKey}
                 products={products}
                 category={categoryKey}
+                page="market"
               />
             )
           )}

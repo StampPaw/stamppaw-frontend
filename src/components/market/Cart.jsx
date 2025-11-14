@@ -1,7 +1,7 @@
 import React from "react";
 import { Minus, Plus, Image } from "lucide-react";
 
-export default function CartList() {
+export default function Cart() {
   const product = {
     title: "Cute Dog Hoodie",
     description:

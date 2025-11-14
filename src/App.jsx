@@ -19,6 +19,7 @@ import WalkRecordPage from "./pages/walk/WalkRecordPage";
 import Market from "./pages/market/Market";
 import ProductList from "./pages/market/ProductList";
 import ProductDetail from "./pages/market/ProductDetail";
+import CartList from "./pages/market/CartList";
 
 // ✅ 반려동물 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
@@ -35,7 +36,7 @@ import Signup from "./pages/Auth/Signup";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import SettingsPage from "./pages/Profile/SettingsPage";
-
+import { i } from "framer-motion/client";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -86,6 +87,7 @@ function AppLayout() {
               path="/market/product/:productId"
               element={<ProductDetail />}
             />
+            <Route path="/market/cart" element={<CartList />} />
 
             {/* ✅ 반려동물 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />
@@ -105,7 +107,6 @@ function AppLayout() {
             <Route path="/profile/edit" element={<ProfileEditPage />} />
             <Route path="/profile/settings" element={<SettingsPage />} />
             <Route path="/users/me" element={<ProfilePage />} />
-
           </Routes>
         </div>
       </main>

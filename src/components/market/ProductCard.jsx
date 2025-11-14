@@ -1,54 +1,88 @@
-import React from "react";
-import { Heart, MessageSquare } from "lucide-react";
+import React, { useState } from "react";
+import { ShoppingBasket } from "lucide-react";
+import { OptionTag } from "./OptionTag.jsx";
 
-export default function Card() {
+export default function ProductCard({ product }) {
+  const [selectedOptions, setSelectedOptions] = useState({});
+
+  const handleSelectOption = (name, value) => {
+    setSelectedOptions((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleAddToCart = () => {
+    if (product.options.length > 0) {
+      // 옵션 선택 여부 확인
+      const missing = product.options.filter(
+        (opt) => !selectedOptions[opt.name]
+      );
+
+      if (missing.length > 0) {
+        return alert(
+          `옵션을 선택해주세요: ${missing.map((m) => m.name).join(", ")}`
+        );
+      }
+    }
+
+    // 실제로 보내야 할 데이터 예시
+    const cartItem = {
+      productId: product.id,
+      quantity: 1,
+      options: selectedOptions,
+    };
+
+    console.log("장바구니 데이터:", cartItem);
+
+    alert("장바구니에 추가되었습니다!");
+  };
+
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-4">Cards</h2>
+      <h2 className="text-xl font-semibold mb-4">{product.name}</h2>
 
-      <div className="bg-white rounded-xl shadow-soft overflow-hidden border border-border w-full cursor-pointer hover:shadow-md transition-all">
-        {/* ✅ 프로필 영역 (상단으로 이동) */}
-        <div className="flex items-center gap-2 p-4">
-          <img
-            src="https://randomuser.me/api/portraits/women/65.jpg"
-            alt="author"
-            className="w-8 h-8 rounded-full object-cover"
-          />
-          <span className="text-sm font-medium text-text">hamtol</span>
-        </div>
-
-        {/* ✅ 이미지 */}
+      <div className="bg-white rounded-xl shadow-soft overflow-hidden border border-border w-full">
         <div className="relative">
           <img
-            src="https://images.unsplash.com/photo-1517849845537-4d257902454a?auto=format&fit=crop&w=800&q=60"
-            alt="post"
+            src={product.mainImageUrl}
+            alt={product.name}
             className="w-full aspect-square object-cover"
           />
           <span className="absolute top-2 left-2 bg-primary/90 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
-            산책
+            {Math.floor(product.price).toLocaleString()}원
           </span>
         </div>
 
-        {/* ✅ 본문 */}
-        <div className="p-4 space-y-2">
-          <h3 className="font-semibold text-lg text-text line-clamp-1">
-            오늘도 산책 완료! 🐶
+        <div className="p-4 space-y-4">
+          <h3 className="font-semibold text-lg text-text">
+            {product.name}
+            <span className="text-base">
+              {Math.floor(product.price).toLocaleString()}원
+            </span>
           </h3>
-          <p className="text-muted text-sm leading-relaxed line-clamp-2">
-            날씨가 좋아서 콩이랑 즐거운 산책을 했어요! 다음엔 공원도 가볼까 해요 🌿
-          </p>
+          <p className="text-muted text-sm">{product.description}</p>
 
-          {/* ✅ 좋아요 / 댓글 */}
-          <div className="flex items-center gap-5 text-sm text-muted pt-2">
-            <button className="flex items-center gap-1 hover:text-primary transition">
-              <Heart className="w-4 h-4" />
-              <span>12</span>
-            </button>
-            <button className="flex items-center gap-1 hover:text-primary transition">
-              <MessageSquare className="w-4 h-4" />
-              <span>5</span>
-            </button>
+          {/* 옵션 영역 */}
+          <div className="space-y-3">
+            {product.options?.map((opt) => (
+              <div key={opt.id}>
+                <p className="font-semibold text-sm mb-2">{opt.name}</p>
+                <OptionTag
+                  option={opt}
+                  selected={selectedOptions[opt.name]}
+                  onSelect={handleSelectOption}
+                />
+              </div>
+            ))}
           </div>
+
+          <button
+            onClick={handleAddToCart}
+            className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#ff8a1e] transition"
+          >
+            <ShoppingBasket /> 장바구니에 추가하기
+          </button>
         </div>
       </div>
     </section>

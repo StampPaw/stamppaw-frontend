@@ -26,7 +26,7 @@ const marketService = {
   },
 
   getProductsByCategory: async (category) => {
-    const response = await api.get(`/api/market/products/category`, {
+    const response = await api.get(`/market/products/category`, {
       params: { category },
     });
     return response.data;

@@ -5,12 +5,12 @@ export default function CategoryTag({ tags = [], selectedTag, onTagClick }) {
     <section>
       <div className="flex gap-2 flex-wrap">
         {tags.map((tag) => {
-          const isActive = tag.value === selectedTag;
+          const isActive = tag.label === selectedTag;
 
           return (
             <button
               key={tag.value}
-              onClick={() => onTagClick(tag.value)}
+              onClick={() => onTagClick(tag.label)}
               className={`px-3 py-1 rounded-full text-sm font-medium border transition
                 ${
                   isActive
