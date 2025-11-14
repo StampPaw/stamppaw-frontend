@@ -48,7 +48,7 @@ export default function CardGrid({ products, category, page }) {
                   onClick={(e) => {
                     e.preventDefault();
                     e.stopPropagation();
-                    navigate(`/cart?productId=${post.id}`);
+                    navigate(`/market/cart?productId=${post.id}`);
                   }}
                 >
                   <ShoppingBasket className="text-primary transition group-hover:text-primary/80" />

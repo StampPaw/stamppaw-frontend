@@ -1,7 +1,10 @@
 import React from "react";
-import { Minus, Plus, Image } from "lucide-react";
+import { Minus, Plus, Image, ChevronLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-export default function Cart() {
+export default function CartCard() {
+  const navigate = useNavigate();
+
   const product = {
     title: "Cute Dog Hoodie",
     description:
@@ -15,7 +18,12 @@ export default function Cart() {
 
   return (
     <section>
-      <h2 className="text-xl font-semibold mb-4">Cart</h2>
+      <h2 className="flex items-center gap-2 text-xl font-semibold mb-4">
+        <button onClick={() => navigate(-1)}>
+          <ChevronLeft className="cursor-pointer" />
+        </button>{" "}
+        장바구니 (8)
+      </h2>
 
       <div className="bg-white rounded-xl shadow-soft border border-border w-full h-40 cursor-pointer hover:shadow-md transition-all flex overflow-hidden">
         {/* ✅ 왼쪽 이미지 (높이에 맞는 정사각형) */}

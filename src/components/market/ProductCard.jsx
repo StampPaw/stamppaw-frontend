@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingBasket, Plus } from "lucide-react";
+import { ShoppingBasket, Plus, Minus } from "lucide-react";
 import { OptionTag } from "./OptionTag.jsx";
 import useCartStore from "../../stores/useCartStore.js";
 
@@ -51,7 +51,7 @@ export default function ProductCard({ product }) {
       <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
         {product.name}
         <span
-          onClick={() => navigate(`/cart`)}
+          onClick={() => navigate(`/market/cart`)}
           className="relative inline-flex items-center justify-center 
              w-8 h-8 rounded-full bg-white shadow 
              cursor-pointer hover:bg-gray-50 transition"
@@ -120,7 +120,16 @@ export default function ProductCard({ product }) {
               </div>
             ))}
           </div>
-
+          <div className="flex items-center gap-3 mt-2 font-semibold text-sm">
+            수량
+            <button className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary">
+              <Minus className="w-4 h-4" />
+            </button>
+            <span className="text-sm font-medium text-text">1</span>
+            <button className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary">
+              <Plus className="w-4 h-4" />
+            </button>
+          </div>
           <button
             onClick={handleAddToCart}
             className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-[#ff8a1e] transition"
