@@ -6,17 +6,17 @@ import useMarketStore from "../../stores/useMarketStore";
 
 export default function Market() {
   const { latestMainImages, fetchLatestMainImages, loading } = useMarketStore();
-  const { categoryProducts, fetchProductsByCategory } = useMarketStore();
+  const { categoryProductsAll, fetchProductsAllCategory } = useMarketStore();
 
   useEffect(() => {
     fetchLatestMainImages();
   }, []);
 
   useEffect(() => {
-    fetchProductsByCategory();
+    fetchProductsAllCategory();
   }, []);
 
-  //console.log("⭐Market categoryProducts:", categoryProducts);
+  //console.log("⭐Market latestMainImages:", latestMainImages);
 
   if (loading) return <p>Loading...</p>;
   return (
@@ -25,8 +25,9 @@ export default function Market() {
         <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-10">
           <LatestCarousel
             images={(latestMainImages || []).map((p) => p.mainImageUrl)}
+            products={(latestMainImages || []).map((p) => p.id)}
           />
-          {Object.entries(categoryProducts || {}).map(
+          {Object.entries(categoryProductsAll || {}).map(
             ([categoryKey, products]) => (
               <ProductCardGrid
                 key={categoryKey}

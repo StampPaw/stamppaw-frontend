@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { ShoppingBasket } from "lucide-react";
 
 export default function CardGrid({ products, category }) {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ export default function CardGrid({ products, category }) {
         {category}
         <span
           className="text-xs text-primary cursor-pointer"
-          onClick={() => navigate("/market/products")}
+          onClick={() => navigate(`/market/products?category=${category}`)}
         >
           더보기
         </span>
@@ -28,6 +29,7 @@ export default function CardGrid({ products, category }) {
               <img
                 src={post.mainImageUrl}
                 alt={post.name}
+                title={`${Math.floor(post.price).toLocaleString()}원`}
                 className="w-full aspect-4/3 object-cover"
               />
               <span className="absolute top-2 left-2 bg-primary/90 text-white text-xs font-semibold px-3 py-1 rounded-full shadow">
@@ -37,8 +39,16 @@ export default function CardGrid({ products, category }) {
 
             {/* 본문 */}
             <div className="p-4 space-y-2">
-              <h3 className="font-semibold text-base text-text line-clamp-1">
+              <h3 className="font-semibold text-base text-text line-clamp-1 flex justify-between items-center">
                 {post.name}
+                <ShoppingBasket
+                  className="text-primary cursor-pointer"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    navigate(`/cart?productId=${post.id}`);
+                  }}
+                />
               </h3>
               <p className="text-muted text-sm leading-relaxed line-clamp-2">
                 {post.description}

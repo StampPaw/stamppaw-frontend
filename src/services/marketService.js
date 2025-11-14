@@ -20,8 +20,15 @@ const marketService = {
     return response.data;
   },
 
-  getProductsByCategory: async () => {
+  getProductsAllCategory: async () => {
     const response = await api.get(`/market/products/grouped`);
+    return response.data;
+  },
+
+  getProductsByCategory: async (category) => {
+    const response = await api.get(`/api/market/products/category`, {
+      params: { category },
+    });
     return response.data;
   },
 

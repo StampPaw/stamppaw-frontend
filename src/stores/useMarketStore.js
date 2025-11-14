@@ -5,6 +5,7 @@ const useMarketStore = create((set) => ({
   products: [],
   productDetail: null,
   latestMainImages: [],
+  categoryProductsAll: [],
   categoryProducts: [],
   categories: [],
 
@@ -61,10 +62,24 @@ const useMarketStore = create((set) => ({
     }
   },
 
-  fetchProductsByCategory: async () => {
+  fetchProductsAllCategory: async () => {
     set({ loading: true, error: null });
     try {
-      const list = await marketService.getProductsByCategory();
+      const list = await marketService.getProductsAllCategory();
+      set({ categoryProductsAll: list, loading: false });
+    } catch (err) {
+      set({
+        error:
+          err.response?.data?.message || "Failed to fetch products by category",
+        loading: false,
+      });
+    }
+  },
+
+  fetchProductsByCategory: async (category) => {
+    set({ loading: true, error: null });
+    try {
+      const list = await marketService.getProductsByCategory(category);
       set({ categoryProducts: list, loading: false });
     } catch (err) {
       set({

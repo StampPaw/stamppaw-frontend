@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight, Image } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
-export default function LatestCarousel({ images }) {
+export default function LatestCarousel({ images, products }) {
   const [current, setCurrent] = useState(0);
+  const navigate = useNavigate();
   const total = images.length;
 
   const prevSlide = () => setCurrent((prev) => Math.max(prev - 1, 0));
@@ -30,7 +32,10 @@ export default function LatestCarousel({ images }) {
     <section>
       <div className="relative w-full mx-auto bg-bg shadow-soft overflow-hidden rounded-xl">
         {/* 이미지 영역 */}
-        <div className="relative flex items-center justify-center h-60 bg-input rounded-xl overflow-hidden">
+        <div
+          className="relative flex items-center justify-center h-60 bg-input rounded-xl overflow-hidden"
+          onClick={() => navigate(`/market/product/${products[current]}`)}
+        >
           {images[current] ? (
             <img
               src={images[current]}
@@ -44,7 +49,10 @@ export default function LatestCarousel({ images }) {
           {/* 좌우 화살표 */}
           {current > 1 && (
             <button
-              onClick={prevSlide}
+              onClick={(e) => {
+                e.stopPropagation(); // 이미지 클릭 이벤트 막기
+                prevSlide();
+              }}
               className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/70 p-1.5 rounded-full shadow-sm hover:bg-white transition"
             >
               <ChevronLeft className="w-5 h-5 text-primary" strokeWidth={2.2} />
@@ -52,7 +60,10 @@ export default function LatestCarousel({ images }) {
           )}
           {current < total - 1 && (
             <button
-              onClick={nextSlide}
+              onClick={(e) => {
+                e.stopPropagation();
+                nextSlide();
+              }}
               className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/70 p-1.5 rounded-full shadow-sm hover:bg-white transition"
             >
               <ChevronRight
