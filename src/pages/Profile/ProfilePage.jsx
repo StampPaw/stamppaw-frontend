@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getMyInfo } from "@/services/userService";
 import ProfileFreePage from "./ProfileFreePage";
 import ProfileWalkPage from "./ProfileWalkPage";
-import ProfileAccompanyPage from "./ProfileAccompanyPage";
+import ProfileAccompanyManagePage from "./ProfileAccompanyManagePage";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -176,7 +176,7 @@ export default function ProfilePage() {
       <div className="mt-5 px-5">
         {tab === "free" && <ProfileFreePage user={user} />}
         {tab === "walk" && <ProfileWalkPage user={user} />}
-        {tab === "accompany" && <ProfileAccompanyPage user={user} />}
+        {tab === "accompany" && <ProfileAccompanyManagePage user={user} />}
       </div>
 
       <div className="h-20" />
