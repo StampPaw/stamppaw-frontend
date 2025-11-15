@@ -3,14 +3,12 @@ import { useNavigate } from "react-router-dom";
 import { ShoppingBasket, Plus, Minus, ChevronLeft } from "lucide-react";
 import { OptionTag } from "./OptionTag.jsx";
 import useCartStore from "../../stores/useCartStore.js";
-import { useAuth } from "../../services/authService.js";
 
 export default function ProductCard({ product }) {
   const [selectedOptions, setSelectedOptions] = useState({});
   const { cart, fetchCart, addToCart } = useCartStore();
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
-  const isLoggedIn = useAuth();
   //const cartItemCount = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
   const cartItemCount = 0;
   const [userImage, setUserImage] = useState(null);
@@ -36,11 +34,6 @@ export default function ProductCard({ product }) {
   };
 
   const handleAddToCart = async () => {
-    if (!isLoggedIn) {
-      navigate("/login");
-      return;
-    }
-
     // 1) 옵션 선택 확인
     if (product.options?.length > 0) {
       const missing = product.options.filter(

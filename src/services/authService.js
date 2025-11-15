@@ -31,7 +31,3 @@ export const logout = async () => {
   await api.post("/auth/logout"); // 🔥 여기만 수정
   localStorage.removeItem("token");
 };
-
-export const useAuth = () => {
-  return !!localStorage.getItem("token"); // true 또는 false
-};
