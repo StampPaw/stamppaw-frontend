@@ -3,14 +3,18 @@ import { useNavigate } from "react-router-dom";
 import { ShoppingBasket, Plus, Minus, ChevronLeft } from "lucide-react";
 import { OptionTag } from "./OptionTag.jsx";
 import useCartStore from "../../stores/useCartStore.js";
+import { useAuth } from "../../services/authService.js";
 
 export default function ProductCard({ product }) {
   const [selectedOptions, setSelectedOptions] = useState({});
   const { cart, fetchCart, addToCart } = useCartStore();
   const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
+  const isLoggedIn = useAuth();
   //const cartItemCount = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
   const cartItemCount = 0;
+  const [userImage, setUserImage] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
 
   useEffect(() => {
     fetchCart();
@@ -23,7 +27,20 @@ export default function ProductCard({ product }) {
     }));
   };
 
+  const handleImageSelect = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    setUserImage(file);
+    setPreviewUrl(URL.createObjectURL(file));
+  };
+
   const handleAddToCart = async () => {
+    if (!isLoggedIn) {
+      navigate("/login");
+      return;
+    }
+
     // 1) 옵션 선택 확인
     if (product.options?.length > 0) {
       const missing = product.options.filter(
@@ -42,13 +59,28 @@ export default function ProductCard({ product }) {
       .map(([key, value]) => `${key}:${value}`)
       .join("  / ");
 
-    // 3) API 규격에 맞춘 item 생성
+    let uploadedUrl = "";
+
+    // CLOTHING_GOODS라면 사진 선택 먼저 실행
+    if (
+      product.category === "CLOTHING_GOODS" ||
+      product.category === "의류굿즈"
+    ) {
+      if (!userImage) {
+        return alert(
+          "해당 상품은 반려견 사진이 필요합니다.\n사진을 업로드해주세요!"
+        );
+      }
+    }
+
+    // 3) item 생성
     const item = {
       productId: product.id,
       optionSummary,
       price: Number(product.price),
       quantity: quantity,
-      userImageUrl: "",
+      userImageFile: userImage ? userImage.name : null, // 이름만 저장
+      file: userImage, // 주문 단계에서 업로드하기 위해 프론트에서 유지
     };
 
     console.log("장바구니 데이터:", item);
@@ -71,7 +103,6 @@ export default function ProductCard({ product }) {
   return (
     <section>
       <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
-        {/* 🔹 왼쪽: 뒤로가기 + 상품명 */}
         <div className="flex items-center gap-1">
           <button onClick={() => navigate(-1)}>
             <ChevronLeft className="cursor-pointer" />
@@ -79,7 +110,6 @@ export default function ProductCard({ product }) {
           <span>{product.name}</span>
         </div>
 
-        {/* 🔹 오른쪽: 장바구니 아이콘 + 배지 */}
         <span
           onClick={() => navigate(`/market/cart`)}
           className="relative inline-flex items-center justify-center 
@@ -132,6 +162,33 @@ export default function ProductCard({ product }) {
               </div>
             ))}
           </div>
+          {product.category === "CLOTHING_GOODS" && (
+            <div className="space-y-3">
+              <p className="font-semibold text-sm mb-2">반려견 사진 업로드</p>
+              <input
+                id="dogImage"
+                type="file"
+                accept="image/*"
+                onChange={handleImageSelect}
+                className="hidden"
+              />
+              <label
+                htmlFor="dogImage"
+                className="inline-block bg-secondary px-4 py-2 rounded-lg border border-primary text-primary font-medium text-sm cursor-pointer hover:bg-primary hover:text-white transition"
+              >
+                사진 선택하기
+              </label>
+              {previewUrl && (
+                <div className="w-full aspect-square overflow-hidden rounded-lg border border-primary">
+                  <img
+                    src={previewUrl}
+                    alt="preview"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+            </div>
+          )}
 
           <div>
             {cart?.items?.map((item) => (

@@ -23,11 +23,12 @@ const useCartStore = create((set) => ({
     set({ loading: true, error: null });
 
     try {
-      const res = await cartService.createCart({ items });
+      const res = await cartService.createCart(items);
       set({ cart: res.data, loading: false });
       return res.data;
     } catch (e) {
       set({ error: e, loading: false });
+      throw e;
     }
   },
 
