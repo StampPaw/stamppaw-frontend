@@ -6,7 +6,7 @@ export default function ChatListPage() {
   const [chatRooms, setChatRooms] = useState([]);
   const [activeTab, setActiveTab] = useState("동행");
   const navigate = useNavigate();
-  const token = localStorage.getItem("accessToken");
+  const token = localStorage.getItem("token");
   const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {

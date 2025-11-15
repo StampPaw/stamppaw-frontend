@@ -44,7 +44,7 @@ export default function CompanionDetailPage() {
           "http://localhost:8080/api/companion/chat/rooms",
           {
             headers: {
-              Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
         );
@@ -77,7 +77,7 @@ export default function CompanionDetailPage() {
             `http://localhost:8080/api/companion/${id}/apply/manage`,
             {
               headers: {
-                Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
               },
             }
           );
@@ -100,7 +100,7 @@ export default function CompanionDetailPage() {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
@@ -132,13 +132,13 @@ export default function CompanionDetailPage() {
         {
           method: "POST",
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
       if (!res.ok) {
         const errorData = await res.json();
-        if (errorData.errorCode === "ALREADY_APPLICANT") {
+        if (errorData.name === "ALREADY_APPLICANT") {
           alert("이미 신청한 글입니다.");
           setHasApplied(true);
           localStorage.setItem(appliedKey, "true");
@@ -163,7 +163,7 @@ export default function CompanionDetailPage() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
           body: JSON.stringify({ status: newStatus }),
         }
@@ -174,7 +174,7 @@ export default function CompanionDetailPage() {
         `http://localhost:8080/api/companion/${id}/apply/manage`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
