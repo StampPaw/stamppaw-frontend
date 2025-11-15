@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileAccompanyPage() {
   const [companions, setCompanions] = useState([]);
@@ -7,6 +8,8 @@ export default function ProfileAccompanyPage() {
   const [loading, setLoading] = useState(false);
 
   const size = 5;
+
+  const navigate = useNavigate();
 
   const fetchCompanions = async () => {
     try {
@@ -74,7 +77,8 @@ export default function ProfileAccompanyPage() {
       {companions.map((item) => (
         <div
           key={item.id}
-          className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border border-[#F3E9D7]"
+          onClick={() => navigate(`/companion/${item.id}`)}
+          className="flex items-start gap-4 p-4 bg-white rounded-xl shadow-sm border border-[#F3E9D7] cursor-pointer hover:bg-[#FFF9F2] transition"
         >
           {item.image ? (
             <img
