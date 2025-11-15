@@ -23,6 +23,8 @@ import CompanionWritePage from "./pages/companion/CompanionWritePage";
 import CompanionDetailPage from "./pages/companion/CompanionDetailPage";
 import ChatRoomPage from "./pages/companion/ChatRoomPage";
 import ChatListPage from "./pages/companion/ChatListPage";
+import ProfileApplyPage from "./pages/Profile/ProfileApplyPage";
+import CompanionReviewWritePage from "./pages/companion/CompanionReviewWritePage";
 
 // ✅ 로그인/회원가입 페이지
 import Login from "./pages/Auth/Login";
@@ -32,7 +34,7 @@ import Signup from "./pages/Auth/Signup";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import SettingsPage from "./pages/Profile/SettingsPage";
-
+import CompanionReviewPage from "./pages/companion/CompanionReviewPage";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -64,7 +66,9 @@ function AppLayout() {
       )}
 
       {/* ✅ 메인 컨텐츠 (라우팅 영역) */}
-      <main className={`relative z-0 ${hideLayout ? "" : "pt-[60px] pb-[80px]"}`}>
+      <main
+        className={`relative z-0 ${hideLayout ? "" : "pt-[60px] pb-[80px]"}`}
+      >
         <div className="w-full sm:max-w-[500px] mx-auto">
           <Routes>
             {/* ✅ 홈 */}
@@ -78,6 +82,15 @@ function AppLayout() {
             <Route path="/companion" element={<CompanionListPage />} />
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
+            <Route
+              path="/companion/:id/reviews"
+              element={<CompanionReviewPage />}
+            />
+            <Route path="/profile/apply" element={<ProfileApplyPage />} />
+            <Route
+              path="/companion/review/write/:applyId"
+              element={<CompanionReviewWritePage />}
+            />
 
             {/* ✅ 채팅 관련 */}
             <Route path="/chat" element={<ChatListPage />} />
@@ -92,7 +105,6 @@ function AppLayout() {
             <Route path="/profile/edit" element={<ProfileEditPage />} />
             <Route path="/profile/settings" element={<SettingsPage />} />
             <Route path="/users/me" element={<ProfilePage />} />
-
           </Routes>
         </div>
       </main>
