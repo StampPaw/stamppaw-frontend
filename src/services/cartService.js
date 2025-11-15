@@ -1,10 +1,29 @@
 import api from "./api";
 
 const cartService = {
-  getCart: () => api.get("/cart"),
-  createCart: (data) => api.post("/cart", data),
-  updateItemQuantity: (data) => api.patch("/cart/item/quantity", data),
-  deleteItem: (id) => api.delete(`/cart/item/${id}`),
+  getCart: async (userId) => {
+    const response = await api.get(`/cart/${userId}`);
+    return response.data;
+  },
+
+  createCart: async (items) => {
+    const response = await api.post(`/cart/add`, {
+      items,
+    });
+    return response.data;
+  },
+
+  updateItemQuantity: async (cartItemId, quantity) => {
+    const response = await api.patch(`/cart/item/${cartItemId}`, {
+      quantity,
+    });
+    return response.data;
+  },
+
+  deleteItem: async (cartItemId) => {
+    const response = await axios.delete(`${API_URL}/cart/item/${cartItemId}`);
+    return response.data;
+  },
 };
 
 export default cartService;

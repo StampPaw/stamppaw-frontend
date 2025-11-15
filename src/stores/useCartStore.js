@@ -19,16 +19,15 @@ const useCartStore = create((set) => ({
     }
   },
 
-  addItems: async (items) => {
+  addToCart: async (items) => {
     set({ loading: true, error: null });
 
     try {
       const res = await cartService.createCart({ items });
-      set({ cart: res.data });
+      set({ cart: res.data, loading: false });
+      return res.data;
     } catch (e) {
-      set({ error: e });
-    } finally {
-      set({ loading: false });
+      set({ error: e, loading: false });
     }
   },
 
@@ -39,7 +38,7 @@ const useCartStore = create((set) => ({
         quantity,
       });
 
-      // 로컬 상태 반영
+      // 로컬 상태 반영, 안돼면 await useCartStore.getState().fetchCart(); //아래 deleteItem 도 동일
       set((state) => ({
         cart: {
           ...state.cart,

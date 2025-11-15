@@ -6,10 +6,15 @@ import useCartStore from "../../stores/useCartStore.js";
 
 export default function ProductCard({ product }) {
   const [selectedOptions, setSelectedOptions] = useState({});
-  const { cart, fetchCart, updateQuantity, removeItem } = useCartStore();
+  const { cart, fetchCart, addToCart } = useCartStore();
+  const [quantity, setQuantity] = useState(1);
   const navigate = useNavigate();
-  //const cartCount = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
-  const cartCount = 0;
+  //const cartItemCount = cart?.items?.reduce((sum, item) => sum + item.quantity, 0) || 0;
+  const cartItemCount = 0;
+
+  useEffect(() => {
+    fetchCart();
+  }, []);
 
   const handleSelectOption = (name, value) => {
     setSelectedOptions((prev) => ({
@@ -18,11 +23,8 @@ export default function ProductCard({ product }) {
     }));
   };
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
-
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
+    // 1) 옵션 선택 확인
     if (product.options?.length > 0) {
       const missing = product.options.filter(
         (opt) => !selectedOptions[opt.name]
@@ -35,15 +37,35 @@ export default function ProductCard({ product }) {
       }
     }
 
-    const cartItem = {
+    // 2) optionSummary 생성
+    const optionSummary = Object.entries(selectedOptions)
+      .map(([key, value]) => `${key}:${value}`)
+      .join("  / ");
+
+    // 3) API 규격에 맞춘 item 생성
+    const item = {
       productId: product.id,
-      quantity: 1,
-      options: selectedOptions,
+      optionSummary,
+      price: Number(product.price),
+      quantity: quantity,
+      userImageUrl: "",
     };
 
-    console.log("장바구니 데이터:", cartItem);
+    console.log("장바구니 데이터:", item);
 
-    alert("장바구니에 추가되었습니다!");
+    try {
+      await addToCart([item]);
+      const goToCart = window.confirm(
+        "장바구니에 추가되었습니다.\n장바구니를 확인 하시겠습니까?"
+      );
+
+      if (goToCart) {
+        navigate("/market/cart");
+      }
+    } catch (e) {
+      console.error("장바구니 추가 실패", e);
+      alert("장바구니 추가에 실패했습니다.");
+    }
   };
 
   return (
@@ -58,13 +80,13 @@ export default function ProductCard({ product }) {
         >
           <ShoppingBasket className="text-primary" />
 
-          {cartCount > 0 && (
+          {cartItemCount > 0 && (
             <span
               className="absolute -top-1 -right-1 bg-red-500 text-white 
                  text-[10px] font-bold w-4 h-4 flex items-center justify-center 
                  rounded-full shadow"
             >
-              {cartCount}
+              {cartItemCount}
             </span>
           )}
         </span>
@@ -122,11 +144,17 @@ export default function ProductCard({ product }) {
           </div>
           <div className="flex items-center gap-3 mt-2 font-semibold text-sm">
             수량
-            <button className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary">
+            <button
+              onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
+              className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary"
+            >
               <Minus className="w-4 h-4" />
             </button>
-            <span className="text-sm font-medium text-text">1</span>
-            <button className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary">
+            <span className="text-sm font-medium text-text">{quantity}</span>
+            <button
+              onClick={() => setQuantity((prev) => prev + 1)}
+              className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary"
+            >
               <Plus className="w-4 h-4" />
             </button>
           </div>
