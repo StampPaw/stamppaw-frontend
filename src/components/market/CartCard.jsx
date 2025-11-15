@@ -18,7 +18,7 @@ export default function CartCard() {
 
   return (
     <section>
-      <h2 className="flex items-center gap-2 text-xl font-semibold mb-4">
+      <h2 className="flex items-center gap-1 text-xl font-semibold mb-4">
         <button onClick={() => navigate(-1)}>
           <ChevronLeft className="cursor-pointer" />
         </button>{" "}

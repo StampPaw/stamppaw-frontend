@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ShoppingBasket, Plus, Minus } from "lucide-react";
+import { ShoppingBasket, Plus, Minus, ChevronLeft } from "lucide-react";
 import { OptionTag } from "./OptionTag.jsx";
 import useCartStore from "../../stores/useCartStore.js";
 
@@ -71,20 +71,28 @@ export default function ProductCard({ product }) {
   return (
     <section>
       <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
-        {product.name}
+        {/* 🔹 왼쪽: 뒤로가기 + 상품명 */}
+        <div className="flex items-center gap-1">
+          <button onClick={() => navigate(-1)}>
+            <ChevronLeft className="cursor-pointer" />
+          </button>
+          <span>{product.name}</span>
+        </div>
+
+        {/* 🔹 오른쪽: 장바구니 아이콘 + 배지 */}
         <span
           onClick={() => navigate(`/market/cart`)}
           className="relative inline-flex items-center justify-center 
-             w-8 h-8 rounded-full bg-white shadow 
-             cursor-pointer hover:bg-gray-50 transition"
+            w-8 h-8 rounded-full bg-white shadow 
+            cursor-pointer hover:bg-gray-50 transition"
         >
           <ShoppingBasket className="text-primary" />
 
           {cartItemCount > 0 && (
             <span
               className="absolute -top-1 -right-1 bg-red-500 text-white 
-                 text-[10px] font-bold w-4 h-4 flex items-center justify-center 
-                 rounded-full shadow"
+                text-[10px] font-bold w-4 h-4 flex items-center justify-center 
+                rounded-full shadow"
             >
               {cartItemCount}
             </span>
