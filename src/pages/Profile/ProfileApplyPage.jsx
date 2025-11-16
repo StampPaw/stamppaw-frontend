@@ -101,7 +101,7 @@ export default function ProfileApplyPage() {
         return (
           <div
             key={idx}
-            onClick={() => navigate(`/companion/${item.id}`)}
+            onClick={() => navigate(`/companion/${item.companionId}`)}
             className="
               p-5 bg-white rounded-2xl border border-[#E8DCC4]
               shadow-[0_4px_12px_rgba(0,0,0,0.04)]
@@ -126,11 +126,6 @@ export default function ProfileApplyPage() {
 
               {/* 하단 구분선 */}
               <div className="border-t border-[#EFE7DA] pt-3 flex justify-between items-center">
-                <div className="flex items-center gap-2 text-xs text-[#A1866D]">
-                  <span className="w-1.5 h-1.5 bg-[#D6B893] rounded-full" />
-                  신청 상태
-                </div>
-
                 <span className={statusBadgeClass(item.status)}>
                   <span className="w-2 h-2 rounded-full bg-current opacity-70"></span>
                   {statusLabel(item.status)}
