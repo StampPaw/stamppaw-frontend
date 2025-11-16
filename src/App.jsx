@@ -34,7 +34,6 @@ import Signup from "./pages/Auth/Signup";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import SettingsPage from "./pages/Profile/SettingsPage";
-import CompanionReviewPage from "./pages/companion/CompanionReviewPage";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -82,10 +81,6 @@ function AppLayout() {
             <Route path="/companion" element={<CompanionListPage />} />
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
-            <Route
-              path="/companion/:id/reviews"
-              element={<CompanionReviewPage />}
-            />
             <Route path="/profile/apply" element={<ProfileApplyPage />} />
             <Route
               path="/companion/review/write/:applyId"
