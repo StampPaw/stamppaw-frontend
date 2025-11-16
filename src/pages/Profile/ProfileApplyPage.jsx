@@ -101,7 +101,7 @@ export default function ProfileApplyPage() {
         return (
           <div
             key={idx}
-            onClick={() => navigate(`/companion/${c.id}`)}
+            onClick={() => navigate(`/companion/${item.id}`)}
             className="
               p-5 bg-white rounded-2xl border border-[#E8DCC4]
               shadow-[0_4px_12px_rgba(0,0,0,0.04)]
@@ -144,9 +144,7 @@ export default function ProfileApplyPage() {
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        navigate(
-                          `/companion/review/write/${item.companionDto.id}`
-                        );
+                        navigate(`/companion/review/write/${item.id}`);
                       }}
                       className="
                         ml-3 px-3 py-1 rounded-md text-xs font-medium

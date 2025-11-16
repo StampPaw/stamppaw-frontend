@@ -50,7 +50,7 @@ export default function CompanionCard({
           <div className="flex items-center gap-2">
             <UserAvatar image={user?.profileImage} size="sm" />
             <span className="text-xs font-medium text-text">
-              {user.nickName}
+              {user.nickname}
             </span>
           </div>
         </div>
