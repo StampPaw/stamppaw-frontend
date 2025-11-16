@@ -25,6 +25,9 @@ export default function CompanionWritePage() {
     try {
       const response = await fetch("http://localhost:8080/api/companion", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
         body: formData,
       });
 
@@ -32,6 +35,8 @@ export default function CompanionWritePage() {
         alert("글이 성공적으로 등록되었습니다!");
         navigate("/companion");
       } else {
+        const errorText = await response.text();
+        console.error("등록 실패:", errorText);
         alert("등록 실패 😢");
       }
     } catch (err) {

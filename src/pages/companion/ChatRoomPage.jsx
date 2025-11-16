@@ -14,7 +14,7 @@ export default function ChatRoomPage() {
 
   const user = JSON.parse(localStorage.getItem("user"));
   const loggedInUserId = user?.id || 0;
-  const token = localStorage.getItem("accessToken");
+  const token = localStorage.getItem("token");
 
   const messagesEndRef = useRef(null);
 
