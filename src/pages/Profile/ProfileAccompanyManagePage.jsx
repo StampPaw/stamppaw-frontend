@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import ProfileAccompanyPage from "./ProfileAccompanyPage";
 import ProfileApplyPage from "./ProfileApplyPage";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileAccompanyManagePage() {
   const [tab, setTab] = useState("companion");
@@ -68,6 +69,7 @@ function ReviewList({ type }) {
   const [page, setPage] = useState(0);
   const [hasNext, setHasNext] = useState(true);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
   const size = 5;
 
   const fetchReviews = useCallback(async () => {
@@ -124,6 +126,7 @@ function ReviewList({ type }) {
       {reviews.map((item, idx) => (
         <div
           key={`${item.title}-${item.user.nickname}-${idx}`}
+          onClick={() => navigate(`/companion/${item.id}`)}
           className="p-5 bg-[#FFFCF7] border border-[#E6D5BD] rounded-xl shadow-md hover:shadow-lg transition-shadow"
         >
           <div className="flex justify-between items-center">
