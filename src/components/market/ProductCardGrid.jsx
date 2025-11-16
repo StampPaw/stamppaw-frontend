@@ -51,7 +51,7 @@ export default function CardGrid({ products, category, page }) {
                     navigate(`/market/cart?productId=${post.id}`);
                   }}
                 >
-                  <ShoppingBasket className="text-primary transition group-hover:text-primary/80" />
+                  {/*<ShoppingBasket className="text-primary transition group-hover:text-primary/80" />*/}
                 </button>
               </h3>
               <p className="text-muted text-sm leading-relaxed line-clamp-2">

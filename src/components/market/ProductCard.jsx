@@ -72,11 +72,11 @@ export default function ProductCard({ product }) {
       optionSummary,
       price: Number(product.price),
       quantity: quantity,
-      userImageFile: userImage ? userImage.name : null, // 이름만 저장
+      userImageUrl: userImage ? userImage.name : null, // 이름만 저장
       file: userImage, // 주문 단계에서 업로드하기 위해 프론트에서 유지
     };
 
-    console.log("장바구니 데이터:", item);
+    console.log("⭐장바구니 데이터:", item);
 
     try {
       await addToCart([item]);

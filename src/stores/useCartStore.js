@@ -8,14 +8,11 @@ const useCartStore = create((set) => ({
 
   fetchCart: async () => {
     set({ loading: true, error: null });
-
     try {
       const res = await cartService.getCart();
-      set({ cart: res.data });
+      set({ cart: res, loading: false });
     } catch (e) {
       set({ error: e });
-    } finally {
-      set({ loading: false });
     }
   },
 
@@ -34,20 +31,24 @@ const useCartStore = create((set) => ({
 
   updateQuantity: async (cartItemId, quantity) => {
     try {
-      await cartService.updateItemQuantity({
-        cartItemId,
-        quantity,
-      });
+      await cartService.updateItemQuantity({ cartItemId, quantity });
 
-      // 로컬 상태 반영, 안돼면 await useCartStore.getState().fetchCart(); //아래 deleteItem 도 동일
       set((state) => ({
         cart: {
           ...state.cart,
           items: state.cart.items.map((i) =>
-            i.cartItemId === cartItemId ? { ...i, quantity } : i
+            i.id === cartItemId
+              ? {
+                  ...i,
+                  quantity,
+                  subtotal: i.price * quantity,
+                }
+              : i
           ),
         },
       }));
+
+      await useCartStore.getState().fetchCart();
     } catch (e) {
       set({ error: e });
     }
@@ -60,7 +61,7 @@ const useCartStore = create((set) => ({
       set((state) => ({
         cart: {
           ...state.cart,
-          items: state.cart.items.filter((i) => i.cartItemId !== cartItemId),
+          items: (state.cart.items || []).filter((i) => i.id !== cartItemId),
         },
       }));
     } catch (e) {
