@@ -20,6 +20,7 @@ import Market from "./pages/market/Market";
 import ProductList from "./pages/market/ProductList";
 import ProductDetail from "./pages/market/ProductDetail";
 import CartList from "./pages/market/CartList";
+import OrderList from "./pages/market/OrderList";
 
 // ✅ 반려동물 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
@@ -88,6 +89,7 @@ function AppLayout() {
               element={<ProductDetail />}
             />
             <Route path="/market/cart" element={<CartList />} />
+            <Route path="/market/orders" element={<OrderList />} />
 
             {/* ✅ 반려동물 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />

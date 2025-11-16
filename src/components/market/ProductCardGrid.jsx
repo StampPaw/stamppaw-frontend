@@ -7,7 +7,7 @@ export default function CardGrid({ products, category, page }) {
   return (
     <section>
       {page === "market" && (
-        <h2 className="text-xl font-semibold mb-4 flex justify-between items-center">
+        <h2 className="text-xl font-semibold mb-2 mt-4 flex justify-between items-center">
           {category}
 
           <span

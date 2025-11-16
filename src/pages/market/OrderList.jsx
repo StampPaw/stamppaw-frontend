@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CartCard from "../../components/market/CartCard.jsx";
 import useCartStore from "../../stores/useCartStore.js";
-import useOrderStore from "../../stores/useOrderStore.js";
 import { ShoppingBasket, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
-export default function CartList() {
-  const { createOrder } = useOrderStore();
+export default function OrderList() {
   const { cart, fetchCart, loading } = useCartStore();
   const navigate = useNavigate();
   const [selectedItems, setSelectedItems] = useState([]);
@@ -25,30 +23,6 @@ export default function CartList() {
 
   //console.log("⭐Cart cart:", cart);
 
-  const handleOrder = async () => {
-    if (selectedItems.length === 0) {
-      alert("주문할 상품을 선택해주세요.");
-      return;
-    }
-
-    const orderData = {
-      cartId: cart.cartId,
-      cartItemIds: selectedItems,
-      shippingName: userInput.name,
-      shippingAddress: userInput.address,
-      shippingMobile: userInput.mobile,
-      paymentMethod: "CARD",
-    };
-
-    try {
-      const order = await createOrder(orderData);
-      navigate(`/order/complete/${order.orderId}`);
-    } catch (err) {
-      console.error("주문 실패:", err);
-      alert("주문 처리 중 오류가 발생했습니다.");
-    }
-  };
-
   if (!cart || !cart.items || cart.items.length === 0) {
     return (
       <div className="bg-white text-text font-sans min-h-screen flex justify-center">
@@ -59,10 +33,12 @@ export default function CartList() {
             </div>
 
             <h2 className="text-xl font-semibold text-text">
-              장바구니가 비어있어요
+              주문 내역이 없어요.
             </h2>
 
-            <p className="text-muted text-sm">마음에 드는 상품을 담아보세요!</p>
+            <p className="text-muted text-sm">
+              마음에 드는 상품을 장바구니에 담아 주문해보세요!
+            </p>
 
             <button
               onClick={() => navigate("/market")}
@@ -92,7 +68,7 @@ export default function CartList() {
             <button onClick={() => navigate(-1)}>
               <ChevronLeft className="cursor-pointer" />
             </button>
-            장바구니 ({cart.items.length})
+            주문 목록
           </h2>
 
           {cart.items.map((item) => (
@@ -127,10 +103,7 @@ export default function CartList() {
             </div>
           </div>
 
-          <button
-            onClick={handleOrder}
-            className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#ff8a1e] transition"
-          >
+          <button className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#ff8a1e] transition">
             주문 하기
           </button>
         </main>
