@@ -90,7 +90,7 @@ export default function CompanionReviewWritePage() {
       <h2 className="text-xl font-bold text-[#4C3928] mb-5">리뷰 작성하기</h2>
 
       <p className="text-sm text-[#7C6A59] mb-3">
-        해당 동행에 대한 느낌을 선택해주세요!
+        해당 동행에 대한 느낌을 선택해주세요! (최대 5개)
       </p>
 
       {/* 태그 로딩 상태 */}
