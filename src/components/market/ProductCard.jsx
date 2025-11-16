@@ -183,23 +183,6 @@ export default function ProductCard({ product }) {
             </div>
           )}
 
-          <div>
-            {cart?.items?.map((item) => (
-              <div key={item.cartItemId}>
-                {item.name} - {item.quantity}
-                <button
-                  onClick={() =>
-                    updateQuantity(item.cartItemId, item.quantity + 1)
-                  }
-                >
-                  +
-                </button>
-                <button onClick={() => removeItem(item.cartItemId)}>
-                  삭제
-                </button>
-              </div>
-            ))}
-          </div>
           <div className="flex items-center gap-3 mt-2 font-semibold text-sm">
             수량
             <button

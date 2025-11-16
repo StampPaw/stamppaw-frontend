@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import CartCard from "../../components/market/CartCard.jsx";
 import useCartStore from "../../stores/useCartStore.js";
 import { ShoppingBasket } from "lucide-react";
@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 export default function CartList() {
   const { cart, fetchCart, loading } = useCartStore();
   const navigate = useNavigate();
+  const [selectedItems, setSelectedItems] = useState([]);
 
   useEffect(() => {
     fetchCart();
@@ -79,6 +80,13 @@ export default function CartList() {
     );
   }
 
+  const totalPrice = selectedItems.reduce((sum, itemId) => {
+    const item = cartData.items.find((i) => i.id === itemId);
+    return sum + (item?.subtotal || 0);
+  }, 0);
+
+  const shippingFee = selectedItems.length > 0 ? 3000 : 0;
+  const finalAmount = totalPrice + shippingFee;
   return (
     <div className="bg-white text-text font-sans">
       <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto">
@@ -88,9 +96,34 @@ export default function CartList() {
           </h2>
 
           {cart.items.map((item) => (
-            <CartCard key={item.id} item={item} />
+            <CartCard
+              key={item.id}
+              item={item}
+              selectedItems={selectedItems}
+              setSelectedItems={setSelectedItems}
+            />
           ))}
 
+          <div className="bg-white border border-border rounded-xl shadow-soft p-5 space-y-3">
+            <h3 className="text-lg font-semibold">주문 예상 금액</h3>
+
+            <div className="flex justify-between text-sm text-muted">
+              <span>총 상품 가격</span>
+              <span>{totalPrice.toLocaleString()}원</span>
+            </div>
+
+            <div className="flex justify-between text-sm text-muted">
+              <span>총 배송비</span>
+              <span>+ {shippingFee.toLocaleString()}원</span>
+            </div>
+
+            <hr />
+
+            <div className="flex justify-between text-lg font-bold text-primary">
+              <span>결제 예상 금액</span>
+              <span className="text-2xl">{finalAmount.toLocaleString()}원</span>
+            </div>
+          </div>
           <button className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#ff8a1e] transition">
             주문 하기
           </button>
