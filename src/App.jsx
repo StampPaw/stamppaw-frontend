@@ -16,6 +16,12 @@ import useKakaoLoaderOnce from "./hooks/useKakaoLoaderOnce";
 import HomePage from "./pages/HomePage";
 import WalkPage from "./pages/walk/WalkPage";
 import WalkRecordPage from "./pages/walk/WalkRecordPage";
+import Market from "./pages/market/Market";
+import ProductList from "./pages/market/ProductList";
+import ProductDetail from "./pages/market/ProductDetail";
+import CartList from "./pages/market/CartList";
+import Order from "./pages/market/Order";
+import OrderList from "./pages/market/OrderList";
 
 // ✅ 반려동물 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
@@ -34,6 +40,7 @@ import Signup from "./pages/Auth/Signup";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import SettingsPage from "./pages/Profile/SettingsPage";
+import { i } from "framer-motion/client";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -76,6 +83,17 @@ function AppLayout() {
             {/* ✅ 산책 관련 */}
             <Route path="/walk" element={<WalkPage />} />
             <Route path="/walk/:walkId" element={<WalkRecordPage />} />
+
+            {/* ✅ 마켓 관련 */}
+            <Route path="/market" element={<Market />} />
+            <Route path="/market/products" element={<ProductList />} />
+            <Route
+              path="/market/product/:productId"
+              element={<ProductDetail />}
+            />
+            <Route path="/market/cart" element={<CartList />} />
+            <Route path="/market/orders" element={<OrderList />} />
+            <Route path="/market/order" element={<Order />} />
 
             {/* ✅ 반려동물 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />
