@@ -41,6 +41,7 @@ import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import SettingsPage from "./pages/Profile/SettingsPage";
 import { i } from "framer-motion/client";
+import CompanionEditPage from "./pages/companion/CompanionEditPage";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -104,6 +105,7 @@ function AppLayout() {
               path="/companion/review/write/:applyId"
               element={<CompanionReviewWritePage />}
             />
+            <Route path="/companion/edit/:id" element={<CompanionEditPage />} />
 
             {/* ✅ 채팅 관련 */}
             <Route path="/chat" element={<ChatListPage />} />
