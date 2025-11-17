@@ -1,8 +1,9 @@
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const api = axios.create({
   baseURL: "http://localhost:8080/api",
-  withCredentials: false, // 필요 없음
+  withCredentials: false,
 });
 
 // 요청 인터셉터
@@ -15,7 +16,6 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    console.log("[API Request] Authorization:", config.headers.Authorization);
     return config;
   },
   (error) => Promise.reject(error)
@@ -26,11 +26,23 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response) {
-      console.log("[API Error Response]", error.response.status, error.response.data);
-      if (error.response.status === 401) {
-        console.warn("[API] 401 Unauthorized - invalid token");
+      const status = error.response.status;
+
+      // 🔥 401 = 토큰 만료 or 유효하지 않음
+      if (status === 401) {
+        console.warn("[API] 401 Unauthorized - 만료된 토큰입니다.");
+
+        // 1) 토큰 삭제
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        // 2) 로그인 페이지로 이동
+        window.location.href = "/login";
+
+        return;
       }
     }
+
     return Promise.reject(error);
   }
 );

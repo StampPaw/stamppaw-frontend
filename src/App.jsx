@@ -84,7 +84,7 @@ function AppLayout() {
             <Route path="/walk" element={<WalkPage />} />
             <Route path="/walk/:walkId" element={<WalkRecordPage />} />
 
-            {/* ✅ 마켓 관련 */}
+            {/* 마켓 관련 */}
             <Route path="/market" element={<Market />} />
             <Route path="/market/products" element={<ProductList />} />
             <Route
@@ -93,7 +93,7 @@ function AppLayout() {
             />
             <Route path="/market/cart" element={<CartList />} />
 
-            {/* ✅ 반려동물 관련 */}
+            {/* 동행 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
