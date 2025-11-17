@@ -33,7 +33,7 @@ const marketService = {
   },
 
   getCategory: async () => {
-    const response = await api.get(`/market/categories`);
+    const response = await api.get(`/market/products/categories`);
     return response.data;
   },
 };

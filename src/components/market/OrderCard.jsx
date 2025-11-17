@@ -3,18 +3,8 @@ import { Minus, Plus, Image } from "lucide-react";
 import { Link } from "react-router-dom";
 import useCartStore from "../../stores/useCartStore.js";
 
-export default function CartCard({ item, selectedItems, setSelectedItems }) {
+export default function OrderCard({ item, selectedItems, setSelectedItems }) {
   const { updateQuantity, removeItem } = useCartStore();
-
-  const isChecked = selectedItems.includes(item.id);
-
-  const toggleCheck = () => {
-    if (isChecked) {
-      setSelectedItems((prev) => prev.filter((id) => id !== item.id));
-    } else {
-      setSelectedItems((prev) => [...prev, item.id]);
-    }
-  };
 
   const handleDelete = () => {
     if (window.confirm("이 상품을 장바구니에서 삭제하시겠습니까?")) {
@@ -26,14 +16,6 @@ export default function CartCard({ item, selectedItems, setSelectedItems }) {
   return (
     <section>
       <div className="bg-white rounded-xl shadow-soft border border-border w-full h-40 hover:shadow-md transition-all flex overflow-hidden">
-        <div className="flex items-center px-3">
-          <input
-            type="checkbox"
-            checked={isChecked}
-            onChange={toggleCheck}
-            className="w-5 h-5 accent-primary"
-          />
-        </div>
         {/* 이미지 */}
         <div className="relative shrink-0 aspect-square h-full bg-input overflow-hidden">
           <Link to={`/market/product/${item.productId}`}>
@@ -77,28 +59,11 @@ export default function CartCard({ item, selectedItems, setSelectedItems }) {
             </p>
           </div>
 
-          {/* 수량 · 가격 영역 */}
           <div className="flex items-center justify-between mt-3">
             <div className="flex items-center gap-3 mt-2">
-              <button
-                onClick={() =>
-                  updateQuantity(item.id, Math.max(item.quantity - 1, 1))
-                }
-                className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-
               <span className="text-sm font-medium text-text">
                 {item.quantity}
               </span>
-
-              <button
-                onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
             </div>
 
             <span className="font-semibold text-primary">

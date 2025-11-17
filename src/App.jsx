@@ -20,6 +20,8 @@ import Market from "./pages/market/Market";
 import ProductList from "./pages/market/ProductList";
 import ProductDetail from "./pages/market/ProductDetail";
 import CartList from "./pages/market/CartList";
+import Order from "./pages/market/Order";
+import OrderList from "./pages/market/OrderList";
 
 // ✅ 반려동물 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
@@ -88,6 +90,8 @@ function AppLayout() {
               element={<ProductDetail />}
             />
             <Route path="/market/cart" element={<CartList />} />
+            <Route path="/market/orders" element={<OrderList />} />
+            <Route path="/market/order" element={<Order />} />
 
             {/* ✅ 반려동물 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />
@@ -132,7 +136,7 @@ function AppNavBar() {
     { name: "산책", icon: PawPrint, path: "/walk" },
     { name: "마켓", icon: Store, path: "/market" },
     { name: "채팅", icon: MessageCircle, path: "/chat" },
-    { name: "프로필", icon: UserRound, path: "/login" },
+    { name: "프로필", icon: UserRound, path: "/profile" },
   ];
 
   return <NavBar menus={menus} />;
