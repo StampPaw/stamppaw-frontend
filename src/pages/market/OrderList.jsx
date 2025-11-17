@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import CartCard from "../../components/market/CartCard.jsx";
+import OrderCard from "../../components/market/OrderCard.jsx";
 import useCartStore from "../../stores/useCartStore.js";
-import { ShoppingBasket, ChevronLeft } from "lucide-react";
+import { ShoppingBag, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function OrderList() {
@@ -29,7 +29,7 @@ export default function OrderList() {
         <div className="w-full sm:max-w-[500px] bg-bg flex flex-col items-center justify-center px-5">
           <div className="text-center space-y-4 pt-32">
             <div className="flex justify-center">
-              <ShoppingBasket className="w-16 h-16 text-primary opacity-80" />
+              <ShoppingBag className="w-16 h-16 text-primary opacity-80" />
             </div>
 
             <h2 className="text-xl font-semibold text-text">
@@ -72,7 +72,7 @@ export default function OrderList() {
           </h2>
 
           {cart.items.map((item) => (
-            <CartCard
+            <OrderCard
               key={item.id}
               item={item}
               selectedItems={selectedItems}
@@ -104,7 +104,7 @@ export default function OrderList() {
           </div>
 
           <button className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#ff8a1e] transition">
-            주문 하기
+            더보기
           </button>
         </main>
       </div>
