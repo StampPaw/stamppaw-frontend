@@ -38,7 +38,10 @@ import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import SettingsPage from "./pages/Profile/SettingsPage";
 
 // 반려견 페이지
-import DogAddPage from "./pages/dog/DogAddPage";
+import DogAddPage from "./pages/Dog/DogAddPage";
+import DogListPage from "./pages/Dog/DogListPage";
+import DogDetailPage from "./pages/Dog/DogDetailPage";
+import DogEditPage from "./pages/Dog/DogEditPage";
 import { i } from "framer-motion/client";
 
 export default function App() {
@@ -111,8 +114,12 @@ function AppLayout() {
             <Route path="/profile/edit" element={<ProfileEditPage />} />
             <Route path="/profile/settings" element={<SettingsPage />} />
             <Route path="/users/me" element={<ProfilePage />} />
+
              {/* 반려견 */}
             <Route path="/dogs/add" element={<DogAddPage />} />
+            <Route path="/dogs/:dogId" element={<DogDetailPage />} />
+            <Route path="/dogs/:dogId/edit" element={<DogEditPage />} />
+            <Route path="/dogs" element={<DogListPage />} />
 
           </Routes>
         </div>

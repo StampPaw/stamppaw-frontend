@@ -35,10 +35,11 @@ export default function DogListPage() {
               onClick={() => navigate(`/dogs/${dog.id}`)}
             >
               <img
-                src={dog.image_url || "/default-dog.png"}   {/* ← 여기 수정 */}
+                src={dog.image_url || "/default-dog.png"}
                 alt={dog.name}
                 className="w-full h-28 object-cover rounded-lg"
               />
+
               <p className="mt-2 text-lg font-semibold text-[#4C3728]">
                 {dog.name}
               </p>

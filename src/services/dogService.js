@@ -14,11 +14,14 @@ export const addDog = async (formData) => {
   return res.data;
 };
 
-// 반려견 상세 조회
+// 반려견 상세 조회 (기존 함수)
 export const getDogDetail = async (dogId) => {
   const response = await api.get(`/dogs/${dogId}`);
   return response.data;
 };
+
+// ❗ DogDetailPage에서 getDogById 를 import 하므로 alias 추가
+export const getDogById = getDogDetail;
 
 // 반려견 수정 (multipart/form-data)
 export const updateDog = async (dogId, formData) => {
