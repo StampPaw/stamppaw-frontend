@@ -393,7 +393,7 @@ export default function CompanionDetailPage() {
                 <>
                   <button
                     onClick={() => navigate(`/companion/edit/${id}`)}
-                    className="text-gray-400 hover:text-blue-800 transition flex items-center justify-center"
+                    className="text-gray-400 hover:text-blue-500 transition-colors duration-200 flex items-center justify-center"
                   >
                     <Pencil size={20} />
                   </button>
@@ -421,7 +421,7 @@ export default function CompanionDetailPage() {
                         alert("삭제 중 문제가 발생했습니다.");
                       }
                     }}
-                    className="text-gray-400 hover:text-red-800 transition flex items-center justify-center"
+                    className="text-gray-400 hover:text-red-500 transition-colors duration-200 flex items-center justify-center"
                   >
                     <Trash size={20} />
                   </button>
