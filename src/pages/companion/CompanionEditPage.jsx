@@ -150,14 +150,14 @@ export default function CompanionEditPage() {
             <button
               type="button"
               onClick={() => navigate(-1)}
-              className="px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400"
+              className="w-1/2 mr-2 px-4 py-2 bg-gray-300 text-black rounded-md hover:bg-gray-400"
             >
               취소
             </button>
 
             <button
               type="submit"
-              className="px-4 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-500"
+              className="w-1/2 ml-2 px-4 py-2 bg-orange-400 text-white rounded-md hover:bg-orange-500"
             >
               수정 완료
             </button>
