@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyInfo } from "@/services/userService";
+import ProfileFreePage from "./ProfileFreePage";
+import ProfileWalkPage from "./ProfileWalkPage";
+import ProfileAccompanyManagePage from "./ProfileAccompanyManagePage";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState("free");
 
   // 🔐 토큰 + 유저정보 로딩을 하나의 useEffect로 처리 (원래 네 스타일)
   useEffect(() => {
@@ -43,10 +47,8 @@ export default function ProfilePage() {
 
   return (
     <div className="w-full min-h-screen bg-[#FFFDF6]">
-
       {/* 🔶 프로필 전체 블록 */}
       <div className="px-5 pt-10 flex items-start gap-6">
-        
         {/* 🔸 왼쪽: 프로필 이미지 */}
         <div className="relative w-24 h-24 flex-shrink-0">
           <img
@@ -55,7 +57,6 @@ export default function ProfilePage() {
                 ? `http://localhost:8080/uploads/profile/${user.profileImage}`
                 : "/default-profile.png"
             }
-
             className="w-full h-full rounded-full object-cover border border-gray-200"
           />
 
@@ -74,7 +75,6 @@ export default function ProfilePage() {
 
         {/* 🔸 오른쪽: 닉네임 + 버튼 + 소개 + 기록 */}
         <div className="flex flex-col w-full">
-
           {/* 닉네임 + 팔로우 버튼 */}
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold text-[#4C3728]">{user.nickname}</p>
@@ -91,7 +91,6 @@ export default function ProfilePage() {
 
           {/* 기록 / 팔로워 / 팔로잉 */}
           <div className="mt-4 flex flex-row items-center gap-10">
-
             <div className="text-center">
               <p className="text-lg font-semibold">{user.recordCount ?? 0}</p>
               <p className="text-xs text-[#B38A6A]">기록</p>
@@ -103,12 +102,12 @@ export default function ProfilePage() {
             </div>
 
             <div className="text-center">
-              <p className="text-lg font-semibold">{user.followingCount ?? 0}</p>
+              <p className="text-lg font-semibold">
+                {user.followingCount ?? 0}
+              </p>
               <p className="text-xs text-[#B38A6A]">팔로잉</p>
             </div>
-
           </div>
-
         </div>
       </div>
 
@@ -120,7 +119,11 @@ export default function ProfilePage() {
               key={dog.id}
               className="w-14 h-14 rounded-full overflow-hidden shadow bg-[#FFF7E3]"
             >
-              <img src={dog.imageUrl} alt={dog.name} className="w-full h-full object-cover" />
+              <img
+                src={dog.imageUrl}
+                alt={dog.name}
+                className="w-full h-full object-cover"
+              />
             </div>
           ))
         ) : (
@@ -132,15 +135,48 @@ export default function ProfilePage() {
 
       {/* 🔶 탭 메뉴 */}
       <div className="flex px-5 mt-8 border-b border-[#F4E4C2]">
-        <button className="px-4 pb-3 text-sm text-[#8D7B6C]" onClick={() => navigate("/profile/free")}>
+        {/* 자유 */}
+        <button
+          className={`px-4 pb-3 text-sm ${
+            tab === "free"
+              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
+              : "text-[#8D7B6C]"
+          }`}
+          onClick={() => setTab("free")}
+        >
           자유
         </button>
-        <button className="px-4 pb-3 text-sm text-[#8D7B6C]" onClick={() => navigate("/profile/walk")}>
+
+        {/* 산책 */}
+        <button
+          className={`px-4 pb-3 text-sm ${
+            tab === "walk"
+              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
+              : "text-[#8D7B6C]"
+          }`}
+          onClick={() => setTab("walk")}
+        >
           산책
         </button>
-        <button className="px-4 pb-3 text-sm text-[#8D7B6C]" onClick={() => navigate("/profile/accompany")}>
+
+        {/* 동행 */}
+        <button
+          className={`px-4 pb-3 text-sm ${
+            tab === "accompany"
+              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
+              : "text-[#8D7B6C]"
+          }`}
+          onClick={() => setTab("accompany")}
+        >
           동행
         </button>
+      </div>
+
+      {/* 🔶 탭별 렌더링 */}
+      <div className="mt-5 px-5">
+        {tab === "free" && <ProfileFreePage user={user} />}
+        {tab === "walk" && <ProfileWalkPage user={user} />}
+        {tab === "accompany" && <ProfileAccompanyManagePage user={user} />}
       </div>
 
       <div className="h-20" />

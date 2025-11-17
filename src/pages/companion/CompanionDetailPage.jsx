@@ -250,13 +250,20 @@ export default function CompanionDetailPage() {
               <div className="flex items-center gap-2">
                 <UserAvatar image={companion.user?.profileImage} size="md" />
                 <span className="font-medium">
-                  {companion.user?.nickName || "익명"}
+                  {companion.user?.nickname || "익명"}
                 </span>
 
                 {currentUserId !== companion.user?.id && (
                   <button
                     onClick={handleChatButtonClick}
-                    className="bg-orange-400 hover:bg-orange-500 text-white text-xs px-3 py-1 rounded-full shadow-sm transition"
+                    disabled={companion.status === "CLOSED"}
+                    className={`bg-orange-400 text-white text-xs px-3 py-1 rounded-full shadow-sm transition
+                    ${
+                      companion.status === "CLOSED"
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "hover:bg-orange-500"
+                    }
+                  `}
                   >
                     {isChatOngoing ? "대화 중인 채팅" : "채팅하기"}
                   </button>
@@ -266,14 +273,18 @@ export default function CompanionDetailPage() {
                   <>
                     <button
                       onClick={handleApplyClick}
-                      disabled={hasApplied}
+                      disabled={hasApplied || companion.status === "CLOSED"}
                       className={`ml-2 text-white text-xs px-3 py-1 rounded-full shadow-sm transition ${
-                        hasApplied
+                        hasApplied || companion.status === "CLOSED"
                           ? "bg-gray-400 cursor-not-allowed"
                           : "bg-orange-400 hover:bg-orange-500"
                       }`}
                     >
-                      {hasApplied ? "이미 신청한 글" : "동행 신청하기"}
+                      {hasApplied
+                        ? "이미 신청한 글"
+                        : companion.status === "CLOSED"
+                        ? "모집 마감"
+                        : "동행 신청하기"}
                     </button>
                   </>
                 ) : (
@@ -335,7 +346,7 @@ export default function CompanionDetailPage() {
                     >
                       <div>
                         <p className="font-medium">
-                          {apply.user?.nickName || "익명"}
+                          {apply.user?.nickname || "익명"}
                         </p>
                         <p className="text-xs text-gray-500">{statusLabel}</p>
                       </div>

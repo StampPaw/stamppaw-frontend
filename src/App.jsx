@@ -29,6 +29,8 @@ import CompanionWritePage from "./pages/companion/CompanionWritePage";
 import CompanionDetailPage from "./pages/companion/CompanionDetailPage";
 import ChatRoomPage from "./pages/companion/ChatRoomPage";
 import ChatListPage from "./pages/companion/ChatListPage";
+import ProfileApplyPage from "./pages/Profile/ProfileApplyPage";
+import CompanionReviewWritePage from "./pages/companion/CompanionReviewWritePage";
 
 // ✅ 로그인/회원가입 페이지
 import Login from "./pages/Auth/Login";
@@ -97,6 +99,11 @@ function AppLayout() {
             <Route path="/companion" element={<CompanionListPage />} />
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
+            <Route path="/profile/apply" element={<ProfileApplyPage />} />
+            <Route
+              path="/companion/review/write/:applyId"
+              element={<CompanionReviewWritePage />}
+            />
 
             {/* ✅ 채팅 관련 */}
             <Route path="/chat" element={<ChatListPage />} />
