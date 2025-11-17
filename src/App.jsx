@@ -16,6 +16,10 @@ import useKakaoLoaderOnce from "./hooks/useKakaoLoaderOnce";
 import HomePage from "./pages/HomePage";
 import WalkPage from "./pages/walk/WalkPage";
 import WalkRecordPage from "./pages/walk/WalkRecordPage";
+import Market from "./pages/market/Market";
+import ProductList from "./pages/market/ProductList";
+import ProductDetail from "./pages/market/ProductDetail";
+import CartList from "./pages/market/CartList";
 
 // 동행 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
@@ -35,7 +39,7 @@ import SettingsPage from "./pages/Profile/SettingsPage";
 
 // 반려견 페이지
 import DogAddPage from "./pages/dog/DogAddPage";
-
+import { i } from "framer-motion/client";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -68,7 +72,9 @@ function AppLayout() {
       )}
 
       {/* 메인 컨텐츠 (라우팅 영역) */}
-      <main className={`relative z-0 ${hideLayout ? "" : "pt-[60px] pb-[80px]"}`}>
+      <main
+        className={`relative z-0 ${hideLayout ? "" : "pt-[60px] pb-[80px]"}`}
+      >
         <div className="w-full sm:max-w-[500px] mx-auto">
           <Routes>
             {/* 홈 */}
@@ -78,7 +84,16 @@ function AppLayout() {
             <Route path="/walk" element={<WalkPage />} />
             <Route path="/walk/:walkId" element={<WalkRecordPage />} />
 
-            {/* 동행 관련 */}
+            {/* ✅ 마켓 관련 */}
+            <Route path="/market" element={<Market />} />
+            <Route path="/market/products" element={<ProductList />} />
+            <Route
+              path="/market/product/:productId"
+              element={<ProductDetail />}
+            />
+            <Route path="/market/cart" element={<CartList />} />
+
+            {/* ✅ 반려동물 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
@@ -96,7 +111,6 @@ function AppLayout() {
             <Route path="/profile/edit" element={<ProfileEditPage />} />
             <Route path="/profile/settings" element={<SettingsPage />} />
             <Route path="/users/me" element={<ProfilePage />} />
-
              {/* 반려견 */}
             <Route path="/dogs/add" element={<DogAddPage />} />
 
@@ -125,7 +139,7 @@ function AppNavBar() {
     { name: "산책", icon: PawPrint, path: "/walk" },
     { name: "마켓", icon: Store, path: "/market" },
     { name: "채팅", icon: MessageCircle, path: "/chat" },
-    { name: "프로필", icon: UserRound, path: "/profile" },
+    { name: "프로필", icon: UserRound, path: "/login" },
   ];
 
   return <NavBar menus={menus} />;
