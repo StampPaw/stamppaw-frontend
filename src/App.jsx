@@ -139,7 +139,7 @@ function AppNavBar() {
     { name: "산책", icon: PawPrint, path: "/walk" },
     { name: "마켓", icon: Store, path: "/market" },
     { name: "채팅", icon: MessageCircle, path: "/chat" },
-    { name: "프로필", icon: UserRound, path: "/login" },
+    { name: "프로필", icon: UserRound, path: "/profile" },
   ];
 
   return <NavBar menus={menus} />;

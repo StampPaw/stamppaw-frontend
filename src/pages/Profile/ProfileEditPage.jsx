@@ -11,7 +11,7 @@ export default function ProfileEditPage() {
   const [profileImage, setProfileImage] = useState(null);
   const [preview, setPreview] = useState("");
 
-  // ⭐ 오류 메시지 상태
+  // 오류 메시지 상태
   const [nicknameError, setNicknameError] = useState("");
 
   // 유저 정보 불러오기

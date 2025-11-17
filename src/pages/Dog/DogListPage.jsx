@@ -35,7 +35,7 @@ export default function DogListPage() {
               onClick={() => navigate(`/dogs/${dog.id}`)}
             >
               <img
-                src={dog.imageUrl || "/default-dog.png"}
+                src={dog.image_url || "/default-dog.png"}   {/* ← 여기 수정 */}
                 alt={dog.name}
                 className="w-full h-28 object-cover rounded-lg"
               />

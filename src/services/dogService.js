@@ -6,9 +6,9 @@ export const getMyDogs = async () => {
   return response.data;
 };
 
-// 반려견 등록
+// 반려견 등록 (multipart/form-data)
 export const addDog = async (formData) => {
-  const res = await api.post("/api/dogs", formData, {
+  const res = await api.post("/dogs", formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
   return res.data;
@@ -20,12 +20,12 @@ export const getDogDetail = async (dogId) => {
   return response.data;
 };
 
-// 반려견 수정
+// 반려견 수정 (multipart/form-data)
 export const updateDog = async (dogId, formData) => {
-  const response = await api.patch(`/dogs/${dogId}`, formData, {
+  const res = await api.patch(`/dogs/${dogId}`, formData, {
     headers: { "Content-Type": "multipart/form-data" },
   });
-  return response.data;
+  return res.data;
 };
 
 // 반려견 삭제

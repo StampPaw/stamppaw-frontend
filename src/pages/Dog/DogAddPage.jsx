@@ -9,47 +9,71 @@ export default function DogAddPage() {
     name: "",
     breed: "",
     age: "",
+    character: "",
   });
 
   const [imageFile, setImageFile] = useState(null);
   const [preview, setPreview] = useState(null);
 
-  // 입력 변경
+  // 에러 메시지
+  const [nameError, setNameError] = useState("");
+  const [breedError, setBreedError] = useState("");
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+
+    if (name === "name") setNameError("");
+    if (name === "breed") setBreedError("");
   };
 
-  // 이미지 선택
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
-
     setImageFile(file);
     setPreview(URL.createObjectURL(file));
   };
 
-  // 제출
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.breed) {
-      alert("이름과 품종은 필수입니다!");
-      return;
+
+    let hasError = false;
+
+    if (!formData.name.trim()) {
+      setNameError("반려견 이름을 입력해주세요.");
+      hasError = true;
+    }
+    if (!formData.breed.trim()) {
+      setBreedError("반려견 품종을 입력해주세요.");
+      hasError = true;
     }
 
+    if (hasError) return;
+
     const data = new FormData();
-    data.append("name", formData.name);
-    data.append("breed", formData.breed);
-    data.append("age", formData.age);
-    if (imageFile) data.append("image", imageFile);
+
+    const jsonData = {
+      name: formData.name,
+      breed: formData.breed,
+      age: Number(formData.age),
+      character: formData.character,
+      image_url: null,
+    };
+
+    data.append(
+      "data",
+      new Blob([JSON.stringify(jsonData)], { type: "application/json" })
+    );
+
+    if (imageFile) {
+      data.append("image", imageFile);
+    }
 
     try {
       await addDog(data);
-      alert("반려견이 등록되었습니다!");
       navigate("/profile");
     } catch (err) {
       console.error(err);
-      alert("등록에 실패했습니다.");
     }
   };
 
@@ -72,31 +96,54 @@ export default function DogAddPage() {
       {/* 입력 폼 */}
       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
 
-        <input
-          name="name"
-          placeholder="이름"
-          value={formData.name}
-          onChange={handleChange}
-          className="px-4 py-3 bg-white rounded-lg border border-[#E5D8C4] focus:outline-none"
-        />
+        {/* 이름 */}
+        <div className="w-full">
+          <input
+            name="name"
+            placeholder="이름"
+            value={formData.name}
+            onChange={handleChange}
+            className={`px-4 py-3 bg-white rounded-lg border ${
+              nameError ? "border-red-400" : "border-[#E5D8C4]"
+            } w-full`}
+          />
+          {nameError && <p className="text-sm text-red-500 mt-1">{nameError}</p>}
+        </div>
 
-        <input
-          name="breed"
-          placeholder="품종"
-          value={formData.breed}
-          onChange={handleChange}
-          className="px-4 py-3 bg-white rounded-lg border border-[#E5D8C4] focus:outline-none"
-        />
+        {/* 품종 */}
+        <div className="w-full">
+          <input
+            name="breed"
+            placeholder="품종"
+            value={formData.breed}
+            onChange={handleChange}
+            className={`px-4 py-3 bg-white rounded-lg border ${
+              breedError ? "border-red-400" : "border-[#E5D8C4]"
+            } w-full`}
+          />
+          {breedError && <p className="text-sm text-red-500 mt-1">{breedError}</p>}
+        </div>
 
+        {/* 나이 */}
         <input
           name="age"
           placeholder="나이"
           type="number"
           value={formData.age}
           onChange={handleChange}
-          className="px-4 py-3 bg-white rounded-lg border border-[#E5D8C4] focus:outline-none"
+          className="px-4 py-3 bg-white rounded-lg border border-[#E5D8C4]"
         />
 
+        {/* 성격 */}
+        <textarea
+          name="character"
+          placeholder="성격"
+          value={formData.character}
+          onChange={handleChange}
+          className="px-4 py-3 bg-white rounded-lg border border-[#E5D8C4] min-h-[80px]"
+        />
+
+        {/* 등록 버튼 */}
         <button
           type="submit"
           className="w-full py-3 bg-[#F6C343] text-[#4C3728] font-semibold rounded-lg mt-2"

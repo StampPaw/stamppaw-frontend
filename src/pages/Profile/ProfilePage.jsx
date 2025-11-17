@@ -101,20 +101,22 @@ export default function ProfilePage() {
 
       {/* 반려견 영역 */}
       <div className="mt-1 px-5">
-
-        {/* 타이틀 (작게 조정) */}
         <p className="text-base font-semibold text-[#6B5B4A] mb-3">
           나의 반려동물 🐾
         </p>
 
         {(user.dogs ?? []).length > 0 ? (
-          /* 강아지가 있는 경우 */
-          <div className="flex items-center gap-4 overflow-x-auto pb-2">
+          <div className="flex items-start gap-4 overflow-x-auto pb-2">
+
             {user.dogs.map((dog) => (
-              <div key={dog.id} className="flex flex-col items-center">
+              <div
+                key={dog.id}
+                className="flex flex-col items-center cursor-pointer"
+                onClick={() => navigate(`/dogs/${dog.id}`)}
+              >
                 <div className="w-16 h-16 rounded-full overflow-hidden shadow bg-[#FFF7E3]">
                   <img
-                    src={dog.imageUrl}
+                    src={dog.image_url || "/default-dog.png"} 
                     alt={dog.name}
                     className="w-full h-full object-cover"
                   />
@@ -123,16 +125,19 @@ export default function ProfilePage() {
               </div>
             ))}
 
-            {/* + 버튼 (축소 버전) */}
-            <button
-              onClick={() => navigate("/dogs/add")}
-              className="w-14 h-14 rounded-full bg-[#F3E9D2] flex items-center justify-center shadow"
-            >
-              <span className="text-[#D4A055] text-3xl font-bold">+</span>
-            </button>
+            {/* + 버튼도 동일한 구조로 감싸기 */}
+            <div className="flex flex-col items-center">
+              <button
+                onClick={() => navigate("/dogs/add")}
+                className="w-16 h-16 rounded-full bg-[#F3E9D2] flex items-center justify-center shadow"
+              >
+                <span className="text-[#D4A055] text-3xl font-bold">+</span>
+              </button>
+              <p className="text-xs text-[#F3E9D2] mt-1">{" "}</p>
+            </div>
+
           </div>
         ) : (
-          /* 강아지가 없는 경우 — 문구 제거하고 버튼만 */
           <div className="flex flex-col items-start gap-3">
             <button
               onClick={() => navigate("/dogs/add")}
@@ -143,6 +148,7 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
+
 
       {/* 탭 메뉴 */}
       <div className="flex px-5 mt-8 border-b border-[#F4E4C2]">
