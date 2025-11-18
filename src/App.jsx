@@ -20,6 +20,8 @@ import Market from "./pages/market/Market";
 import ProductList from "./pages/market/ProductList";
 import ProductDetail from "./pages/market/ProductDetail";
 import CartList from "./pages/market/CartList";
+import Order from "./pages/market/Order";
+import OrderList from "./pages/market/OrderList";
 
 // 동행 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
@@ -27,6 +29,8 @@ import CompanionWritePage from "./pages/companion/CompanionWritePage";
 import CompanionDetailPage from "./pages/companion/CompanionDetailPage";
 import ChatRoomPage from "./pages/companion/ChatRoomPage";
 import ChatListPage from "./pages/companion/ChatListPage";
+import ProfileApplyPage from "./pages/Profile/ProfileApplyPage";
+import CompanionReviewWritePage from "./pages/companion/CompanionReviewWritePage";
 
 // 로그인/회원가입 페이지
 import Login from "./pages/Auth/Login";
@@ -43,6 +47,7 @@ import DogListPage from "./pages/Dog/DogListPage";
 import DogDetailPage from "./pages/Dog/DogDetailPage";
 import DogEditPage from "./pages/Dog/DogEditPage";
 import { i } from "framer-motion/client";
+import CompanionEditPage from "./pages/companion/CompanionEditPage";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -95,11 +100,19 @@ function AppLayout() {
               element={<ProductDetail />}
             />
             <Route path="/market/cart" element={<CartList />} />
+            <Route path="/market/orders" element={<OrderList />} />
+            <Route path="/market/order" element={<Order />} />
 
             {/* 동행 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
+            <Route path="/profile/apply" element={<ProfileApplyPage />} />
+            <Route
+              path="/companion/review/write/:applyId"
+              element={<CompanionReviewWritePage />}
+            />
+            <Route path="/companion/edit/:id" element={<CompanionEditPage />} />
 
             {/* 채팅 관련 */}
             <Route path="/chat" element={<ChatListPage />} />

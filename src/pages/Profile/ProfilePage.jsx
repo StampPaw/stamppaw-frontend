@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyInfo } from "@/services/userService";
+import ProfileFreePage from "./ProfileFreePage";
+import ProfileWalkPage from "./ProfileWalkPage";
+import ProfileAccompanyManagePage from "./ProfileAccompanyManagePage";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState("free");
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -91,11 +95,12 @@ export default function ProfilePage() {
               <p className="text-xs text-[#B38A6A]">팔로워</p>
             </div>
             <div className="text-center">
-              <p className="text-lg font-semibold">{user.followingCount ?? 0}</p>
+              <p className="text-lg font-semibold">
+                {user.followingCount ?? 0}
+              </p>
               <p className="text-xs text-[#B38A6A]">팔로잉</p>
             </div>
           </div>
-
         </div>
       </div>
 
@@ -154,15 +159,48 @@ export default function ProfilePage() {
 
       {/* 탭 메뉴 */}
       <div className="flex px-5 mt-8 border-b border-[#F4E4C2]">
-        <button className="px-4 pb-3 text-sm text-[#8D7B6C]" onClick={() => navigate("/profile/free")}>
+        {/* 자유 */}
+        <button
+          className={`px-4 pb-3 text-sm ${
+            tab === "free"
+              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
+              : "text-[#8D7B6C]"
+          }`}
+          onClick={() => setTab("free")}
+        >
           자유
         </button>
-        <button className="px-4 pb-3 text-sm text-[#8D7B6C]" onClick={() => navigate("/profile/walk")}>
+
+        {/* 산책 */}
+        <button
+          className={`px-4 pb-3 text-sm ${
+            tab === "walk"
+              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
+              : "text-[#8D7B6C]"
+          }`}
+          onClick={() => setTab("walk")}
+        >
           산책
         </button>
-        <button className="px-4 pb-3 text-sm text-[#8D7B6C]" onClick={() => navigate("/profile/accompany")}>
+
+        {/* 동행 */}
+        <button
+          className={`px-4 pb-3 text-sm ${
+            tab === "accompany"
+              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
+              : "text-[#8D7B6C]"
+          }`}
+          onClick={() => setTab("accompany")}
+        >
           동행
         </button>
+      </div>
+
+      {/* 🔶 탭별 렌더링 */}
+      <div className="mt-5 px-5">
+        {tab === "free" && <ProfileFreePage user={user} />}
+        {tab === "walk" && <ProfileWalkPage user={user} />}
+        {tab === "accompany" && <ProfileAccompanyManagePage user={user} />}
       </div>
 
       <div className="h-20" />
