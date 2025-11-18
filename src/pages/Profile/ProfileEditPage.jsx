@@ -8,10 +8,10 @@ export default function ProfileEditPage() {
 
   const [user, setUser] = useState(null);
   const [nickname, setNickname] = useState("");
+  const [bio, setBio] = useState(""); // ✅ 자기소개 추가
   const [profileImage, setProfileImage] = useState(null);
   const [preview, setPreview] = useState("");
 
-  // 오류 메시지 상태
   const [nicknameError, setNicknameError] = useState("");
 
   // 유저 정보 불러오기
@@ -19,7 +19,8 @@ export default function ProfileEditPage() {
     const fetchUser = async () => {
       const data = await getMyInfo();
       setUser(data);
-      setNickname(data.nickname);
+      setNickname(data.nickname || "");
+      setBio(data.bio || ""); // ✅ userResponseDto.bio 사용
 
       if (data.profileImage) setPreview(data.profileImage);
     };
@@ -28,7 +29,7 @@ export default function ProfileEditPage() {
 
   if (!user) return <p className="text-center mt-10">로딩 중...</p>;
 
-  // 이미지 선택
+  // 이미지 변경
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -41,6 +42,7 @@ export default function ProfileEditPage() {
   const handleSave = async () => {
     const formData = new FormData();
     formData.append("nickname", nickname);
+    formData.append("bio", bio); // ✅ bio 포함
 
     if (profileImage) {
       formData.append("profileImage", profileImage);
@@ -48,9 +50,7 @@ export default function ProfileEditPage() {
 
     try {
       await updateUserInfo(formData);
-      // alert 제거 → 자연스럽게 페이지 이동
       navigate("/profile");
-
     } catch (err) {
       if (err.response?.data?.message) {
         setNicknameError(err.response.data.message);
@@ -120,7 +120,7 @@ export default function ProfileEditPage() {
             maxLength={20}
             onChange={(e) => {
               setNickname(e.target.value);
-              setNicknameError(""); // 입력 시 오류 제거
+              setNicknameError(""); 
             }}
             className={`w-full border ${
               nicknameError ? "border-red-400" : "border-[#FFD18E]"
@@ -128,7 +128,6 @@ export default function ProfileEditPage() {
                        focus:ring-2 focus:ring-[#FF9F43]`}
           />
 
-          {/* 닉네임 오류 메시지 */}
           {nicknameError && (
             <p className="text-sm text-red-500 mt-1">{nicknameError}</p>
           )}
@@ -144,6 +143,21 @@ export default function ProfileEditPage() {
             value={user.email}
             disabled
             className="w-full border border-gray-300 rounded-lg px-4 py-2 bg-[#FFF5E0] text-gray-500"
+          />
+        </div>
+
+        {/* 자기소개 */}
+        <div className="mb-6">
+          <label className="block mb-1 font-semibold text-[#6B5B4A]">
+            자기소개
+          </label>
+
+          <textarea
+            value={bio}
+            rows={4}
+            placeholder="자기소개를 입력하세요 :)"
+            onChange={(e) => setBio(e.target.value)}
+            className="w-full border border-[#FFD18E] rounded-lg px-4 py-2 bg-white focus:outline-none focus:ring-2 focus:ring-[#FF9F43]"
           />
         </div>
 
