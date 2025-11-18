@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Header from "../../components/ui/Header";
 
 export default function ChatRoomPage() {
   const [messages, setMessages] = useState([]);
