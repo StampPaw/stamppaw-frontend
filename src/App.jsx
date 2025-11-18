@@ -42,6 +42,8 @@ import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import SettingsPage from "./pages/Profile/SettingsPage";
 import { i } from "framer-motion/client";
 import CompanionEditPage from "./pages/companion/CompanionEditPage";
+import AllListPage from "./pages/AllListPage";
+import SearchPage from "./pages/SearchPage";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -80,6 +82,7 @@ function AppLayout() {
           <Routes>
             {/* ✅ 홈 */}
             <Route path="/" element={<HomePage />} />
+            <Route path="/all-list" element={<AllListPage />} />
 
             {/* ✅ 산책 관련 */}
             <Route path="/walk" element={<WalkPage />} />
@@ -120,6 +123,8 @@ function AppLayout() {
             <Route path="/profile/edit" element={<ProfileEditPage />} />
             <Route path="/profile/settings" element={<SettingsPage />} />
             <Route path="/users/me" element={<ProfilePage />} />
+
+            <Route path="/search" element={<SearchPage />} />
           </Routes>
         </div>
       </main>
