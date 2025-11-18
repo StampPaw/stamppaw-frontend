@@ -8,7 +8,7 @@ export default function ProfileEditPage() {
 
   const [user, setUser] = useState(null);
   const [nickname, setNickname] = useState("");
-  const [bio, setBio] = useState(""); // ✅ 자기소개 추가
+  const [bio, setBio] = useState("");
   const [profileImage, setProfileImage] = useState(null);
   const [preview, setPreview] = useState("");
 
@@ -20,9 +20,11 @@ export default function ProfileEditPage() {
       const data = await getMyInfo();
       setUser(data);
       setNickname(data.nickname || "");
-      setBio(data.bio || ""); // ✅ userResponseDto.bio 사용
+      setBio(data.bio || "");
 
-      if (data.profileImage) setPreview(data.profileImage);
+      if (data.profileImage) {
+        setPreview(data.profileImage);
+      }
     };
     fetchUser();
   }, []);
@@ -42,7 +44,7 @@ export default function ProfileEditPage() {
   const handleSave = async () => {
     const formData = new FormData();
     formData.append("nickname", nickname);
-    formData.append("bio", bio); // ✅ bio 포함
+    formData.append("bio", bio);
 
     if (profileImage) {
       formData.append("profileImage", profileImage);
@@ -54,9 +56,9 @@ export default function ProfileEditPage() {
     } catch (err) {
       if (err.response?.data?.message) {
         setNicknameError(err.response.data.message);
-        return;
+      } else {
+        setNicknameError("수정 중 오류가 발생했습니다.");
       }
-      setNicknameError("수정 중 오류가 발생했습니다.");
     }
   };
 
@@ -71,7 +73,6 @@ export default function ProfileEditPage() {
 
   return (
     <div className="w-full min-h-screen bg-[#FFFDF6] pb-24">
-
       {/* 제목 */}
       <h2 className="text-center text-2xl font-bold text-[#4C3728] mt-10">
         프로필 수정
@@ -86,7 +87,7 @@ export default function ProfileEditPage() {
                 ? preview
                 : user.profileImage
                 ? user.profileImage
-                : "/default-profile.png"
+                : "/user.svg"             // ⬅⬅⬅ 요기 수정됨!!!
             }
             className="w-32 h-32 rounded-full object-cover"
           />
@@ -105,7 +106,6 @@ export default function ProfileEditPage() {
 
       {/* 입력 섹션 */}
       <div className="px-8 mt-10">
-
         {/* 닉네임 */}
         <div className="mb-6 relative">
           <label className="block mb-1 font-semibold text-[#6B5B4A]">
@@ -120,7 +120,7 @@ export default function ProfileEditPage() {
             maxLength={20}
             onChange={(e) => {
               setNickname(e.target.value);
-              setNicknameError(""); 
+              setNicknameError("");
             }}
             className={`w-full border ${
               nicknameError ? "border-red-400" : "border-[#FFD18E]"
@@ -180,7 +180,6 @@ export default function ProfileEditPage() {
           로그아웃
         </button>
       </div>
-
     </div>
   );
 }
