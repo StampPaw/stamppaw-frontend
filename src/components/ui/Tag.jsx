@@ -4,9 +4,8 @@ export default function Tag({ selectedTag, onTagClick }) {
   const tags = ["전체", "자유", "알바 구인", "동행 모집"];
 
   return (
-    <section>
-      <h2 className="text-xl font-semibold mb-4">Tags</h2>
-      <div className="flex gap-2 flex-wrap">
+    <section className="mt-5">
+      <div className="flex gap-3 flex-wrap">
         {tags.map((tag) => {
           const isActive = tag === selectedTag;
           return (
