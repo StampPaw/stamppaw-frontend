@@ -16,7 +16,9 @@ export default function CompanionEditPage() {
   useEffect(() => {
     const fetchCompanion = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/companion/${id}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/companion/${id}`
+        );
         if (!res.ok) throw new Error("글 정보를 불러오지 못했습니다.");
         const data = await res.json();
 
@@ -52,13 +54,16 @@ export default function CompanionEditPage() {
 
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:8080/api/companion/${id}`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
+      const res = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/companion/${id}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formData,
+        }
+      );
 
       if (!res.ok) throw new Error("수정 실패");
 

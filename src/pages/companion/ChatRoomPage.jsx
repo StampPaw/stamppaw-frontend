@@ -22,7 +22,9 @@ export default function ChatRoomPage() {
     const fetchMessages = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8080/api/companion/chat/messages/rooms/${roomId}`,
+          `${
+            import.meta.env.VITE_API_BASE_URL
+          }/companion/chat/messages/rooms/${roomId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

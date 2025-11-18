@@ -23,13 +23,16 @@ export default function CompanionWritePage() {
     if (image) formData.append("image", image);
 
     try {
-      const response = await fetch("http://localhost:8080/api/companion", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: formData,
-      });
+      const response = await fetch(
+        "${import.meta.env.VITE_API_BASE_URL}/companion",
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: formData,
+        }
+      );
 
       if (response.ok) {
         alert("글이 성공적으로 등록되었습니다!");

@@ -15,7 +15,7 @@ export default function CompanionReviewWritePage() {
     const fetchTags = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8080/api/companion/review/all-tags",
+          "${import.meta.env.VITE_API_BASE_URL}/companion/review/all-tags",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -62,7 +62,7 @@ export default function CompanionReviewWritePage() {
 
     try {
       const res = await fetch(
-        `http://localhost:8080/api/companion/review/${applyId}`,
+        `${import.meta.env.VITE_API_BASE_URL}/companion/review/${applyId}`,
         {
           method: "POST",
           headers: {
