@@ -46,7 +46,7 @@ export default function ProfilePage() {
         {/* 프로필 이미지 */}
         <div className="relative w-24 h-24 flex-shrink-0">
           <img
-            src={user.profileImage ? user.profileImage : "/default-profile.png"}
+            src={user.profileImage ? user.profileImage : "/user.svg"}
             className="w-full h-full rounded-full object-cover border border-gray-200"
           />
 
@@ -116,11 +116,13 @@ export default function ProfilePage() {
               >
                 <div className="w-16 h-16 rounded-full overflow-hidden shadow bg-[#FFF7E3]">
                   <img
-                    src={dog.image_url || "/default-dog.png"} 
+                    src={dog.image_url || "/dog.png"}
                     alt={dog.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover scale-[1.5] translate-y-3"
+                    style={{ transformOrigin: "center" }}
                   />
                 </div>
+
                 <p className="text-xs text-[#6B5B4A] mt-1">{dog.name}</p>
               </div>
             ))}
