@@ -8,6 +8,20 @@ export default function CompanionCard({
   onClick,
   status,
 }) {
+  // 🔪 글자수 제한 처리
+  const MAX_TITLE_LENGTH = 15; // 원하는 글자수로 변경 가능
+  const MAX_DESC_LENGTH = 40; // 원하는 글자수로 변경 가능
+
+  const truncatedTitle =
+    title.length > MAX_TITLE_LENGTH
+      ? title.substring(0, MAX_TITLE_LENGTH) + "..."
+      : title;
+
+  const truncatedDescription =
+    description.length > MAX_DESC_LENGTH
+      ? description.substring(0, MAX_DESC_LENGTH) + "..."
+      : description;
+
   const statusLabel =
     {
       ONGOING: "모집중",
@@ -30,7 +44,7 @@ export default function CompanionCard({
         <div>
           <div className="flex items-center mb-1">
             <h3 className="font-semibold text-base text-text line-clamp-1">
-              {title}
+              {truncatedTitle}
             </h3>
             <span
               className={`text-xs font-medium px-2 py-0.5 rounded-full ml-2 ${
@@ -43,7 +57,7 @@ export default function CompanionCard({
             </span>
           </div>
           <p className="text-muted text-sm leading-relaxed line-clamp-2">
-            {description}
+            {truncatedDescription}
           </p>
         </div>
 
