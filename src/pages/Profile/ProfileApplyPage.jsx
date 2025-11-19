@@ -58,7 +58,9 @@ export default function ProfileApplyPage() {
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:8080/api/companion/myApply?page=${page}&size=${size}`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/companion/myApply?page=${page}&size=${size}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,

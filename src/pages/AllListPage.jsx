@@ -2,10 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react";
 import Tag from "../components/ui/Tag";
+
 import { getAllCompanions } from "../services/companionService";
 import CompanionCard from "../pages/companion/CompanionCard";
 
-export default function HomePage() {
+export default function AllListPage() {
   const [companions, setCompanions] = useState([]);
   const [selectedTag, setSelectedTag] = useState("전체");
   const navigate = useNavigate();
@@ -23,11 +24,12 @@ export default function HomePage() {
   }, []);
 
   const handleTagClick = (tag) => {
-    setSelectedTag(tag);
     if (tag === "동행 모집") {
       navigate("/companion");
+    } else if (tag === "전체") {
+      navigate("/all-list"); // ✅ 전체 클릭 시 홈으로 이동
     } else {
-      navigate("/");
+      navigate("/all-list");
     }
   };
 
@@ -55,6 +57,13 @@ export default function HomePage() {
             </p>
           )}
         </main>
+
+        <button
+          className="fixed bottom-20 right-6 z-50 bg-[#FCA652] p-3 rounded-full shadow-lg text-white hover:bg-[#e59545] transition"
+          onClick={() => navigate("/companion/write")}
+        >
+          <Pencil size={20} />
+        </button>
       </div>
     </div>
   );
