@@ -48,6 +48,8 @@ import DogDetailPage from "./pages/Dog/DogDetailPage";
 import DogEditPage from "./pages/Dog/DogEditPage";
 import { i } from "framer-motion/client";
 import CompanionEditPage from "./pages/companion/CompanionEditPage";
+import AllListPage from "./pages/AllListPage";
+import SearchPage from "./pages/SearchPage";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -87,6 +89,7 @@ function AppLayout() {
           <Routes>
             {/* 홈 */}
             <Route path="/" element={<HomePage />} />
+            <Route path="/all-list" element={<AllListPage />} />
 
             {/* 산책 관련 */}
             <Route path="/walk" element={<WalkPage />} />
@@ -134,6 +137,7 @@ function AppLayout() {
             <Route path="/dogs/:dogId/edit" element={<DogEditPage />} />
             <Route path="/dogs" element={<DogListPage />} />
 
+            <Route path="/search" element={<SearchPage />} />
           </Routes>
         </div>
       </main>

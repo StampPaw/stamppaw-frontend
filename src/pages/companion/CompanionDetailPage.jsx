@@ -36,7 +36,9 @@ export default function CompanionDetailPage() {
   useEffect(() => {
     const fetchCompanion = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/companion/${id}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/companion/${id}`
+        );
         if (!res.ok) throw new Error("데이터 불러오기 실패");
         const data = await res.json();
         setCompanion(data);
@@ -52,7 +54,7 @@ export default function CompanionDetailPage() {
     const checkExistingChat = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8080/api/companion/chat/rooms",
+          "${import.meta.env.VITE_API_BASE_URL}/companion/chat/rooms",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -264,7 +266,9 @@ export default function CompanionDetailPage() {
                         try {
                           const newStatus = "ONGOING";
                           const res = await fetch(
-                            `http://localhost:8080/api/companion/${id}`,
+                            `${
+                              import.meta.env.VITE_API_BASE_URL
+                            }/companion/${id}`,
                             {
                               method: "PUT",
                               headers: {
@@ -297,7 +301,9 @@ export default function CompanionDetailPage() {
                         try {
                           const newStatus = "CLOSED";
                           const res = await fetch(
-                            `http://localhost:8080/api/companion/${id}`,
+                            `${
+                              import.meta.env.VITE_API_BASE_URL
+                            }/companion/${id}`,
                             {
                               method: "PUT",
                               headers: {
@@ -411,7 +417,9 @@ export default function CompanionDetailPage() {
                       if (!window.confirm("정말 삭제하시겠습니까?")) return;
                       try {
                         const res = await fetch(
-                          `http://localhost:8080/api/companion/${id}`,
+                          `${
+                            import.meta.env.VITE_API_BASE_URL
+                          }/companion/${id}`,
                           {
                             method: "DELETE",
                             headers: {

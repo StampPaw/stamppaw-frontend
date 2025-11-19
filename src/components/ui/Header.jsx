@@ -1,11 +1,11 @@
 import React from "react";
 import { Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
+  const navigate = useNavigate();
   return (
-    <header
-      className="sticky top-0 z-10 flex justify-between items-center px-5 py-3 bg-white/80 backdrop-blur-md border-b border-border shadow-soft"
-    >
+    <header className="sticky top-0 z-10 flex justify-between items-center px-5 py-3 bg-white/80 backdrop-blur-md border-b border-border shadow-soft">
       {/* ✅ 왼쪽 로고 */}
       <a href="/" className="flex items-center gap-2">
         <img
@@ -17,7 +17,10 @@ export default function Header() {
       </a>
 
       {/* ✅ 오른쪽 검색 버튼 */}
-      <button className="text-muted hover:text-primary transition">
+      <button
+        onClick={() => navigate("/search")}
+        className="text-muted hover:text-primary transition"
+      >
         <Search className="w-6 h-6" />
       </button>
     </header>
