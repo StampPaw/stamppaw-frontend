@@ -7,3 +7,17 @@ export const getAllCompanions = async (page = 0, size = 10) => {
   });
   return response.data; // Page 객체 반환
 };
+
+// 동행 글쓰기
+export const createCompanion = async (formData) => {
+  try {
+    const response = await api.post("/companion", formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error("[createCompanion] Error:", error.response || error);
+    throw error;
+  }
+};

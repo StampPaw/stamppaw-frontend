@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
+import { createCompanion } from "../../services/companionService";
 
 export default function CompanionWritePage() {
   const navigate = useNavigate();
@@ -8,12 +9,10 @@ export default function CompanionWritePage() {
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
 
-  // ✅ 이미지 파일 선택
   const handleImageChange = (e) => {
     setImage(e.target.files[0]);
   };
 
-  // ✅ 글 등록 요청 (POST)
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -23,34 +22,20 @@ export default function CompanionWritePage() {
     if (image) formData.append("image", image);
 
     try {
-      const response = await fetch(
-        "${import.meta.env.VITE_API_BASE_URL}/companion",
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: formData,
-        }
-      );
+      await createCompanion(formData);
 
-      if (response.ok) {
-        alert("글이 성공적으로 등록되었습니다!");
-        navigate("/companion");
-      } else {
-        const errorText = await response.text();
-        console.error("등록 실패:", errorText);
-        alert("등록 실패 😢");
-      }
+      alert("글이 성공적으로 등록되었습니다!");
+      navigate("/companion");
     } catch (err) {
       console.error("글 등록 실패:", err);
+      alert("등록 실패 😢");
     }
   };
 
   return (
     <div className="min-h-screen bg-[#FFF8EE] text-text font-sans flex justify-center">
       <div className="w-full sm:max-w-[500px] flex flex-col relative mx-auto h-screen">
-        {/* ✅ 상단 헤더 */}
+        {/* 상단 헤더 */}
         <div className="flex items-center gap-3 p-4">
           <button onClick={() => navigate(-1)}>
             <ArrowLeft className="text-gray-600" />
@@ -58,11 +43,12 @@ export default function CompanionWritePage() {
           <h2 className="text-lg font-semibold">동행 글쓰기</h2>
         </div>
 
-        {/* ✅ 폼 영역 */}
+        {/* 폼 영역 */}
         <form
           onSubmit={handleSubmit}
           className="flex-1 overflow-y-auto px-5 space-y-5 pb-32"
         >
+          {/* 제목 */}
           <div>
             <label className="block text-sm font-medium mb-1">제목</label>
             <input
@@ -75,6 +61,7 @@ export default function CompanionWritePage() {
             />
           </div>
 
+          {/* 내용 */}
           <div>
             <label className="block text-sm font-medium mb-1">내용</label>
             <textarea
@@ -86,6 +73,7 @@ export default function CompanionWritePage() {
             />
           </div>
 
+          {/* 이미지 업로드 */}
           <div>
             <label className="block text-sm font-medium mb-1">이미지</label>
             <input
@@ -96,6 +84,7 @@ export default function CompanionWritePage() {
               file:rounded-full file:border-0 file:text-sm file:font-semibold
               file:bg-primary file:text-white hover:file:bg-[#e59545]"
             />
+
             {image && (
               <img
                 src={URL.createObjectURL(image)}
