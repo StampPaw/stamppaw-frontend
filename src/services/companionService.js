@@ -21,3 +21,52 @@ export const createCompanion = async (formData) => {
     throw error;
   }
 };
+
+// 상세 조회
+export const getCompanionDetail = async (id) => {
+  const response = await api.get(`/companion/${id}`);
+  return response.data;
+};
+
+// 동행 신청
+export const applyCompanion = async (id) => {
+  const response = await api.post(`/companion/${id}/apply`);
+  return response.data;
+};
+
+// 신청 목록 불러오기 (작성자 전용)
+export const getApplyList = async (id) => {
+  const response = await api.get(`/companion/${id}/apply/manage`);
+  return response.data;
+};
+
+// 신청 상태 변경 (수락/거절)
+export const updateApplyStatus = async (id, applyId, status) => {
+  const response = await api.put(`/companion/${id}/apply/status/${applyId}`, {
+    status,
+  });
+  return response.data;
+};
+
+// 모집 상태 변경
+export const updateCompanionStatus = async (id, status) => {
+  const response = await api.put(`/companion/${id}`, { status });
+  return response.data;
+};
+
+// 동행 글 삭제
+export const deleteCompanion = async (id) => {
+  const response = await api.delete(`/companion/${id}`);
+  return response.data;
+};
+
+// 동행 글 수정
+export const updateCompanion = async (id, formData) => {
+  try {
+    const response = await api.put(`/companion/${id}`, formData);
+    return response.data;
+  } catch (error) {
+    console.error("[updateCompanion] Error:", error.response || error);
+    throw error;
+  }
+};

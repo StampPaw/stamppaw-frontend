@@ -36,9 +36,7 @@ export default function CompanionDetailPage() {
   useEffect(() => {
     const fetchCompanion = async () => {
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/companion/${id}`
-        );
+        const res = await fetch(`http://localhost:8080/api/companion/${id}`);
         if (!res.ok) throw new Error("데이터 불러오기 실패");
         const data = await res.json();
         setCompanion(data);
@@ -54,7 +52,7 @@ export default function CompanionDetailPage() {
     const checkExistingChat = async () => {
       try {
         const res = await fetch(
-          "${import.meta.env.VITE_API_BASE_URL}/companion/chat/rooms",
+          "http://localhost:8080/api/companion/chat/rooms",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -87,9 +85,7 @@ export default function CompanionDetailPage() {
       const fetchApplyList = async () => {
         try {
           const res = await fetch(
-            `${
-              import.meta.env.VITE_API_BASE_URL
-            }/api/companion/${id}/apply/manage`,
+            `http://localhost:8080/api/companion/${id}/apply/manage`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -111,9 +107,7 @@ export default function CompanionDetailPage() {
   const handleChatStart = async () => {
     try {
       const response = await fetch(
-        `${
-          import.meta.env.VITE_API_BASE_URL
-        }/api/companion/chat/rooms/companions/${id}`,
+        `http://localhost:8080/api/companion/chat/rooms/companions/${id}`,
         {
           method: "POST",
           headers: {
@@ -145,7 +139,7 @@ export default function CompanionDetailPage() {
     }
     try {
       const res = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply`,
+        `http://localhost:8080/api/companion/${id}/apply`,
         {
           method: "POST",
           headers: {
@@ -175,9 +169,7 @@ export default function CompanionDetailPage() {
   const handleStatusChange = async (applyId, newStatus) => {
     try {
       const res = await fetch(
-        `${
-          import.meta.env.VITE_API_BASE_URL
-        }/companion/${id}/apply/status/${applyId}`,
+        `http://localhost:8080/api/companion/${id}/apply/status/${applyId}`,
         {
           method: "PUT",
           headers: {
@@ -190,7 +182,7 @@ export default function CompanionDetailPage() {
       if (!res.ok) throw new Error("상태 변경 실패");
       // Refresh apply list after status update
       const updatedListRes = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply/manage`,
+        `http://localhost:8080/api/companion/${id}/apply/manage`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -264,9 +256,7 @@ export default function CompanionDetailPage() {
                         try {
                           const newStatus = "ONGOING";
                           const res = await fetch(
-                            `${
-                              import.meta.env.VITE_API_BASE_URL
-                            }/companion/${id}`,
+                            `http://localhost:8080/api/companion/${id}`,
                             {
                               method: "PUT",
                               headers: {
@@ -299,9 +289,7 @@ export default function CompanionDetailPage() {
                         try {
                           const newStatus = "CLOSED";
                           const res = await fetch(
-                            `${
-                              import.meta.env.VITE_API_BASE_URL
-                            }/api/companion/${id}`,
+                            `http://localhost:8080/api/companion/${id}`,
                             {
                               method: "PUT",
                               headers: {
@@ -415,9 +403,7 @@ export default function CompanionDetailPage() {
                       if (!window.confirm("정말 삭제하시겠습니까?")) return;
                       try {
                         const res = await fetch(
-                          `${
-                            import.meta.env.VITE_API_BASE_URL
-                          }/api/companion/${id}`,
+                          `http://localhost:8080/api/companion/${id}`,
                           {
                             method: "DELETE",
                             headers: {
