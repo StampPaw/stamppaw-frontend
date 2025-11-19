@@ -42,7 +42,7 @@ export default function ChatRoomPage() {
     fetchMessages();
 
     const client = new Client({
-      brokerURL: `ws://13.125.219.174:8080/ws-stomp`,
+      brokerURL: `ws://13.125.219.174/ws-stomp`,
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
