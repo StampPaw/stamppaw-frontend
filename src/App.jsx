@@ -16,12 +16,16 @@ import useKakaoLoaderOnce from "./hooks/useKakaoLoaderOnce";
 import HomePage from "./pages/HomePage";
 import WalkPage from "./pages/walk/WalkPage";
 import WalkRecordPage from "./pages/walk/WalkRecordPage";
+
+// 마켓
 import Market from "./pages/market/Market";
 import ProductList from "./pages/market/ProductList";
 import ProductDetail from "./pages/market/ProductDetail";
 import CartList from "./pages/market/CartList";
 import Order from "./pages/market/Order";
 import OrderList from "./pages/market/OrderList";
+import PaymentSuccess from "./pages/market/PaymentSuccess";
+import PaymentFail from "./pages/market/PaymentFail";
 
 // ✅ 반려동물 관련 페이지
 import CompanionListPage from "./pages/companion/CompanionListPage";
@@ -94,6 +98,11 @@ function AppLayout() {
             <Route path="/market/cart" element={<CartList />} />
             <Route path="/market/orders" element={<OrderList />} />
             <Route path="/market/order" element={<Order />} />
+            <Route
+              path="/market/payment/success"
+              element={<PaymentSuccess />}
+            />
+            <Route path="/market/payment/fail" element={<PaymentFail />} />
 
             {/* ✅ 반려동물 관련 */}
             <Route path="/companion" element={<CompanionListPage />} />
