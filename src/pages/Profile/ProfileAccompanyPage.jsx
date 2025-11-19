@@ -95,15 +95,16 @@ export default function ProfileAccompanyPage() {
           )}
 
           <div className="flex-1">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-semibold text-[#4C3928]">
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-base font-semibold text-[#4C3928] line-clamp-1">
                 {item.title}
               </h3>
+
               <p
-                className={`text-xs px-2 py-1 rounded-full ${
+                className={`shrink-0 text-xs px-2 py-1 ${
                   item.status === "ONGOING"
-                    ? "bg-[#FFD8A8] text-[#7A4B18]"
-                    : "bg-[#E0E0E0] text-[#6B6B6B]"
+                    ? "text-[#A76A26]"
+                    : "text-[#6B6B6B]"
                 }`}
               >
                 {statusLabel(item.status)}
