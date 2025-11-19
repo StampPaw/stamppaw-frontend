@@ -121,7 +121,7 @@ export default function ProfilePage() {
               >
                 <div className="w-16 h-16 rounded-full overflow-hidden shadow bg-[#FFF7E3]">
                   <img
-                    src={dog.image_url || "/dog.png"}
+                    src={dog.imageUrl || "/dog.png"}
                     alt={dog.name}
                     className="w-full h-full object-cover scale-[1.5] translate-y-3"
                     style={{ transformOrigin: "center" }}

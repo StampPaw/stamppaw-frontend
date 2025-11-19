@@ -40,7 +40,7 @@ export default function DogDetailPage() {
       <div className="flex flex-col items-center mb-6">
         <div className="w-30 h-30 rounded-full overflow-hidden shadow-md bg-[#FFF7E3]">
           <img
-            src={dog.image_url || "/dog.png"}
+            src={dog.imageUrl || "/dog.png"}
             className="w-full h-full object-cover scale-[1.5] translate-y-3"
           />
         </div>

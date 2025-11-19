@@ -161,8 +161,17 @@ export default function Signup() {
         >
           가입하기
         </button>
-
       </form>
+
+      <p className="mt-6 text-sm text-[#6B3E1E]">
+        이미 계정이 있으신가요?{" "}
+        <span
+          className="text-[#E49B25] font-semibold cursor-pointer underline"
+          onClick={() => navigate("/login")}
+        >
+          로그인
+        </span>
+      </p>
     </div>
   );
 }

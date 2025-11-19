@@ -87,7 +87,7 @@ export default function ProfileEditPage() {
                 ? preview
                 : user.profileImage
                 ? user.profileImage
-                : "/user.svg"             // ⬅⬅⬅ 요기 수정됨!!!
+                : "/user.svg"          
             }
             className="w-32 h-32 rounded-full object-cover"
           />

@@ -25,7 +25,7 @@ export default function DogEditPage() {
         age: data.age,
         character: data.character,
       });
-      setPreview(data.image_url);
+      setPreview(data.imageUrl);
     };
     fetchDog();
   }, [dogId]);
