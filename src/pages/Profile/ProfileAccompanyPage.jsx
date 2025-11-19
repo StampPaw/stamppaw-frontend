@@ -99,7 +99,7 @@ export default function ProfileAccompanyPage() {
               <h3 className="text-base font-semibold text-[#4C3928]">
                 {item.title}
               </h3>
-              <span
+              <p
                 className={`text-xs px-2 py-1 rounded-full ${
                   item.status === "ONGOING"
                     ? "bg-[#FFD8A8] text-[#7A4B18]"
@@ -107,7 +107,7 @@ export default function ProfileAccompanyPage() {
                 }`}
               >
                 {statusLabel(item.status)}
-              </span>
+              </p>
             </div>
 
             <p className="text-sm text-[#8D7B6C] mt-1 line-clamp-2">
