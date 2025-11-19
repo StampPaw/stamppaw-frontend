@@ -85,7 +85,7 @@ export default function CompanionDetailPage() {
       const fetchApplyList = async () => {
         try {
           const res = await fetch(
-            `http://localhost:8080/api/companion/${id}/apply/manage`,
+            `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply/manage`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -107,7 +107,9 @@ export default function CompanionDetailPage() {
   const handleChatStart = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/companion/chat/rooms/companions/${id}`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/companion/chat/rooms/companions/${id}`,
         {
           method: "POST",
           headers: {
@@ -139,7 +141,7 @@ export default function CompanionDetailPage() {
     }
     try {
       const res = await fetch(
-        `http://localhost:8080/api/companion/${id}/apply`,
+        `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply`,
         {
           method: "POST",
           headers: {
@@ -169,7 +171,9 @@ export default function CompanionDetailPage() {
   const handleStatusChange = async (applyId, newStatus) => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/companion/${id}/apply/status/${applyId}`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/companion/${id}/apply/status/${applyId}`,
         {
           method: "PUT",
           headers: {
@@ -182,7 +186,7 @@ export default function CompanionDetailPage() {
       if (!res.ok) throw new Error("상태 변경 실패");
       // Refresh apply list after status update
       const updatedListRes = await fetch(
-        `http://localhost:8080/api/companion/${id}/apply/manage`,
+        `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply/manage`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
