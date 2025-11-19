@@ -78,10 +78,10 @@ function ReviewList({ type }) {
 
       const url =
         type === "send"
-          ? `/api/companion/review/send?page=${page}&size=${size}`
-          : `/api/companion/review/receive?page=${page}&size=${size}`;
+          ? `/companion/review/send?page=${page}&size=${size}`
+          : `/companion/review/receive?page=${page}&size=${size}`;
 
-      const res = await fetch(`http://localhost:8080${url}`, {
+      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}${url}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

@@ -232,10 +232,14 @@ export default function CompanionDetailPage() {
           </div>
 
           <div className="bg-white/80 rounded-xl shadow-sm border border-gray-100 p-4 mx-4">
-            <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-center">
-              {companion.title}
+            <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-start justify-between gap-3">
+              {/* 제목은 왼쪽에서만 줄바꿈되도록 */}
+              <span className="flex-1 break-words leading-snug">
+                {companion.title}
+              </span>
+
               {/* 모집 상태 표시 */}
-              <div className="relative inline-block align-middle ml-2">
+              <div className="relative inline-flex shrink-0">
                 <span
                   onClick={() => setShowStatusMenu((prev) => !prev)}
                   className={`text-sm font-semibold px-3 py-1 rounded-full cursor-pointer transition shadow-sm border
@@ -250,7 +254,7 @@ export default function CompanionDetailPage() {
                 </span>
 
                 {showStatusMenu && currentUserId === companion.user?.id && (
-                  <div className="absolute mt-2 w-28 bg-white shadow-lg border border-gray-200 rounded-xl z-50 overflow-hidden animate-fadeIn">
+                  <div className="absolute right-0 mt-2 w-28 bg-white shadow-lg border border-gray-200 rounded-xl z-50 overflow-hidden animate-fadeIn">
                     <button
                       onClick={async () => {
                         try {
