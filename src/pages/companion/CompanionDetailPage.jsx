@@ -85,7 +85,7 @@ export default function CompanionDetailPage() {
       const fetchApplyList = async () => {
         try {
           const res = await fetch(
-            `http://localhost:8080/api/companion/${id}/apply/manage`,
+            `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply/manage`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -107,7 +107,9 @@ export default function CompanionDetailPage() {
   const handleChatStart = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/companion/chat/rooms/companions/${id}`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/companion/chat/rooms/companions/${id}`,
         {
           method: "POST",
           headers: {
@@ -139,7 +141,7 @@ export default function CompanionDetailPage() {
     }
     try {
       const res = await fetch(
-        `http://localhost:8080/api/companion/${id}/apply`,
+        `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply`,
         {
           method: "POST",
           headers: {
@@ -169,7 +171,9 @@ export default function CompanionDetailPage() {
   const handleStatusChange = async (applyId, newStatus) => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/companion/${id}/apply/status/${applyId}`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/companion/${id}/apply/status/${applyId}`,
         {
           method: "PUT",
           headers: {
@@ -182,7 +186,7 @@ export default function CompanionDetailPage() {
       if (!res.ok) throw new Error("상태 변경 실패");
       // Refresh apply list after status update
       const updatedListRes = await fetch(
-        `http://localhost:8080/api/companion/${id}/apply/manage`,
+        `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply/manage`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -232,10 +236,14 @@ export default function CompanionDetailPage() {
           </div>
 
           <div className="bg-white/80 rounded-xl shadow-sm border border-gray-100 p-4 mx-4">
-            <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-center">
-              {companion.title}
+            <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-start justify-between gap-3">
+              {/* 제목은 왼쪽에서만 줄바꿈되도록 */}
+              <span className="flex-1 break-words leading-snug">
+                {companion.title}
+              </span>
+
               {/* 모집 상태 표시 */}
-              <div className="relative inline-block align-middle ml-2">
+              <div className="relative inline-flex shrink-0">
                 <span
                   onClick={() => setShowStatusMenu((prev) => !prev)}
                   className={`text-sm font-semibold px-3 py-1 rounded-full cursor-pointer transition shadow-sm border
@@ -250,7 +258,7 @@ export default function CompanionDetailPage() {
                 </span>
 
                 {showStatusMenu && currentUserId === companion.user?.id && (
-                  <div className="absolute mt-2 w-28 bg-white shadow-lg border border-gray-200 rounded-xl z-50 overflow-hidden animate-fadeIn">
+                  <div className="absolute right-0 mt-2 w-28 bg-white shadow-lg border border-gray-200 rounded-xl z-50 overflow-hidden animate-fadeIn">
                     <button
                       onClick={async () => {
                         try {

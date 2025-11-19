@@ -11,17 +11,14 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("free");
 
-  // 🔐 토큰 + 유저정보 로딩을 하나의 useEffect로 처리 (원래 네 스타일)
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    // 1) 토큰 자체가 없으면 → 즉시 로그인 이동 (무한 로딩 방지)
     if (!token) {
       navigate("/login");
       return;
     }
 
-    // 2) 토큰은 있는데 유효성 문제로 401이면 → remove + login 이동
     const fetchUser = async () => {
       try {
         const data = await getMyInfo();
@@ -29,7 +26,6 @@ export default function ProfilePage() {
       } catch (err) {
         console.error("유저 조회 실패:", err);
 
-        // 백엔드가 401 줬을 때
         if (err.response?.status === 401) {
           localStorage.removeItem("token");
           navigate("/login");
@@ -47,20 +43,18 @@ export default function ProfilePage() {
 
   return (
     <div className="w-full min-h-screen bg-[#FFFDF6]">
-      {/* 🔶 프로필 전체 블록 */}
+
+      {/* 프로필 전체 블록 */}
       <div className="px-5 pt-10 flex items-start gap-6">
-        {/* 🔸 왼쪽: 프로필 이미지 */}
+        
+        {/* 프로필 이미지 */}
         <div className="relative w-24 h-24 flex-shrink-0">
           <img
-            src={
-              user.profileImage
-                ? `http://localhost:8080/uploads/profile/${user.profileImage}`
-                : "/default-profile.png"
-            }
+            src={user.profileImage ? user.profileImage : "/user.svg"}
             className="w-full h-full rounded-full object-cover border border-gray-200"
           />
 
-          {/* ✏ 수정 아이콘 */}
+          {/* 수정 아이콘 */}
           <button
             onClick={() => navigate("/profile/edit")}
             className="
@@ -73,9 +67,10 @@ export default function ProfilePage() {
           </button>
         </div>
 
-        {/* 🔸 오른쪽: 닉네임 + 버튼 + 소개 + 기록 */}
+        {/* 닉네임/소개/기록 */}
         <div className="flex flex-col w-full">
-          {/* 닉네임 + 팔로우 버튼 */}
+
+          {/* 닉네임 + 팔로우 */}
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold text-[#4C3728]">{user.nickname}</p>
 
@@ -95,12 +90,10 @@ export default function ProfilePage() {
               <p className="text-lg font-semibold">{user.recordCount ?? 0}</p>
               <p className="text-xs text-[#B38A6A]">기록</p>
             </div>
-
             <div className="text-center">
               <p className="text-lg font-semibold">{user.followerCount ?? 0}</p>
               <p className="text-xs text-[#B38A6A]">팔로워</p>
             </div>
-
             <div className="text-center">
               <p className="text-lg font-semibold">
                 {user.followingCount ?? 0}
@@ -111,29 +104,60 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* 🔶 강아지 썸네일 영역 */}
-      <div className="mt-6 px-5 flex gap-3 overflow-x-auto pb-2">
+      {/* 반려견 영역 */}
+      <div className="mt-1 px-5">
+        <p className="text-base font-semibold text-[#6B5B4A] mb-3">
+          나의 반려동물 🐾
+        </p>
+
         {(user.dogs ?? []).length > 0 ? (
-          user.dogs.map((dog) => (
-            <div
-              key={dog.id}
-              className="w-14 h-14 rounded-full overflow-hidden shadow bg-[#FFF7E3]"
-            >
-              <img
-                src={dog.imageUrl}
-                alt={dog.name}
-                className="w-full h-full object-cover"
-              />
+          <div className="flex items-start gap-4 overflow-x-auto pb-2">
+
+            {user.dogs.map((dog) => (
+              <div
+                key={dog.id}
+                className="flex flex-col items-center cursor-pointer"
+                onClick={() => navigate(`/dogs/${dog.id}`)}
+              >
+                <div className="w-16 h-16 rounded-full overflow-hidden shadow bg-[#FFF7E3]">
+                  <img
+                    src={dog.imageUrl || "/dog.png"}
+                    alt={dog.name}
+                    className="w-full h-full object-cover scale-[1.5] translate-y-3"
+                    style={{ transformOrigin: "center" }}
+                  />
+                </div>
+
+                <p className="text-xs text-[#6B5B4A] mt-1">{dog.name}</p>
+              </div>
+            ))}
+
+            {/* + 버튼도 동일한 구조로 감싸기 */}
+            <div className="flex flex-col items-center">
+              <button
+                onClick={() => navigate("/dogs/add")}
+                className="w-16 h-16 rounded-full bg-[#F3E9D2] flex items-center justify-center shadow"
+              >
+                <span className="text-[#D4A055] text-3xl font-bold">+</span>
+              </button>
+              <p className="text-xs text-[#F3E9D2] mt-1">{" "}</p>
             </div>
-          ))
+
+          </div>
         ) : (
-          <div className="text-sm text-[#B38A6A]">
-            등록된 반려견이 없어요 🐶
+          <div className="flex flex-col items-start gap-3">
+            <button
+              onClick={() => navigate("/dogs/add")}
+              className="w-14 h-14 rounded-full bg-[#F3E9D2] flex items-center justify-center shadow"
+            >
+              <span className="text-[#D4A055] text-3xl font-bold">+</span>
+            </button>
           </div>
         )}
       </div>
 
-      {/* 🔶 탭 메뉴 */}
+
+      {/* 탭 메뉴 */}
       <div className="flex px-5 mt-8 border-b border-[#F4E4C2]">
         {/* 자유 */}
         <button

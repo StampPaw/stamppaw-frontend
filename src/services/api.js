@@ -1,11 +1,13 @@
 import axios from "axios";
 
+const BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/api";
+
 const api = axios.create({
-  baseURL: "http://localhost:8080/api",
+  baseURL: BASE_URL,
   withCredentials: false, // 필요 없음
 });
 
-// 요청 인터셉터
 api.interceptors.request.use(
   (config) => {
     let token = localStorage.getItem("token");
@@ -15,7 +17,6 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
 
-    console.log("[API Request] Authorization:", config.headers.Authorization);
     return config;
   },
   (error) => Promise.reject(error)
@@ -25,12 +26,19 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
+
     if (error.response) {
       console.log("[API Error Response]", error.response.status, error.response.data);
       if (error.response.status === 401) {
         console.warn("[API] 401 Unauthorized - invalid token");
       }
+      
+      if (status === 401) {
+        console.warn("[API] 401 오류 발생 (토큰 만료 아님)");
+        return Promise.reject(error);
+      }
     }
+
     return Promise.reject(error);
   }
 );

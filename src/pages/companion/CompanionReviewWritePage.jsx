@@ -1,53 +1,35 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { getReviewTags, writeReview } from "../../services/reviewService";
 
 export default function CompanionReviewWritePage() {
   const { applyId } = useParams();
   const navigate = useNavigate();
 
-  const [reviewTags, setReviewTags] = useState([]); // ← 기존 하드코딩 삭제
+  const [reviewTags, setReviewTags] = useState([]);
   const [selectedTags, setSelectedTags] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loadingTags, setLoadingTags] = useState(true);
 
   // 🔥 태그 목록 불러오기
   useEffect(() => {
-    const fetchTags = async () => {
+    async function loadTags() {
       try {
-        const res = await fetch(
-          "http://localhost:8080/api/companion/review/all-tags",
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          }
-        );
-
-        if (!res.ok) {
-          throw new Error("태그 목록을 불러오지 못했습니다.");
-        }
-
-        const data = await res.json();
-        setReviewTags(data); // [{id, tag}] 형태
+        const data = await getReviewTags();
+        setReviewTags(data);
       } catch (err) {
-        console.error(err);
         alert("태그 데이터를 불러오는 중 오류가 발생했습니다.");
       } finally {
         setLoadingTags(false);
       }
-    };
-
-    fetchTags();
+    }
+    loadTags();
   }, []);
 
   const toggleTag = (tagId) => {
     setSelectedTags((prev) => {
-      if (prev.includes(tagId)) {
-        return prev.filter((id) => id !== tagId);
-      }
-      if (prev.length >= 5) {
-        return prev;
-      }
+      if (prev.includes(tagId)) return prev.filter((id) => id !== tagId);
+      if (prev.length >= 5) return prev;
       return [...prev, tagId];
     });
   };
@@ -61,24 +43,10 @@ export default function CompanionReviewWritePage() {
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `http://localhost:8080/api/companion/review/${applyId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-          body: JSON.stringify({ tags: selectedTags }),
-        }
-      );
-
-      if (!res.ok) throw new Error("리뷰 작성 실패");
-
+      await writeReview(applyId, selectedTags);
       alert("리뷰가 작성되었습니다!");
       navigate(-1);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
       alert("리뷰 작성 중 문제가 발생했습니다.");
     } finally {
       setLoading(false);
@@ -93,7 +61,6 @@ export default function CompanionReviewWritePage() {
         해당 동행에 대한 느낌을 선택해주세요! (최대 5개)
       </p>
 
-      {/* 태그 로딩 상태 */}
       {loadingTags ? (
         <p className="text-[#8A7A6C] mb-5">태그 불러오는 중...</p>
       ) : (

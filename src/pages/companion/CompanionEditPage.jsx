@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { Trash2 } from "lucide-react";
+import {
+  getCompanionDetail,
+  updateCompanion,
+} from "../../services/companionService";
 
 export default function CompanionEditPage() {
   const { id } = useParams(); // 수정할 글 ID
@@ -16,10 +20,7 @@ export default function CompanionEditPage() {
   useEffect(() => {
     const fetchCompanion = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/companion/${id}`);
-        if (!res.ok) throw new Error("글 정보를 불러오지 못했습니다.");
-        const data = await res.json();
-
+        const data = await getCompanionDetail(id);
         setTitle(data.title);
         setContent(data.content);
         setOriginalImage(data.image);
@@ -40,6 +41,7 @@ export default function CompanionEditPage() {
 
   // 🔥 수정 요청
   const handleSubmit = async (e) => {
+    console.log(localStorage.getItem("token"));
     e.preventDefault();
 
     const formData = new FormData();
@@ -51,17 +53,7 @@ export default function CompanionEditPage() {
     }
 
     try {
-      const token = localStorage.getItem("token");
-      const res = await fetch(`http://localhost:8080/api/companion/${id}`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        body: formData,
-      });
-
-      if (!res.ok) throw new Error("수정 실패");
-
+      await updateCompanion(id, formData);
       alert("수정이 완료되었습니다!");
       navigate(`/companion/${id}`);
     } catch (error) {

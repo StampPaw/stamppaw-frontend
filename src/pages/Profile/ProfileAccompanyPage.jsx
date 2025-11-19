@@ -16,7 +16,9 @@ export default function ProfileAccompanyPage() {
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:8080/api/companion/myCompanion?page=${page}&size=${size}`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/companion/myCompanion?page=${page}&size=${size}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
