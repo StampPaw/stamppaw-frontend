@@ -1,34 +1,30 @@
-// src/services/walkService.js
 import axios from "axios";
 
 const API_BASE = `${import.meta.env.VITE_API_BASE_URL}/walks`;
 
-// 🔑 토큰 자동 가져오기 (localStorage 등에서)
 const getAuthHeader = () => {
-  const token =
-    localStorage.getItem("accessToken") || localStorage.getItem("token");
-
+  const token = localStorage.getItem("token");
   return token ? { Authorization: `Bearer ${token}` } : {};
 };
 
 export const walkService = {
-  // ✅ 산책 시작
-  async startWalk({ lat, lng }) {
+
+  async startWalk({ lat, lng, timestamp }) {
     const response = await axios.post(
       `${API_BASE}/start`,
-      { lat, lng },
+      { lat, lng, timestamp },
       {
         headers: {
+          ...getAuthHeader(),
+          "Content-Type": "application/json",
           ...getAuthHeader(),
           "Content-Type": "application/json",
         },
       }
     );
-
     return response.data;
   },
 
-  // ✅ 좌표 추가 (3초마다)
   async addPoint(walkId, { lat, lng, timestamp }) {
     await axios.post(
       `${API_BASE}/${walkId}/point`,
@@ -42,11 +38,10 @@ export const walkService = {
     );
   },
 
-  // ✅ 산책 종료
-  async endWalk(walkId, { lat, lng }) {
+  async endWalk(walkId, { lat, lng, timestamp }) {
     const response = await axios.post(
       `${API_BASE}/${walkId}/end`,
-      { lat, lng },
+      { lat, lng, timestamp },
       {
         headers: {
           ...getAuthHeader(),
@@ -57,18 +52,20 @@ export const walkService = {
     return response.data;
   },
 
-  // ✅ 산책 기록 (메모·사진)
   async recordWalk(walkId, formData) {
-    const response = await axios.put(`${API_BASE}/${walkId}/record`, formData, {
-      headers: {
-        ...getAuthHeader(),
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const response = await axios.put(
+      `${API_BASE}/${walkId}/record`,
+      formData,
+      {
+        headers: {
+          ...getAuthHeader(),
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     return response.data;
   },
 
-  // ✅ 산책 상세 조회
   async getWalkDetail(walkId) {
     const response = await axios.get(`${API_BASE}/${walkId}`, {
       headers: {
@@ -76,5 +73,46 @@ export const walkService = {
       },
     });
     return response.data;
+  },
+
+  async deleteWalk(walkId) {
+    const response = await axios.delete(`${API_BASE}/${walkId}`, {
+      headers: {
+        ...getAuthHeader(),
+      },
+    });
+    return response.data;
+  },
+
+  async getMyWalks(page = 0, size = 12) {
+    const response = await axios.get(`${API_BASE}/my`, {
+      params: { page, size },
+      headers: {
+        ...getAuthHeader(),
+      },
+    });
+
+    return {
+      content: response.data.content || [],
+      totalPages: response.data.totalPages,
+      currentPage: response.data.number,
+      last: response.data.last,
+    };
+  },
+
+  async getWalksByUser(userId, page = 0, size = 12) {
+    const response = await axios.get(`${API_BASE}/user/${userId}`, {
+      params: { page, size },
+      headers: {
+        ...getAuthHeader(),
+      },
+    });
+
+    return {
+      content: response.data.content || [],
+      totalPages: response.data.totalPages,
+      currentPage: response.data.number,
+      last: response.data.last,
+    };
   },
 };
