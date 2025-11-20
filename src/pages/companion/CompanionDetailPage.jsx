@@ -335,58 +335,61 @@ export default function CompanionDetailPage() {
               </div>
             </h1>
 
-            <div className="flex items-center justify-between mb-4 text-sm text-gray-500">
-              <div className="flex items-center gap-2">
-                <UserAvatar image={companion.user?.profileImage} size="md" />
-                <span className="font-medium">
-                  {companion.user?.nickname || "익명"}
-                </span>
+            <div className="mb-4 flex flex-col gap-2 text-sm text-gray-500">
+              {/* 첫 줄: 작성자 + 버튼들 */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <UserAvatar image={companion.user?.image} size="md" />
+                  <span className="font-medium">
+                    {companion.user?.nickname || "익명"}
+                  </span>
+                </div>
 
-                {currentUserId !== companion.user?.id && (
-                  <button
-                    onClick={handleChatButtonClick}
-                    disabled={companion.status === "CLOSED"}
-                    className={`bg-orange-400 text-white text-xs px-3 py-1 rounded-full shadow-sm transition
-                    ${
-                      companion.status === "CLOSED"
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "hover:bg-orange-500"
-                    }
-                  `}
-                  >
-                    {isChatOngoing ? "대화 중인 채팅" : "채팅하기"}
-                  </button>
-                )}
+                <div className="flex gap-2">
+                  {currentUserId !== companion.user?.id ? (
+                    <>
+                      <button
+                        onClick={handleChatButtonClick}
+                        disabled={companion.status === "CLOSED"}
+                        className={`bg-orange-400 text-white text-xs px-3 py-1 rounded-full shadow-sm transition
+              ${
+                companion.status === "CLOSED"
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "hover:bg-orange-500"
+              }
+            `}
+                      >
+                        {isChatOngoing ? "대화 중" : "채팅"}
+                      </button>
 
-                {currentUserId !== companion.user?.id ? (
-                  <>
-                    <button
-                      onClick={handleApplyClick}
-                      disabled={hasApplied || companion.status === "CLOSED"}
-                      className={`ml-2 text-white text-xs px-3 py-1 rounded-full shadow-sm transition ${
-                        hasApplied || companion.status === "CLOSED"
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-orange-400 hover:bg-orange-500"
-                      }`}
-                    >
-                      {hasApplied
-                        ? "이미 신청한 글"
-                        : companion.status === "CLOSED"
-                        ? "신청 불가"
-                        : "동행 신청하기"}
-                    </button>
-                  </>
-                ) : (
-                  <>
+                      <button
+                        onClick={handleApplyClick}
+                        disabled={hasApplied || companion.status === "CLOSED"}
+                        className={`text-white text-xs px-3 py-1 rounded-full shadow-sm transition ${
+                          hasApplied || companion.status === "CLOSED"
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-orange-400 hover:bg-orange-500"
+                        }`}
+                      >
+                        {hasApplied
+                          ? "신청 완료"
+                          : companion.status === "CLOSED"
+                          ? "불가"
+                          : "신청"}
+                      </button>
+                    </>
+                  ) : (
                     <button
                       onClick={() => setShowApplyModal(true)}
-                      className="ml-2 text-white text-xs px-3 py-1 rounded-full shadow-sm transition bg-orange-300 hover:bg-indigo-400"
+                      className="text-white text-xs px-3 py-1 rounded-full shadow-sm transition bg-orange-300 hover:bg-indigo-400"
                     >
-                      신청 목록 보기
+                      신청 목록
                     </button>
-                  </>
-                )}
+                  )}
+                </div>
               </div>
+
+              {/* 두 번째 줄: 등록 날짜 */}
               <span>
                 {new Date(companion.registeredAt).toLocaleString([], {
                   year: "numeric",
