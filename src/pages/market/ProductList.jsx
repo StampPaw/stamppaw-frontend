@@ -62,7 +62,7 @@ export default function ProductList() {
   }, [selectedKey]);
 
   //console.log("⭐ selectedLabel:", selectedLabel);
-  //console.log("⭐ selectedKey:", selectedKey);
+  console.log("⭐ selectedKey:", selectedKey);
   //console.log("⭐ categoryProducts:", categoryProducts);
 
   return (
