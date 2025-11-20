@@ -26,6 +26,7 @@ const marketService = {
   },
 
   getProductsByCategory: async (category) => {
+    const encodedCategory = encodeURIComponent(category);
     const response = await api.get(`/market/products/category`, {
       params: { category },
     });
