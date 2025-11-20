@@ -1,20 +1,22 @@
-import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import api from "../../services/api";
 
 export default function PaymentSuccess() {
-  const location = useLocation();
-  const query = new URLSearchParams(location.search);
+  const [params] = useSearchParams();
 
-  const paymentKey = query.get("paymentKey");
-  const orderId = query.get("orderId");
-  const amount = query.get("amount");
+  const paymentKey = params.get("paymentKey");
+  const orderId = params.get("orderId");
+  const amount = params.get("amount");
 
-  // 서버로 승인 요청
   async function confirmPayment() {
     try {
-      const res = await api.get(
-        `/payment/success?paymentKey=${paymentKey}&orderId=${orderId}&amount=${amount}`
-      );
+      const res = await api.post("/payment/confirm", {
+        paymentKey,
+        orderId,
+        amount,
+      });
+
       console.log("결제 승인 성공:", res.data);
     } catch (e) {
       console.error("결제 승인 실패:", e);
@@ -22,7 +24,9 @@ export default function PaymentSuccess() {
   }
 
   useEffect(() => {
-    confirmPayment();
+    if (paymentKey && orderId && amount) {
+      confirmPayment();
+    }
   }, []);
 
   return (

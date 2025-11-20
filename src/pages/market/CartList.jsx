@@ -14,7 +14,7 @@ export default function CartList() {
   }, []);
 
   useEffect(() => {
-    if (cart?.items) {
+    if (cart?.items && selectedItems.length === 0) {
       setSelectedItems(cart.items.map((i) => i.id));
     }
   }, [cart]);
