@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft, Pencil, Trash } from "lucide-react";
 import UserAvatar from "../../components/ui/UserAvatar";
+import UserProfileLink from "../../components/common/UserProfileLink";
 
 <style>{`
   @keyframes fadeIn {
@@ -338,12 +339,20 @@ export default function CompanionDetailPage() {
             <div className="mb-4 flex flex-col gap-2 text-sm text-gray-500">
               {/* 첫 줄: 작성자 + 버튼들 */}
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                {/* <div className="flex items-center gap-2">
                   <UserAvatar image={companion.user?.image} size="md" />
                   <span className="font-medium">
                     {companion.user?.nickname || "익명"}
                   </span>
-                </div>
+                </div> */}
+                <UserProfileLink userId={companion.user?.id}>
+                  <div className="flex items-center gap-2 cursor-pointer">
+                    <UserAvatar image={companion.user?.image} size="md" />
+                    <span className="font-medium">
+                      {companion.user?.nickname || "익명"}
+                    </span>
+                  </div>
+                </UserProfileLink>
 
                 <div className="flex gap-2">
                   {currentUserId !== companion.user?.id ? (
