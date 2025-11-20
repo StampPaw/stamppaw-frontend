@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useWalkStore } from "../../stores/walkStore";
+import { useWalkStore } from "../../stores/useWalkStore";
 
 export default function WalkListPage({ userId: propUserId }) {
   const params = useParams();
