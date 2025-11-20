@@ -8,9 +8,6 @@ const getAuthHeader = () => {
 };
 
 export const walkService = {
-  // ================================
-  // ✅ 산책 CRUD
-  // ================================
 
   async startWalk({ lat, lng, timestamp }) {
     const response = await axios.post(
@@ -18,6 +15,8 @@ export const walkService = {
       { lat, lng, timestamp },
       {
         headers: {
+          ...getAuthHeader(),
+          "Content-Type": "application/json",
           ...getAuthHeader(),
           "Content-Type": "application/json",
         },
@@ -85,9 +84,6 @@ export const walkService = {
     return response.data;
   },
 
-  // ================================
-  // 내 산책 목록 조회
-  // ================================
   async getMyWalks(page = 0, size = 12) {
     const response = await axios.get(`${API_BASE}/my`, {
       params: { page, size },
@@ -104,9 +100,6 @@ export const walkService = {
     };
   },
 
-  // ================================
-  // 다른 사용자 산책 목록 조회
-  // ================================
   async getWalksByUser(userId, page = 0, size = 12) {
     const response = await axios.get(`${API_BASE}/user/${userId}`, {
       params: { page, size },

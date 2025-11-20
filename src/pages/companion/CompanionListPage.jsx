@@ -33,14 +33,8 @@ export default function CompanionListPage() {
   return (
     <div className="min-h-screen bg-white text-text font-sans flex justify-center">
       <div className="w-full sm:max-w-[500px] bg-[#FFF8EE] flex flex-col relative mx-auto h-screen">
-        <main className="flex-1 overflow-y-auto px-4 pb-24 space-y-3">
-          <div className="pt-4">
-            <SearchBar placeholder="Search" />
-          </div>
-
-          <div className="flex gap-2 mb-3">
-            <Tag selectedTag={selectedTag} onTagClick={handleTagClick} />
-          </div>
+        <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-3">
+          <Tag selectedTag={selectedTag} onTagClick={handleTagClick} />
 
           {companions.length > 0 ? (
             companions.map((c) => (

@@ -1,12 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Pencil, Trash } from "lucide-react";
 import UserAvatar from "../../components/ui/UserAvatar";
+
+<style>{`
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .animate-fadeIn {
+    animation: fadeIn 0.2s ease-out;
+  }
+`}</style>;
 
 export default function CompanionDetailPage() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [companion, setCompanion] = useState(null);
+  const [showStatusMenu, setShowStatusMenu] = useState(false);
   const [isChatOngoing, setIsChatOngoing] = useState(false);
   const [existingRoomId, setExistingRoomId] = useState(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
@@ -25,7 +36,9 @@ export default function CompanionDetailPage() {
   useEffect(() => {
     const fetchCompanion = async () => {
       try {
-        const res = await fetch(`http://localhost:8080/api/companion/${id}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}/companion/${id}`
+        );
         if (!res.ok) throw new Error("데이터 불러오기 실패");
         const data = await res.json();
         setCompanion(data);
@@ -41,7 +54,7 @@ export default function CompanionDetailPage() {
     const checkExistingChat = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8080/api/companion/chat/rooms",
+          "${import.meta.env.VITE_API_BASE_URL}/companion/chat/rooms",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -74,7 +87,7 @@ export default function CompanionDetailPage() {
       const fetchApplyList = async () => {
         try {
           const res = await fetch(
-            `http://localhost:8080/api/companion/${id}/apply/manage`,
+            `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply/manage`,
             {
               headers: {
                 Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -96,7 +109,9 @@ export default function CompanionDetailPage() {
   const handleChatStart = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/companion/chat/rooms/companions/${id}`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/companion/chat/rooms/companions/${id}`,
         {
           method: "POST",
           headers: {
@@ -128,7 +143,7 @@ export default function CompanionDetailPage() {
     }
     try {
       const res = await fetch(
-        `http://localhost:8080/api/companion/${id}/apply`,
+        `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply`,
         {
           method: "POST",
           headers: {
@@ -158,7 +173,9 @@ export default function CompanionDetailPage() {
   const handleStatusChange = async (applyId, newStatus) => {
     try {
       const res = await fetch(
-        `http://localhost:8080/api/companion/${id}/apply/status/${applyId}`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/companion/${id}/apply/status/${applyId}`,
         {
           method: "PUT",
           headers: {
@@ -171,7 +188,7 @@ export default function CompanionDetailPage() {
       if (!res.ok) throw new Error("상태 변경 실패");
       // Refresh apply list after status update
       const updatedListRes = await fetch(
-        `http://localhost:8080/api/companion/${id}/apply/manage`,
+        `${import.meta.env.VITE_API_BASE_URL}/companion/${id}/apply/manage`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -221,83 +238,158 @@ export default function CompanionDetailPage() {
           </div>
 
           <div className="bg-white/80 rounded-xl shadow-sm border border-gray-100 p-4 mx-4">
-            <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-center">
-              {companion.title}
+            <h1 className="text-2xl font-bold text-gray-800 mb-2 flex items-start justify-between gap-3">
+              {/* 제목은 왼쪽에서만 줄바꿈되도록 */}
+              <span className="flex-1 break-words leading-snug">
+                {companion.title}
+              </span>
+
               {/* 모집 상태 표시 */}
-              <div className="inline-block align-middle ml-2">
-                {(() => {
-                  const statusLabel =
-                    {
-                      ONGOING: "모집 중",
-                      CLOSED: "모집 완료",
-                    }[companion.status] || companion.status;
-                  return (
-                    <span
-                      className={`text-sm font-medium px-2 py-1 rounded-full ${
-                        companion.status === "ONGOING"
-                          ? "bg-green-100 text-green-700"
-                          : "bg-gray-200 text-gray-600"
-                      }`}
+              <div className="relative inline-flex shrink-0">
+                <span
+                  onClick={() => setShowStatusMenu((prev) => !prev)}
+                  className={`text-sm font-semibold px-3 py-1 rounded-full cursor-pointer transition shadow-sm border
+                    ${
+                      companion.status === "ONGOING"
+                        ? "bg-green-50 text-green-700 border-green-300 hover:bg-green-100"
+                        : "bg-red-50 text-red-600 border-red-300 hover:bg-red-100"
+                    }
+                  `}
+                >
+                  {companion.status === "ONGOING" ? "모집 중" : "마감"}
+                </span>
+
+                {showStatusMenu && currentUserId === companion.user?.id && (
+                  <div className="absolute right-0 mt-2 w-28 bg-white shadow-lg border border-gray-200 rounded-xl z-50 overflow-hidden animate-fadeIn">
+                    <button
+                      onClick={async () => {
+                        try {
+                          const newStatus = "ONGOING";
+                          const res = await fetch(
+                            `${
+                              import.meta.env.VITE_API_BASE_URL
+                            }/companion/${id}`,
+                            {
+                              method: "PUT",
+                              headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${localStorage.getItem(
+                                  "token"
+                                )}`,
+                              },
+                              body: JSON.stringify({ status: newStatus }),
+                            }
+                          );
+                          if (!res.ok) throw new Error("모집 상태 변경 실패");
+
+                          setCompanion((prev) => ({
+                            ...prev,
+                            status: newStatus,
+                          }));
+                          setShowStatusMenu(false);
+                        } catch (err) {
+                          alert("상태 변경 실패");
+                        }
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm hover:bg-green-50 text-gray-700 transition"
                     >
-                      {statusLabel}
-                    </span>
-                  );
-                })()}
+                      모집 중
+                    </button>
+
+                    <button
+                      onClick={async () => {
+                        try {
+                          const newStatus = "CLOSED";
+                          const res = await fetch(
+                            `${
+                              import.meta.env.VITE_API_BASE_URL
+                            }/companion/${id}`,
+                            {
+                              method: "PUT",
+                              headers: {
+                                "Content-Type": "application/json",
+                                Authorization: `Bearer ${localStorage.getItem(
+                                  "token"
+                                )}`,
+                              },
+                              body: JSON.stringify({ status: newStatus }),
+                            }
+                          );
+                          if (!res.ok) throw new Error("모집 상태 변경 실패");
+
+                          setCompanion((prev) => ({
+                            ...prev,
+                            status: newStatus,
+                          }));
+                          setShowStatusMenu(false);
+                        } catch (err) {
+                          alert("상태 변경 실패");
+                        }
+                      }}
+                      className="block w-full text-left px-4 py-2 text-sm hover:bg-red-50 text-gray-700 transition"
+                    >
+                      마감
+                    </button>
+                  </div>
+                )}
               </div>
             </h1>
 
-            <div className="flex items-center justify-between mb-4 text-sm text-gray-500">
-              <div className="flex items-center gap-2">
-                <UserAvatar image={companion.user?.profileImage} size="md" />
-                <span className="font-medium">
-                  {companion.user?.nickname || "익명"}
-                </span>
+            <div className="mb-4 flex flex-col gap-2 text-sm text-gray-500">
+              {/* 첫 줄: 작성자 + 버튼들 */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <UserAvatar image={companion.user?.image} size="md" />
+                  <span className="font-medium">
+                    {companion.user?.nickname || "익명"}
+                  </span>
+                </div>
 
-                {currentUserId !== companion.user?.id && (
-                  <button
-                    onClick={handleChatButtonClick}
-                    disabled={companion.status === "CLOSED"}
-                    className={`bg-orange-400 text-white text-xs px-3 py-1 rounded-full shadow-sm transition
-                    ${
-                      companion.status === "CLOSED"
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "hover:bg-orange-500"
-                    }
-                  `}
-                  >
-                    {isChatOngoing ? "대화 중인 채팅" : "채팅하기"}
-                  </button>
-                )}
+                <div className="flex gap-2">
+                  {currentUserId !== companion.user?.id ? (
+                    <>
+                      <button
+                        onClick={handleChatButtonClick}
+                        disabled={companion.status === "CLOSED"}
+                        className={`bg-orange-400 text-white text-xs px-3 py-1 rounded-full shadow-sm transition
+              ${
+                companion.status === "CLOSED"
+                  ? "bg-gray-400 cursor-not-allowed"
+                  : "hover:bg-orange-500"
+              }
+            `}
+                      >
+                        {isChatOngoing ? "대화 중" : "채팅"}
+                      </button>
 
-                {currentUserId !== companion.user?.id ? (
-                  <>
-                    <button
-                      onClick={handleApplyClick}
-                      disabled={hasApplied || companion.status === "CLOSED"}
-                      className={`ml-2 text-white text-xs px-3 py-1 rounded-full shadow-sm transition ${
-                        hasApplied || companion.status === "CLOSED"
-                          ? "bg-gray-400 cursor-not-allowed"
-                          : "bg-orange-400 hover:bg-orange-500"
-                      }`}
-                    >
-                      {hasApplied
-                        ? "이미 신청한 글"
-                        : companion.status === "CLOSED"
-                        ? "모집 마감"
-                        : "동행 신청하기"}
-                    </button>
-                  </>
-                ) : (
-                  <>
+                      <button
+                        onClick={handleApplyClick}
+                        disabled={hasApplied || companion.status === "CLOSED"}
+                        className={`text-white text-xs px-3 py-1 rounded-full shadow-sm transition ${
+                          hasApplied || companion.status === "CLOSED"
+                            ? "bg-gray-400 cursor-not-allowed"
+                            : "bg-orange-400 hover:bg-orange-500"
+                        }`}
+                      >
+                        {hasApplied
+                          ? "신청 완료"
+                          : companion.status === "CLOSED"
+                          ? "불가"
+                          : "신청"}
+                      </button>
+                    </>
+                  ) : (
                     <button
                       onClick={() => setShowApplyModal(true)}
-                      className="ml-2 text-white text-xs px-3 py-1 rounded-full shadow-sm transition bg-green-500 hover:bg-green-600"
+                      className="text-white text-xs px-3 py-1 rounded-full shadow-sm transition bg-orange-300 hover:bg-indigo-400"
                     >
-                      신청 목록 보기
+                      신청 목록
                     </button>
-                  </>
-                )}
+                  )}
+                </div>
               </div>
+
+              {/* 두 번째 줄: 등록 날짜 */}
               <span>
                 {new Date(companion.registeredAt).toLocaleString([], {
                   year: "numeric",
@@ -314,7 +406,46 @@ export default function CompanionDetailPage() {
             </p>
 
             <div className="flex items-center gap-2 mt-3">
-              {/* Removed duplicate chat and apply buttons here */}
+              {currentUserId === companion.user?.id && (
+                <>
+                  <button
+                    onClick={() => navigate(`/companion/edit/${id}`)}
+                    className="text-gray-400 hover:text-blue-500 transition-colors duration-200 flex items-center justify-center"
+                  >
+                    <Pencil size={20} />
+                  </button>
+
+                  <button
+                    onClick={async () => {
+                      if (!window.confirm("정말 삭제하시겠습니까?")) return;
+                      try {
+                        const res = await fetch(
+                          `${
+                            import.meta.env.VITE_API_BASE_URL
+                          }/companion/${id}`,
+                          {
+                            method: "DELETE",
+                            headers: {
+                              Authorization: `Bearer ${localStorage.getItem(
+                                "token"
+                              )}`,
+                            },
+                          }
+                        );
+                        if (!res.ok) throw new Error("삭제 실패");
+                        alert("삭제가 완료되었습니다.");
+                        navigate("/companion");
+                      } catch (error) {
+                        console.error("삭제 오류:", error);
+                        alert("삭제 중 문제가 발생했습니다.");
+                      }
+                    }}
+                    className="text-gray-400 hover:text-red-500 transition-colors duration-200 flex items-center justify-center"
+                  >
+                    <Trash size={20} />
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </main>

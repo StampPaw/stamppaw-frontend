@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { Client } from "@stomp/stompjs";
 import { useParams, useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
-import Header from "../../components/ui/Header";
 
 export default function ChatRoomPage() {
   const [messages, setMessages] = useState([]);
@@ -22,7 +21,9 @@ export default function ChatRoomPage() {
     const fetchMessages = async () => {
       try {
         const res = await fetch(
-          `http://localhost:8080/api/companion/chat/messages/rooms/${roomId}`,
+          `${
+            import.meta.env.VITE_API_BASE_URL
+          }/companion/chat/messages/rooms/${roomId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -41,7 +42,7 @@ export default function ChatRoomPage() {
     fetchMessages();
 
     const client = new Client({
-      brokerURL: `ws://localhost:8080/ws-stomp`,
+      brokerURL: `wss://stamp-paw.duckdns.org/ws-stomp`,
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },

@@ -16,7 +16,9 @@ export default function ProfileAccompanyPage() {
       setLoading(true);
 
       const res = await fetch(
-        `http://localhost:8080/api/companion/myCompanion?page=${page}&size=${size}`,
+        `${
+          import.meta.env.VITE_API_BASE_URL
+        }/companion/myCompanion?page=${page}&size=${size}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -93,19 +95,20 @@ export default function ProfileAccompanyPage() {
           )}
 
           <div className="flex-1">
-            <div className="flex items-center justify-between">
-              <h3 className="text-base font-semibold text-[#4C3928]">
+            <div className="flex items-start justify-between gap-2">
+              <h3 className="text-base font-semibold text-[#4C3928] line-clamp-1">
                 {item.title}
               </h3>
-              <span
-                className={`text-xs px-2 py-1 rounded-full ${
+
+              <p
+                className={`shrink-0 text-xs px-2 py-1 ${
                   item.status === "ONGOING"
-                    ? "bg-[#FFD8A8] text-[#7A4B18]"
-                    : "bg-[#E0E0E0] text-[#6B6B6B]"
+                    ? "text-[#A76A26]"
+                    : "text-[#6B6B6B]"
                 }`}
               >
                 {statusLabel(item.status)}
-              </span>
+              </p>
             </div>
 
             <p className="text-sm text-[#8D7B6C] mt-1 line-clamp-2">

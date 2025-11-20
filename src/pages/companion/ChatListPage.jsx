@@ -17,7 +17,7 @@ export default function ChatListPage() {
     const fetchChatRooms = async () => {
       try {
         const res = await fetch(
-          "http://localhost:8080/api/companion/chat/rooms",
+          `${import.meta.env.VITE_API_BASE_URL}/companion/chat/rooms`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
