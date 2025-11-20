@@ -16,6 +16,7 @@ export default function Order() {
   const [shippingMobile, setShippingMobile] = useState("");
   const [shippingAddress, setShippingAddress] = useState("");
   const [paymentWidget, setPaymentWidget] = useState(null);
+  const [isOrdering, setIsOrdering] = useState(false);
 
   const parseJwt = (token) => {
     try {
@@ -37,7 +38,7 @@ export default function Order() {
           ? `user_${payload.userId}`
           : `guest_${crypto.randomUUID()}`;
 
-        console.log("🔵 customerKey:", customerKey);
+        //console.log("🔵 customerKey:", customerKey);
 
         const widget = await loadPaymentWidget(
           import.meta.env.VITE_TOSS_CLIENT_KEY,
@@ -85,11 +86,22 @@ export default function Order() {
     );
   }
 
+  // 상품명 생성
+  const firstItemName = orderData.items?.[0]?.productName || "상품";
+  const itemCount = orderData.items?.length || 1;
+
+  const orderName =
+    itemCount > 1 ? `${firstItemName} 외 ${itemCount - 1}개` : firstItemName;
+
   const handleOrder = async () => {
+    if (isOrdering) return;
+
     if (!shippingName || !shippingMobile || !shippingAddress) {
       alert("배송 정보를 모두 입력해주세요.");
       return;
     }
+
+    setIsOrdering(true);
 
     const order = await createOrder({
       cartId: orderData.cartId,
@@ -100,14 +112,21 @@ export default function Order() {
       shippingFee: orderData.shippingFee,
     });
 
+    if (!order || !order.orderId) {
+      alert("주문 생성에 실패했습니다. 다시 시도해주세요.");
+      return;
+    }
+    console.log("🚩", order.orderId);
+
     const readyRes = await api.post("/payment/checkout", {
       amount: Number(orderData.finalAmount),
-      orderName: "상품 결제", // tossOrderId는 backend가 생성
-      orderId: order.id,
+      orderName: "상품 구매", // orderName, tossOrderId는 backend가 생성
+      orderId: order.orderId,
     });
 
     const { payment } = readyRes.data;
     console.log("💫", payment);
+
     const tossOrderId = payment.tossOrderId;
 
     await paymentWidget.requestPayment({
@@ -221,9 +240,12 @@ export default function Order() {
             <div id="payment-widget"></div>
             <button
               onClick={handleOrder}
-              className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#ff8a1e] transition"
+              disabled={isOrdering}
+              className={`w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg 
+    ${isOrdering ? "opacity-50 cursor-not-allowed" : "hover:bg-[#ff8a1e]"}
+  `}
             >
-              결제 하기
+              {isOrdering ? "처리 중..." : "결제 하기"}
             </button>
           </div>
         </main>
