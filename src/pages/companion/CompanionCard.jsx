@@ -63,10 +63,7 @@ export default function CompanionCard({
 
         <div className="flex items-center justify-between mt-3">
           <div className="flex items-center gap-2">
-            <UserAvatar
-              image={JSON.parse(localStorage.getItem("user"))?.image}
-              size="md"
-            />
+            <UserAvatar image={user.image} size="md" />
             <span className="text-xs font-medium text-text">
               {user.nickname}
             </span>

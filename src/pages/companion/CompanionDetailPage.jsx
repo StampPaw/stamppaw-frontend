@@ -337,10 +337,7 @@ export default function CompanionDetailPage() {
 
             <div className="flex items-center justify-between mb-4 text-sm text-gray-500">
               <div className="flex items-center gap-2">
-                <UserAvatar
-                  image={JSON.parse(localStorage.getItem("user"))?.image}
-                  size="md"
-                />
+                <UserAvatar image={companion.user?.image} size="md" />
                 <span className="font-medium">
                   {companion.user?.nickname || "익명"}
                 </span>
