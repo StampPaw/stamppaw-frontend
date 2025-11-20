@@ -1,4 +1,3 @@
-// src/stores/walkStore.js
 import { create } from "zustand";
 import { walkService } from "../services/walkService";
 
@@ -23,6 +22,44 @@ export const useWalkStore = create((set, get) => ({
   duration: 0,
   walk: null,
   error: null,
+
+  // 내 산책 목록 불러오기
+  fetchMyWalks: async (page = 0, size = 12, append = false) => {
+    try {
+      set({ isLoading: true });
+
+      const data = await walkService.getMyWalks(page, size);
+
+      set((state) => ({
+        walkList: append ? [...state.walkList, ...data.content] : data.content,
+        currentPage: page,
+        isLastPage: data.last,
+        isLoading: false,
+      }));
+    } catch (e) {
+      console.error("❌ fetchMyWalks 실패:", e);
+      set({ isLoading: false });
+    }
+  },
+
+  // 특정 유저 산책 목록 불러오기
+  fetchWalksByUser: async (userId, page = 0, size = 12, append = false) => {
+    try {
+      set({ isLoading: true });
+
+      const data = await walkService.getWalksByUser(userId, page, size);
+
+      set((state) => ({
+        walkList: append ? [...state.walkList, ...data.content] : data.content,
+        currentPage: page,
+        isLastPage: data.last,
+        isLoading: false,
+      }));
+    } catch (e) {
+      console.error("❌ fetchWalksByUser 실패:", e);
+      set({ isLoading: false });
+    }
+  },
 
   // 산책 시작
   startWalk: async (lat, lng) => {
@@ -137,7 +174,7 @@ export const useWalkStore = create((set, get) => ({
     }
   },
 
-  // 초기화
+  // 산책 상태 초기화
   resetAll: () =>
     set({
       walkList: [],
@@ -152,5 +189,14 @@ export const useWalkStore = create((set, get) => ({
       duration: 0,
       walkData: null,
       error: null,
+    }),
+
+  // 산책 리스트 상태 초기화
+  resetWalkList: () =>
+    set({
+      walkList: [],
+      currentPage: 0,
+      isLastPage: false,
+      isLoading: false,
     }),
 }));
