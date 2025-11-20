@@ -139,6 +139,7 @@ function AppLayout() {
             <Route path="/profile/edit" element={<ProfileEditPage />} />
             <Route path="/profile/settings" element={<SettingsPage />} />
             <Route path="/users/me" element={<ProfilePage />} />
+            <Route path="/profile/:id" element={<ProfilePage />} /> 
 
              {/* 반려견 */}
             <Route path="/dogs/add" element={<DogAddPage />} />
