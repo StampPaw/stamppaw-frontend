@@ -28,10 +28,6 @@ export default function Market() {
     fetchCategories();
   }, []);
 
-  useEffect(() => {
-    console.log("📦 Market categories:", categories);
-  }, [categories]);
-
   //console.log("⭐Market latestMainImages:", latestMainImages);
 
   if (loading) return <p>Loading...</p>;
