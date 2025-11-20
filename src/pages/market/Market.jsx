@@ -12,6 +12,8 @@ export default function Market() {
     loading,
     categoryProductsAll,
     fetchProductsAllCategory,
+    categories,
+    fetchCategories,
   } = useMarketStore();
 
   useEffect(() => {
@@ -20,6 +22,10 @@ export default function Market() {
 
   useEffect(() => {
     fetchProductsAllCategory();
+  }, []);
+
+  useEffect(() => {
+    fetchCategories();
   }, []);
 
   //console.log("⭐Market latestMainImages:", latestMainImages);
@@ -55,16 +61,19 @@ export default function Market() {
             images={(latestMainImages || []).map((p) => p.mainImageUrl)}
             products={(latestMainImages || []).map((p) => p.id)}
           />
-          {Object.entries(categoryProductsAll || {}).map(
-            ([categoryKey, products]) => (
+          {categories.map((cat) => {
+            const products = categoryProductsAll?.[cat.label] || [];
+
+            return (
               <ProductCardGrid
-                key={categoryKey}
+                key={cat.value}
                 products={products}
-                category={categoryKey}
+                category={cat.label}
+                categoryKey={cat.value}
                 page="market"
               />
-            )
-          )}
+            );
+          })}
         </main>
       </div>
     </div>

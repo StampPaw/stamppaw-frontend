@@ -1,4 +1,3 @@
-// ProductList.jsx
 import React, { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import CategoryTag from "../../components/market/CategoryTag";
@@ -15,72 +14,70 @@ export default function ProductList() {
 
   const location = useLocation();
   const params = new URLSearchParams(location.search);
-  const initialCategoryLabel = params.get("category") || "전체";
 
-  const [selectedLabel, setSelectedLabel] = useState(initialCategoryLabel);
+  // URL 파라미터에서 categoryKey 가져옴
+  const initialSelectedKey = params.get("category"); // ex) CAP
+
+  const [selectedLabel, setSelectedLabel] = useState(null);
   const [selectedKey, setSelectedKey] = useState(null);
 
+  /** 1) 카테고리 로딩 */
   useEffect(() => {
     fetchCategories();
   }, []);
 
+  /** 2) 카테고리 로드 후 초기 선택 설정 */
   useEffect(() => {
     if (!categories || categories.length === 0) return;
 
-    if (initialCategoryLabel === "전체") {
-      setSelectedLabel("전체");
-      setSelectedKey(null);
-      return;
+    // URL에 키가 있는 경우
+    if (initialSelectedKey) {
+      const found = categories.find((c) => c.value === initialSelectedKey);
+      if (found) {
+        setSelectedLabel(found.label);
+        setSelectedKey(found.value);
+        return;
+      }
     }
 
-    const found = categories.find((c) => c.label === initialCategoryLabel);
-
-    if (found) {
-      setSelectedLabel(found.label); // 예: "모자"
-      setSelectedKey(found.value); // 예: "CAP"
-    } else {
-      setSelectedLabel("전체");
-      setSelectedKey(null);
+    // URL 파라미터가 없거나 잘못된 경우 → 첫 번째 카테고리 선택
+    const first = categories[0];
+    if (first) {
+      setSelectedLabel(first.label);
+      setSelectedKey(first.value);
     }
-  }, [categories, initialCategoryLabel]);
+  }, [categories]);
 
+  /** 3) 태그 클릭 */
   const handleTagClick = (label) => {
-    setSelectedLabel(label);
-
-    if (label === "전체") {
-      setSelectedKey(null);
-      return;
-    }
-
     const found = categories.find((c) => c.label === label);
-    setSelectedKey(found ? found.value : null);
+    if (found) {
+      setSelectedLabel(found.label);
+      setSelectedKey(found.value);
+    }
   };
 
+  /** 4) 선택된 categoryKey로 상품 로딩 */
   useEffect(() => {
     if (!selectedKey) return;
     fetchProductsByCategory(selectedKey);
   }, [selectedKey]);
-
-  //console.log("⭐ selectedLabel:", selectedLabel);
-  //console.log("⭐ selectedKey:", selectedKey);
-  //console.log("⭐ categoryProducts:", categoryProducts);
 
   return (
     <div className="min-h-screen bg-white text-text font-sans flex justify-center">
       <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto">
         <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-10">
           <CategoryTag
-            //tags={[{ value: "ALL", label: "전체" }, ...(categories || [])]}
             tags={categories || []}
             selectedTag={selectedLabel}
             onTagClick={handleTagClick}
           />
 
-          {/* 선택된 카테고리 상품 */}
           {selectedKey && (
             <ProductCardGrid
               products={categoryProducts || []}
               category={selectedLabel}
+              categoryKey={selectedKey}
               page="products"
             />
           )}

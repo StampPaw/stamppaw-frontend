@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "react-router-dom";
 import { ShoppingBasket } from "lucide-react";
 
-export default function CardGrid({ products, category, page }) {
+export default function CardGrid({ products, category, categoryKey, page }) {
   const navigate = useNavigate();
 
   return (
@@ -12,7 +12,11 @@ export default function CardGrid({ products, category, page }) {
 
           <span
             className="text-xs text-primary cursor-pointer"
-            onClick={() => navigate(`/market/products?category=${category}`)}
+            onClick={() =>
+              navigate(
+                `/market/products?category=${encodeURIComponent(categoryKey)}`
+              )
+            }
           >
             더보기
           </span>
