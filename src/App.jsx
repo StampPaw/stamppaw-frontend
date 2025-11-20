@@ -73,7 +73,7 @@ function AppLayout() {
 
       {/* ✅ 메인 컨텐츠 (라우팅 영역) */}
       <main
-        className={`relative z-0 ${hideLayout ? "" : "pt-[60px] pb-[80px]"}`}
+        className={`relative z-0 ${hideLayout ? "" : ""}`}
       >
         <div className="w-full sm:max-w-[500px] mx-auto">
           <Routes>
