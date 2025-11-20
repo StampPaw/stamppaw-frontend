@@ -10,6 +10,8 @@ export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("free");
+  const localUser = JSON.parse(localStorage.getItem("user"));
+  const totalPoint = localUser?.totalPoint ?? 0;
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -43,10 +45,8 @@ export default function ProfilePage() {
 
   return (
     <div className="w-full min-h-screen bg-[#FFFDF6]">
-
       {/* 프로필 전체 블록 */}
       <div className="px-5 pt-10 flex items-start gap-6">
-        
         {/* 프로필 이미지 */}
         <div className="relative w-24 h-24 flex-shrink-0">
           <img
@@ -69,7 +69,6 @@ export default function ProfilePage() {
 
         {/* 닉네임/소개/기록 */}
         <div className="flex flex-col w-full">
-
           {/* 닉네임 + 팔로우 */}
           <div className="flex items-center justify-between">
             <p className="text-2xl font-bold text-[#4C3728]">{user.nickname}</p>
@@ -100,6 +99,13 @@ export default function ProfilePage() {
               </p>
               <p className="text-xs text-[#B38A6A]">팔로잉</p>
             </div>
+
+            <div className="flex items-center gap-1">
+              <p className="text-xs text-[#B38A6A]">💰 적립 포인트</p>
+              <p className="text-sm font-semibold text-[#B5802A]">
+                {totalPoint} P
+              </p>
+            </div>
           </div>
         </div>
       </div>
@@ -112,7 +118,6 @@ export default function ProfilePage() {
 
         {(user.dogs ?? []).length > 0 ? (
           <div className="flex items-start gap-4 overflow-x-auto pb-2">
-
             {user.dogs.map((dog) => (
               <div
                 key={dog.id}
@@ -140,9 +145,8 @@ export default function ProfilePage() {
               >
                 <span className="text-[#D4A055] text-3xl font-bold">+</span>
               </button>
-              <p className="text-xs text-[#F3E9D2] mt-1">{" "}</p>
+              <p className="text-xs text-[#F3E9D2] mt-1"> </p>
             </div>
-
           </div>
         ) : (
           <div className="flex flex-col items-start gap-3">
@@ -155,7 +159,6 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
-
 
       {/* 탭 메뉴 */}
       <div className="flex px-5 mt-8 border-b border-[#F4E4C2]">
