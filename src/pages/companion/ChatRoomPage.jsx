@@ -42,7 +42,7 @@ export default function ChatRoomPage() {
     fetchMessages();
 
     const client = new Client({
-      brokerURL: `ws://stamp-paw.duckdns.org/ws-stomp`,
+      brokerURL: `wss://stamp-paw.duckdns.org/ws-stomp`,
       connectHeaders: {
         Authorization: `Bearer ${token}`,
       },
