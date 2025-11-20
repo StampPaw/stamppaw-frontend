@@ -84,7 +84,6 @@ function AppLayout() {
 
   return (
     <div className="relative min-h-screen bg-white text-text font-sans overflow-hidden">
-
       {/* Header */}
       {!hideLayout && (
         <header className="fixed top-0 left-0 w-full z-50">
@@ -95,7 +94,7 @@ function AppLayout() {
       )}
 
       {/* 메인 */}
-      <main className={`relative z-0 ${mainPadding}`}>
+      <main className={`relative z-0 pb-20 ${mainPadding}`}>
         <div className="w-full sm:max-w-[500px] mx-auto">
           <Routes>
             {/* 홈 */}
@@ -109,11 +108,17 @@ function AppLayout() {
             {/* 마켓 */}
             <Route path="/market" element={<Market />} />
             <Route path="/market/products" element={<ProductList />} />
-            <Route path="/market/product/:productId" element={<ProductDetail />} />
+            <Route
+              path="/market/product/:productId"
+              element={<ProductDetail />}
+            />
             <Route path="/market/cart" element={<CartList />} />
             <Route path="/market/orders" element={<OrderList />} />
             <Route path="/market/order" element={<Order />} />
-            <Route path="/market/payment/success" element={<PaymentSuccess />} />
+            <Route
+              path="/market/payment/success"
+              element={<PaymentSuccess />}
+            />
             <Route path="/market/payment/fail" element={<PaymentFail />} />
 
             {/* 동행 */}
@@ -121,7 +126,10 @@ function AppLayout() {
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
             <Route path="/profile/apply" element={<ProfileApplyPage />} />
-            <Route path="/companion/review/write/:applyId" element={<CompanionReviewWritePage />} />
+            <Route
+              path="/companion/review/write/:applyId"
+              element={<CompanionReviewWritePage />}
+            />
             <Route path="/companion/edit/:id" element={<CompanionEditPage />} />
 
             {/* 채팅 */}
