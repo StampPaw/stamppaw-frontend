@@ -1,29 +1,34 @@
 import React, { useEffect, useState } from "react";
 import OrderCard from "../../components/market/OrderCard.jsx";
-import useCartStore from "../../stores/useCartStore.js";
+import OrderCardHorizontal from "../../components/market/OrderCardHorizontal.jsx";
+import useOrderStore from "../../stores/useOrderStore";
 import { ShoppingBag, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export default function OrderList() {
-  const { cart, fetchCart, loading } = useCartStore();
   const navigate = useNavigate();
-  const [selectedItems, setSelectedItems] = useState([]);
+
+  const {
+    orders,
+    loading,
+    error,
+    getUserOrders,
+    page,
+    size,
+    hasNext,
+    fetchNextPage,
+  } = useOrderStore();
 
   useEffect(() => {
-    fetchCart();
+    getUserOrders();
   }, []);
 
-  useEffect(() => {
-    if (cart?.items) {
-      setSelectedItems(cart.items.map((i) => i.id));
-    }
-  }, [cart]);
-
   if (loading) return <p className="p-5">Loading...</p>;
+  if (error) return <p className="p-5 text-red-500">에러가 발생했습니다.</p>;
 
-  //console.log("⭐Cart cart:", cart);
+  //console.log("getUserOrders:", getUserOrders);
 
-  if (!cart || !cart.items || cart.items.length === 0) {
+  if (!orders || orders.length === 0) {
     return (
       <div className="bg-white text-text font-sans min-h-screen flex justify-center">
         <div className="w-full sm:max-w-[500px] bg-bg flex flex-col items-center justify-center px-5">
@@ -52,32 +57,19 @@ export default function OrderList() {
     );
   }
 
-  const totalPrice = selectedItems.reduce((sum, itemId) => {
-    const item = cart.items.find((i) => i.id === itemId);
-    return sum + (item?.subtotal || 0);
-  }, 0);
-
-  const shippingFee = totalPrice < 50000 ? 3000 : 0;
-  const finalAmount = totalPrice + shippingFee;
-
   return (
     <div className="bg-white text-text font-sans">
       <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto">
-        <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-10">
+        <main className="flex-1 overflow-y-auto pb-24 p-5 pt-10 space-y-10">
           <h2 className="flex items-center gap-1 text-xl font-semibold mb-4">
             <button onClick={() => navigate(-1)}>
               <ChevronLeft className="cursor-pointer" />
             </button>
-            주문 목록
+            주문 내역
           </h2>
 
-          {cart.items.map((item) => (
-            <OrderCard
-              key={item.id}
-              item={item}
-              selectedItems={selectedItems}
-              setSelectedItems={setSelectedItems}
-            />
+          {orders.content.map((order) => (
+            <OrderCardHorizontal key={order.orderId} order={order} />
           ))}
 
           <div className="bg-white border border-border rounded-xl shadow-soft p-5 space-y-3">
@@ -85,21 +77,19 @@ export default function OrderList() {
 
             <div className="flex justify-between text-sm text-muted">
               <span>총 상품 가격</span>
-              <span>{totalPrice.toLocaleString()}원</span>
+              <span>150원</span>
             </div>
 
             <div className="flex justify-between text-sm text-muted">
               <span>총 배송비</span>
-              <span>+ {shippingFee.toLocaleString()}원</span>
+              <span>+ 50원</span>
             </div>
 
             <hr />
 
             <div className="flex justify-between text-lg  text-primary">
               <span>결제 예상 금액</span>
-              <span className="text-2xl font-bold">
-                {finalAmount.toLocaleString()}원
-              </span>
+              <span className="text-2xl font-bold">00원</span>
             </div>
           </div>
 
