@@ -4,32 +4,32 @@ import { Pencil } from "lucide-react";
 
 import Tag from "../../components/ui/Tag";
 
-import { getAllCompanions } from "../../services/companionService";
-import CompanionCard from "./CompanionCard";
+import { getAllCommunity } from "../../services/communityService";
+import CommunityCard from "./CommunityCard";
 
-export default function CompanionListPage() {
-  const [companions, setCompanions] = useState([]);
-  const [selectedTag, setSelectedTag] = useState("동행 모집");
+export default function CommunityListPage() {
+  const [communities, setCommunities] = useState([]);
+  const [selectedTag, setSelectedTag] = useState("자유");
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchCompanions = async () => {
+    const fetchCommunities = async () => {
       try {
-        const data = await getAllCompanions(0, 10);
-        setCompanions(data.content);
+        const data = await getAllCommunity(0, 10);
+        setCommunities(data.content);
       } catch (error) {
-        console.error("동행 모집글 불러오기 실패:", error);
+        console.error("커뮤니티글 불러오기 실패:", error);
       }
     };
-    fetchCompanions();
+    fetchCommunities();
   }, []);
 
   const handleTagClick = (tag) => {
     if (tag === "전체") {
       navigate("/");
-    } else if (tag === "자유") {
+    } else if (tag === "동행 모집") {
       setSelectedTag(tag);
-      navigate("/community");
+      navigate("/companion");
     } else {
       setSelectedTag(tag);
     }
@@ -41,16 +41,15 @@ export default function CompanionListPage() {
         <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-3">
           <Tag selectedTag={selectedTag} onTagClick={handleTagClick} />
 
-          {companions.length > 0 ? (
-            companions.map((c) => (
-              <CompanionCard
+          {communities.length > 0 ? (
+            communities.map((c) => (
+              <CommunityCard
                 key={c.id}
                 title={c.title}
                 description={c.content}
                 image={c.image}
                 user={c.user}
-                status={c.status}
-                onClick={() => navigate(`/companion/${c.id}`)}
+                onClick={() => navigate(`/community/${c.id}`)}
               />
             ))
           ) : (
@@ -62,7 +61,7 @@ export default function CompanionListPage() {
 
         <button
           className="fixed bottom-20 right-6 z-50 bg-[#FCA652] p-3 rounded-full shadow-lg text-white hover:bg-[#e59545] transition"
-          onClick={() => navigate("/companion/write")}
+          onClick={() => navigate("/community/write")}
         >
           <Pencil size={20} />
         </button>
