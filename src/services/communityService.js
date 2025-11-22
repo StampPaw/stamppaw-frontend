@@ -37,7 +37,7 @@ export const deleteCommunity = async (id) => {
 // 글 수정
 export const updateCommunity = async (id, formData) => {
   try {
-    const response = await api.patch(`/community/${id}`, formData);
+    const response = await api.put(`/community/${id}`, formData);
     return response.data;
   } catch (error) {
     console.error("[updateCommunity] Error:", error.response || error);

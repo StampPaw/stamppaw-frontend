@@ -67,7 +67,7 @@ export default function HomePage() {
                   key={`free-${post.id}`}
                   title={post.title}
                   description={post.content}
-                  image={post.image}
+                  image={post.imageUrl}
                   user={post.user}
                   onClick={() => navigate(`/community/${post.id}`)}
                 />
