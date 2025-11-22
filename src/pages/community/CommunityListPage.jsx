@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Pencil } from "lucide-react";
 
@@ -10,19 +10,41 @@ import CommunityCard from "./CommunityCard";
 export default function CommunityListPage() {
   const [communities, setCommunities] = useState([]);
   const [selectedTag, setSelectedTag] = useState("자유");
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const loaderRef = useRef(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCommunities = async () => {
       try {
-        const data = await getAllCommunity(0, 10);
-        setCommunities(data.content);
+        const data = await getAllCommunity(page, 10);
+        setCommunities((prev) => {
+          const merged = [...prev, ...data.content];
+          return merged.filter(
+            (item, i, self) => i === self.findIndex((p) => p.id === item.id)
+          );
+        });
+        setHasMore(!data.last);
       } catch (error) {
         console.error("커뮤니티글 불러오기 실패:", error);
       }
     };
     fetchCommunities();
-  }, []);
+  }, [page]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prev) => prev + 1);
+        }
+      },
+      { threshold: 1.0 }
+    );
+    if (loaderRef.current) observer.observe(loaderRef.current);
+    return () => observer.disconnect();
+  }, [hasMore]);
 
   const handleTagClick = (tag) => {
     if (tag === "전체") {
@@ -44,7 +66,7 @@ export default function CommunityListPage() {
           {communities.length > 0 ? (
             communities.map((c) => (
               <CommunityCard
-                key={c.id}
+                key={`community-${c.id}-${page}`}
                 title={c.title}
                 description={c.content}
                 image={c.imageUrl}
@@ -57,6 +79,7 @@ export default function CommunityListPage() {
               등록된 동행 모집글이 없습니다.
             </p>
           )}
+          <div ref={loaderRef} className="h-10"></div>
         </main>
 
         <button
