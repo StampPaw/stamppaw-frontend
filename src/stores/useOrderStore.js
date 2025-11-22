@@ -3,10 +3,10 @@ import orderService from "../services/orderService";
 
 const useOrderStore = create((set, get) => ({
   order: null,
-  orderDetail: null,
+  orderDetail: {},
   orders: [],
   page: 0,
-  size: 20,
+  size: 3,
   hasNext: true,
   loading: false,
   error: null,
@@ -24,7 +24,7 @@ const useOrderStore = create((set, get) => ({
     }
   },
 
-// 사용자 주문내역 : 첫 페이지
+  // 사용자 주문내역 : 첫 페이지
   getUserOrders: async () => {
     set({ loading: true, error: null });
 
@@ -65,17 +65,21 @@ const useOrderStore = create((set, get) => ({
       throw e;
     }
   },
-}));
 
-
-
-  // 주문 상세 조회
+  // 주문 상세 조회 :  사용안함
   getOrderDetail: async (orderId) => {
     set({ loading: true, error: null });
 
     try {
-      const data = await orderService.getOrderDetail({ orderId }); // GET /order/{id}/items
-      set({ orderDetail: data, loading: false });
+      const data = await orderService.getOrderDetail(orderId);
+      set((state) => ({
+        orderDetails: {
+          ...state.orderDetails,
+          [orderId]: data,
+        },
+        loading: false,
+      }));
+
       return data;
     } catch (e) {
       set({ error: e, loading: false });

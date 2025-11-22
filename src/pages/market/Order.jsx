@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import useOrderStore from "../../stores/useOrderStore.js";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import KakaoAddressSearch from "../../components/market/KakaoAddressSearch.jsx";
 import api from "../../services/api";
 
 export default function Order() {
@@ -222,17 +223,21 @@ export default function Order() {
               </span>
             </div>
 
-            <div className="flex justify-between text-sm text-muted">
-              <span className="w-full">
-                <textarea
-                  placeholder="받는 분 주소"
-                  name="shippingAddress"
-                  value={shippingAddress}
-                  onChange={(e) => setShippingAddress(e.target.value)}
-                  className="w-full bg-white border border-border rounded-lg px-4 py-2 h-21 
-                 placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
-                ></textarea>
-              </span>
+            <div className="flex flex-col w-full gap-2">
+              <label className="text-sm text-muted">주소 검색</label>
+
+              <KakaoAddressSearch
+                value={shippingAddress}
+                onChange={setShippingAddress}
+              />
+
+              <textarea
+                placeholder="상세 주소를 입력하세요"
+                value={shippingAddress}
+                onChange={(e) => setShippingAddress(e.target.value)}
+                className="w-full bg-white border border-border rounded-lg px-4 py-2 h-21 
+               placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
+              ></textarea>
             </div>
           </div>
 

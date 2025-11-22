@@ -11,7 +11,8 @@ const orderService = {
     return response.data;
   },
 
-  getOrderDetail: async ({ orderId }) => {
+  //사용안함
+  getOrderDetail: async (orderId) => {
     const response = await api.get(`/order/${orderId}/items`);
     return response.data;
   },

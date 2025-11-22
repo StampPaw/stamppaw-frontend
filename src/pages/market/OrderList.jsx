@@ -1,15 +1,22 @@
 import React, { useEffect, useState } from "react";
-import OrderCard from "../../components/market/OrderCard.jsx";
-import OrderCardHorizontal from "../../components/market/OrderCardHorizontal.jsx";
 import useOrderStore from "../../stores/useOrderStore";
 import { ShoppingBag, ChevronLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import OrderCardHorizontal from "../../components/market/OrderCardHorizontal.jsx";
+
+const formatDate = (isoString) => {
+  const date = isoString.substring(0, 10).replace(/-/g, ".");
+  const time = isoString.substring(11, 16);
+  return `${date} ${time}`;
+};
 
 export default function OrderList() {
   const navigate = useNavigate();
 
   const {
     orders,
+    orderDetail,
+    getOrderDetail,
     loading,
     error,
     getUserOrders,
@@ -68,31 +75,28 @@ export default function OrderList() {
             주문 내역
           </h2>
 
-          {orders.content.map((order) => (
-            <OrderCardHorizontal key={order.orderId} order={order} />
+          {orders.map((order) => (
+            <div
+              key={order.orderId}
+              className="bg-white border border-border rounded-xl shadow-soft p-5 space-y-3"
+            >
+              <h3 className="text-lg font-semibold">
+                {formatDate(order.registeredAt)} 주문 {order.status}{" "}
+              </h3>
+              <hr />
+              <div className="flex justify-between text-sm text-muted">
+                <span>총 결제금액 </span>
+                <span>
+                  {(order.totalAmount + order.shippingFee).toLocaleString()}원
+                </span>
+                <span>배송 상태</span>
+                <span> {order.shippingStatus}</span>
+              </div>
+              {order.items.map((item) => (
+                <OrderCardHorizontal key={item.itemId} item={item} />
+              ))}
+            </div>
           ))}
-
-          <div className="bg-white border border-border rounded-xl shadow-soft p-5 space-y-3">
-            <h3 className="text-lg font-semibold">주문 예상 금액</h3>
-
-            <div className="flex justify-between text-sm text-muted">
-              <span>총 상품 가격</span>
-              <span>150원</span>
-            </div>
-
-            <div className="flex justify-between text-sm text-muted">
-              <span>총 배송비</span>
-              <span>+ 50원</span>
-            </div>
-
-            <hr />
-
-            <div className="flex justify-between text-lg  text-primary">
-              <span>결제 예상 금액</span>
-              <span className="text-2xl font-bold">00원</span>
-            </div>
-          </div>
-
           <button className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#ff8a1e] transition">
             더보기
           </button>
