@@ -47,7 +47,7 @@ export default function CommunityListPage() {
                 key={c.id}
                 title={c.title}
                 description={c.content}
-                image={c.image}
+                image={c.imageUrl}
                 user={c.user}
                 onClick={() => navigate(`/community/${c.id}`)}
               />

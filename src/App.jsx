@@ -56,6 +56,7 @@ import AllListPage from "./pages/AllListPage";
 import SearchPage from "./pages/SearchPage";
 import CommunityListPage from "./pages/community/CommunityListPage";
 import CommunityDetailPage from "./pages/community/CommunityDetailPage";
+import CommunityWritePage from "./pages/community/CommunityWrite";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -158,6 +159,7 @@ function AppLayout() {
             {/* 커뮤니티 */}
             <Route path="/community" element={<CommunityListPage />} />
             <Route path="/community/:id" element={<CommunityDetailPage />} />
+            <Route path="/community/write" element={<CommunityWritePage />} />
 
             <Route path="/search" element={<SearchPage />} />
           </Routes>
