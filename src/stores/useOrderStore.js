@@ -66,19 +66,16 @@ const useOrderStore = create((set, get) => ({
     }
   },
 
-  // 주문 상세 조회 :  사용안함
-  getOrderDetail: async (orderId) => {
+  fetchOrderDetail: async (orderId) => {
     set({ loading: true, error: null });
 
     try {
       const data = await orderService.getOrderDetail(orderId);
-      set((state) => ({
-        orderDetails: {
-          ...state.orderDetails,
-          [orderId]: data,
-        },
+
+      set({
+        orderDetail: data,
         loading: false,
-      }));
+      });
 
       return data;
     } catch (e) {

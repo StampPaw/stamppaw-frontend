@@ -16,7 +16,7 @@ export default function ProductDetail() {
 
   return (
     <div className="bg-white text-text font-sans">
-      <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto">
+      <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto min-h-screen">
         <main className="flex-1 overflow-y-auto pb-24 p-5 mt-3 space-y-10">
           <ProductCard product={productDetail} />
         </main>

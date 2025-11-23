@@ -65,7 +65,7 @@ export default function OrderList() {
   return (
     <div className="bg-white text-text font-sans">
       <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto">
-        <main className="flex-1 overflow-y-auto pb-24 p-5 mt-3 space-y-10">
+        <main className="flex-1 overflow-y-auto pb-24 p-5 mt-3 space-y-5">
           <h2 className="flex items-center gap-1 text-xl font-semibold mb-4">
             <button onClick={() => navigate(-1)}>
               <ChevronLeft className="cursor-pointer" />
@@ -76,18 +76,18 @@ export default function OrderList() {
           {orders.map((order) => (
             <div
               key={order.orderId}
-              className=" bg-white border border-border rounded-xl shadow-soft p-5 space-y-3"
+              className=" bg-white border border-border rounded-xl shadow-soft p-3 space-y-2"
             >
-              <h3 className="flex justify-between text-lg font-semibold">
-                {formatDate(order.registeredAt)} 주문
+              <div className="flex justify-between items-center text-lg font-semibold">
+                <span>{formatDate(order.registeredAt)} 주문</span>
                 <Link
-                  key={order.orderId}
                   to={`/market/order/${order.orderId}`}
                   className="text-sm text-primary hover:underline cursor-pointer"
                 >
                   상세보기
                 </Link>
-              </h3>
+              </div>
+
               <hr />
               <div className="flex justify-between text-sm text-muted">
                 <span>총 결제금액 </span>

@@ -12,7 +12,7 @@ const orderService = {
   },
 
   getOrderDetail: async (orderId) => {
-    const response = await api.get(`/order/${orderId}/items`);
+    const response = await api.get(`/order/${orderId}/detail`);
     return response.data;
   },
 
