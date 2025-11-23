@@ -1,12 +1,11 @@
 import React from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { ShoppingBasket } from "lucide-react";
+import { ShoppingBasket, Dot } from "lucide-react";
 
 export default function OrderCardHorizontal({ item }) {
   return (
     <section>
       <div className="bg-white rounded-xl shadow-soft border border-border w-full transition-all flex overflow-hidden">
-        {/* ✅ 왼쪽 이미지 (정사각형) */}
         <div className="aspect-square w-[30%] relative">
           <img
             src={item.mainImageUrl}
@@ -15,22 +14,31 @@ export default function OrderCardHorizontal({ item }) {
           />
         </div>
 
-        {/* ✅ 오른쪽 텍스트 콘텐츠 */}
         <div className="flex flex-col justify-between p-4 flex-1">
-          {/* 제목 + 내용 */}
           <div>
             <h3 className="font-semibold text-base text-text line-clamp-1">
               {item.productName}
             </h3>
-            <p className="text-muted text-sm leading-relaxed line-clamp-2">
-              수량: {item.quantity}개
+
+            <p className="text-muted text-sm leading-relaxed line-clamp-1 flex items-center gap-1">
+              {item.optionSummary && (
+                <>
+                  <span>
+                    <Dot className="text-gray-400 inline-block" />
+                    옵션 - {item.optionSummary}
+                  </span>
+                </>
+              )}
+              <span>
+                <Dot className="text-gray-400 inline-block" />
+                수량 - {item.quantity}개
+              </span>
             </p>
           </div>
 
           <div className="flex items-center justify-between mt-3">
-            {/* 프로필 + 닉네임 */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-text">
+              <span className="text-sm font-medium text-text">
                 {" "}
                 {item.subtotal.toLocaleString()}원
               </span>
