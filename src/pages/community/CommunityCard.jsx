@@ -1,4 +1,5 @@
 import UserAvatar from "../../components/ui/UserAvatar";
+import { Heart, MessageCircle } from "lucide-react";
 
 export default function CommunityCard({
   title,
@@ -6,6 +7,8 @@ export default function CommunityCard({
   image,
   user,
   onClick,
+  likeCount,
+  commentCount,
 }) {
   // 🔪 글자수 제한 처리
   const MAX_TITLE_LENGTH = 15; // 원하는 글자수로 변경 가능
@@ -51,6 +54,16 @@ export default function CommunityCard({
             <span className="text-xs font-medium text-text">
               {user.nickname}
             </span>
+          </div>
+          <div className="flex items-center gap-4 text-gray-500 text-xs">
+            <div className="flex items-center gap-1">
+              <Heart size={14} className="text-red-500" />
+              <span>{likeCount}</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <MessageCircle size={14} className="text-blue-500" />
+              <span>{commentCount}</span>
+            </div>
           </div>
         </div>
       </div>
