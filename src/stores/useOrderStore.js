@@ -5,6 +5,7 @@ const useOrderStore = create((set, get) => ({
   order: null,
   orderDetail: {},
   orders: [],
+  allShippingStatus: [],
   page: 0,
   size: 3,
   hasNext: true,
@@ -25,11 +26,11 @@ const useOrderStore = create((set, get) => ({
   },
 
   // 사용자 주문내역 : 첫 페이지
-  getUserOrders: async () => {
+  getUserOrders: async (orderStatus) => {
     set({ loading: true, error: null });
 
     try {
-      const data = await orderService.getUserOrders(0, get().size);
+      const data = await orderService.getUserOrders(orderStatus, 0, get().size);
 
       set({
         orders: data.content,
@@ -44,15 +45,18 @@ const useOrderStore = create((set, get) => ({
   },
 
   // 사용자 주문내역 : 다음 페이지
-  fetchNextPage: async () => {
+  fetchNextPage: async (orderStatus) => {
     if (!get().hasNext) return;
 
     const nextPage = get().page + 1;
 
     try {
       set({ loading: true });
-
-      const data = await orderService.getUserOrders(nextPage, get().size);
+      const data = await orderService.getUserOrders(
+        orderStatus,
+        nextPage,
+        get().size
+      );
 
       set({
         orders: [...get().orders, ...data.content],
@@ -81,6 +85,15 @@ const useOrderStore = create((set, get) => ({
     } catch (e) {
       set({ error: e, loading: false });
       throw e;
+    }
+  },
+
+  fetchAllShippingStatuses: async () => {
+    try {
+      const data = await orderService.fetchStatuses();
+      set({ allShippingStatus: data });
+    } catch (e) {
+      console.error("배송 상태 로드 실패:", e);
     }
   },
 }));

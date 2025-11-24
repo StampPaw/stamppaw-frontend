@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useOrderStore from "../../stores/useOrderStore";
 import { ShoppingBag, ChevronLeft } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 import OrderCardHorizontal from "../../components/market/OrderCardHorizontal.jsx";
 
 const formatDate = (isoString) => {
@@ -12,6 +12,7 @@ const formatDate = (isoString) => {
 
 export default function OrderList() {
   const navigate = useNavigate();
+  const { orderStatus } = useParams();
 
   const {
     orders,
@@ -25,8 +26,9 @@ export default function OrderList() {
   } = useOrderStore();
 
   useEffect(() => {
-    getUserOrders();
-  }, []);
+    console.log("📌 orderStatus :", orderStatus);
+    getUserOrders(orderStatus);
+  }, [orderStatus]);
 
   if (loading) return <p className="p-5">Loading...</p>;
   if (error) return <p className="p-5 text-red-500">에러가 발생했습니다.</p>;
@@ -66,11 +68,20 @@ export default function OrderList() {
     <div className="bg-white text-text font-sans">
       <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto">
         <main className="flex-1 overflow-y-auto pb-24 p-5 mt-3 space-y-5">
-          <h2 className="flex items-center gap-1 text-xl font-semibold mb-4">
-            <button onClick={() => navigate(-1)}>
-              <ChevronLeft className="cursor-pointer" />
-            </button>
-            주문 내역
+          <h2 className="flex justify-between items-center text-xl font-semibold mb-4">
+            <div className="flex items-center gap-1">
+              <button onClick={() => navigate(-1)}>
+                <ChevronLeft className="cursor-pointer" />
+              </button>
+              <span>주문 내역</span>
+            </div>
+
+            <Link
+              to={"/market/orders/CANCELED"}
+              className="text-xl hover:underline cursor-pointer"
+            >
+              취소/반품
+            </Link>
           </h2>
 
           {orders.map((order) => (
@@ -102,8 +113,12 @@ export default function OrderList() {
               ))}
             </div>
           ))}
-          <button className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#ff8a1e] transition">
-            더보기
+          <button
+            onClick={() => fetchNextPage(orderStatus)}
+            disabled={!hasNext}
+            className="w-full bg-primary text-white font-semibold px-6 py-2 rounded-lg hover:bg-[#ff8a1e] transition disabled:bg-gray-300 disabled:text-gray-500"
+          >
+            {hasNext ? "더보기" : "마지막 페이지"}
           </button>
         </main>
       </div>

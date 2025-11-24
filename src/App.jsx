@@ -114,7 +114,7 @@ function AppLayout() {
               element={<ProductDetail />}
             />
             <Route path="/market/cart" element={<CartList />} />
-            <Route path="/market/orders" element={<OrderList />} />
+            <Route path="/market/orders/:orderStatus" element={<OrderList />} />
             <Route path="/market/order/:orderId" element={<OrderDetail />} />
             <Route path="/market/order" element={<Order />} />
             <Route

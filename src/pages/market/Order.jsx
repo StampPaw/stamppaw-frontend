@@ -143,7 +143,7 @@ export default function Order() {
   return (
     <div className="bg-white text-text font-sans">
       <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto">
-        <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-5">
+        <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-5 mt-5">
           <h2 className="flex items-center justify-between text-xl font-semibold mb-4 w-full">
             <div className="flex items-center gap-1">
               <button onClick={() => navigate(-1)}>
