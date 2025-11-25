@@ -53,11 +53,12 @@ import DogEditPage from "./pages/Dog/DogEditPage";
 
 import CompanionEditPage from "./pages/companion/CompanionEditPage";
 import AllListPage from "./pages/AllListPage";
-import SearchPage from "./pages/SearchPage";
+import SearchPage from "./pages/search/SearchPage";
 import CommunityListPage from "./pages/community/CommunityListPage";
 import CommunityDetailPage from "./pages/community/CommunityDetailPage";
 import CommunityWritePage from "./pages/community/CommunityWrite";
 import CommunityEditPage from "./pages/community/CommunityEditPage";
+import SearchCompanionResultPage from "./pages/search/SearchCompanionResultPage";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -164,6 +165,10 @@ function AppLayout() {
             <Route path="/community/edit/:id" element={<CommunityEditPage />} />
 
             <Route path="/search" element={<SearchPage />} />
+            <Route
+              path="/search/companion"
+              element={<SearchCompanionResultPage />}
+            />
           </Routes>
         </div>
       </main>
