@@ -4,12 +4,16 @@ import { Pencil } from "lucide-react";
 import Tag from "../components/ui/Tag";
 import { getAllCompanions } from "../services/companionService";
 import { getAllCommunity } from "../services/communityService";
+import { getPartTimeList } from "../services/partTimeService"; 
 import CompanionCard from "../pages/companion/CompanionCard";
 import CommunityCard from "./community/CommunityCard";
+import PartTimeCard from "./PartTime/PartTimeCard"; 
+
 
 export default function HomePage() {
   const [companions, setCompanions] = useState([]);
   const [freePosts, setFreePosts] = useState([]);
+    const [partTimes, setPartTimes] = useState([]); 
   const [selectedTag, setSelectedTag] = useState("전체");
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -21,6 +25,8 @@ export default function HomePage() {
       try {
         const companionData = await getAllCompanions(page, 10);
         const freeData = await getAllCommunity(page, 10);
+        const partTimeData = await getPartTimeList(page, 10); 
+
 
         setCompanions((prev) => {
           const merged = [...prev, ...companionData.content];
@@ -38,7 +44,14 @@ export default function HomePage() {
           );
         });
 
-        setHasMore(!companionData.last || !freeData.last);
+        setPartTimes((prev) => {
+          const merged = [...prev, ...partTimeData.content];
+          return merged.filter(
+            (item, index, self) => index === self.findIndex((p) => p.id === item.id)
+          );
+        });
+
+        setHasMore(!companionData.last || !freeData.last || !partTimeData.last);
       } catch (error) {
         console.error("동행 모집글 불러오기 실패:", error);
       }
@@ -67,7 +80,9 @@ export default function HomePage() {
       navigate("/companion");
     } else if (tag == "자유") {
       navigate("/community");
-    } else {
+    } else if (tag === "알바 구인")
+      navigate("/parttime");
+    else {
       navigate("/");
     }
   };
@@ -78,7 +93,7 @@ export default function HomePage() {
         <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-3">
           <Tag selectedTag={selectedTag} onTagClick={handleTagClick} />
 
-          {companions.length === 0 && freePosts.length === 0 ? (
+          {companions.length === 0 && freePosts.length === 0 && partTimes.length === 0 ? (
             <p className="text-center text-gray-500 mt-5">
               등록된 글이 없습니다.
             </p>
@@ -103,6 +118,17 @@ export default function HomePage() {
                   image={post.imageUrl}
                   user={post.user}
                   onClick={() => navigate(`/community/${post.id}`)}
+                />
+              ))}
+              {partTimes.map((p) => (
+                <PartTimeCard
+                  key={`part-${p.id}-${page}`}
+                  title={p.title}
+                  description={p.content}
+                  image={p.image}
+                  user={p.user}
+                  status={p.status}
+                  onClick={() => navigate(`/parttime/${p.id}`)}
                 />
               ))}
             </>

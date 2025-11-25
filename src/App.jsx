@@ -51,6 +51,12 @@ import DogListPage from "./pages/Dog/DogListPage";
 import DogDetailPage from "./pages/Dog/DogDetailPage";
 import DogEditPage from "./pages/Dog/DogEditPage";
 
+//아르바이트
+import PartTimeListPage from "./pages/PartTime/PartTimeListPage";
+import PartTimeWritePage from "./pages/PartTime/PartTimeWritePage";
+import PartTimeDetailPage from "./pages/PartTime/PartTimeDetailPage";
+import PartTimeEditPage from "./pages/PartTime/PartTimeEditPage";
+
 import CompanionEditPage from "./pages/companion/CompanionEditPage";
 import AllListPage from "./pages/AllListPage";
 import SearchPage from "./pages/SearchPage";
@@ -162,6 +168,12 @@ function AppLayout() {
             <Route path="/community/:id" element={<CommunityDetailPage />} />
             <Route path="/community/write" element={<CommunityWritePage />} />
             <Route path="/community/edit/:id" element={<CommunityEditPage />} />
+
+            {/* 아르바이트 */}
+             <Route path="/parttime" element={<PartTimeListPage />} />
+            <Route path="/parttime/write" element={<PartTimeWritePage />} />
+            <Route path="/parttime/:id" element={<PartTimeDetailPage />} />
+            <Route path="/parttime/:id/edit" element={<PartTimeEditPage />} />
 
             <Route path="/search" element={<SearchPage />} />
           </Routes>
