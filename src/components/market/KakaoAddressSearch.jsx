@@ -46,12 +46,13 @@ export default function KakaoAddressSearch({ value, onChange }) {
           setKeyword(e.target.value);
           onChange(e.target.value);
         }}
-        placeholder="예: 서울 강동구"
-        className="w-full border px-4 py-2 rounded"
+        placeholder="예: 서울 종로구"
+        className="w-full bg-white border border-border rounded-lg px-4 py-2 
+               placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
       />
 
       {results.length > 0 && (
-        <ul className="absolute z-10 bg-white border w-full rounded shadow-lg max-h-60 overflow-auto mt-1">
+        <ul className="absolute z-10 bg-white border  border-border rounded-lg px-4 py-2 w-full rounded shadow-lg max-h-60 overflow-auto mt-1">
           {results.map((addr) => (
             <li
               key={addr.address_name}

@@ -3,12 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, Dot } from "lucide-react";
 import useOrderStore from "../../stores/useOrderStore";
 import OrderCardHorizontal from "../../components/market/OrderCardHorizontal";
-
-const formatDate = (isoString) => {
-  const date = isoString.substring(0, 10).replace(/-/g, ".");
-  const time = isoString.substring(11, 16);
-  return `${date} ${time}`;
-};
+import { formatDateTime } from "@/utils/date";
 
 export default function OrderorderDetail() {
   const navigate = useNavigate();
@@ -46,7 +41,7 @@ export default function OrderorderDetail() {
               주문 상세{" "}
             </h2>
             <span className="text-base">
-              {formatDate(orderDetail.registeredAt)} 주문
+              {formatDateTime(orderDetail.registeredAt)} 주문
             </span>
           </div>
           <div>
@@ -58,84 +53,90 @@ export default function OrderorderDetail() {
 
           <div className="bg-white border border-border rounded-xl shadow-soft p-4 space-y-3">
             <h3 className="text-lg font-semibold">
-              결제 정보 : {orderDetail.payment.status}
+              결제 정보 :{" "}
+              {orderDetail.payment.status === "READY" ? "미결제(결제대기)" : ""}
             </h3>
 
-            <div className="flex justify-between text-sm text-muted">
-              <span>총 결제 금액</span>
-              <span>
-                {(
-                  orderDetail.totalAmount + orderDetail.shippingFee
-                ).toLocaleString()}
-                원 (상품 합 {orderDetail.totalAmount} + 배송비{" "}
-                {orderDetail.shippingFee})
-              </span>
-            </div>
+            {orderDetail.payment.status !== "READY" && (
+              <>
+                <div className="flex justify-between text-sm text-muted">
+                  <span>총 결제 금액</span>
+                  <span>
+                    {(
+                      orderDetail.totalAmount + orderDetail.shippingFee
+                    ).toLocaleString()}
+                    원 (상품 합 {orderDetail.totalAmount} + 배송비{" "}
+                    {orderDetail.shippingFee})
+                  </span>
+                </div>
 
-            <div className="flex justify-between text-sm text-muted">
-              <span>결제 방식</span>
-              <span>{orderDetail.payment.method}</span>
-            </div>
+                <div className="flex justify-between text-sm text-muted">
+                  <span>결제 방식</span>
+                  <span>{orderDetail.payment.method}</span>
+                </div>
 
-            <div className="flex justify-between text-sm text-muted">
-              <span>결제 승인 시간</span>
-              <span>
-                {orderDetail.payment.approvedAt
-                  ? orderDetail.payment.approvedAt.replace("T", " ")
-                  : "-"}
-              </span>
-            </div>
+                <div className="flex justify-between text-sm text-muted">
+                  <span>결제 승인 시간</span>
+                  <span>
+                    {orderDetail.payment.approvedAt
+                      ? formatDateTime(orderDetail.payment.approvedAt)
+                      : "-"}
+                  </span>
+                </div>
+              </>
+            )}
 
-            <a
-              href={orderDetail.payment.receiptUrl}
-              target="_blank"
-              className="text-primary underline text-sm"
-            >
-              영수증 보기
-            </a>
+            {orderDetail.payment.receiptUrl && (
+              <a
+                href={orderDetail.payment.receiptUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary underline text-sm"
+              >
+                영수증 보기
+              </a>
+            )}
           </div>
 
           <div className="bg-white border border-border rounded-xl shadow-soft p-5 space-y-3 mt-5">
             <h3 className="text-lg font-semibold">배송 정보</h3>
+            {orderDetail.payment.status !== "READY" && (
+              <div className="flex items-center justify-between w-full my-3">
+                {allShippingStatus.map((st, idx) => {
+                  const isActive = st.code === orderDetail.shippingStatus;
 
-            <div className="flex items-center justify-between w-full my-3">
-              {allShippingStatus.map((st, idx) => {
-                const isActive = st.code === orderDetail.shippingStatus;
+                  // 현재 단계 인덱스
+                  const currentIdx = allShippingStatus.findIndex(
+                    (s) => s.code === orderDetail.shippingStatus
+                  );
 
-                // 현재 단계 인덱스
-                const currentIdx = allShippingStatus.findIndex(
-                  (s) => s.code === orderDetail.shippingStatus
-                );
+                  const isPast = idx < currentIdx; //이전단계
+                  const isFuture = idx > currentIdx; //다음단계
 
-                // 이미 지난 단계인지?
-                const isPast = idx < currentIdx;
-                // 아직 오지 않은 단계인지?
-                const isFuture = idx > currentIdx;
-
-                return (
-                  <div key={st.code} className="flex items-center w-full">
-                    <div
-                      className={`w-3 h-3 rounded-full transition-all
+                  return (
+                    <div key={st.code} className="flex items-center w-full">
+                      <div
+                        className={`w-3 h-3 rounded-full transition-all
             ${isActive ? "bg-primary" : ""}
             ${isPast ? "bg-primary/40" : ""}
             ${isFuture ? "bg-gray-300" : ""}
           `}
-                    />
-                    <span className="text-xs ml-1 whitespace-nowrap">
-                      {st.label}
-                    </span>
-                    {idx < allShippingStatus.length - 1 && (
-                      <div
-                        className={`h-[2px] flex-1 mx-2 rounded-full 
+                      />
+                      <span className="text-xs ml-1 whitespace-nowrap">
+                        {st.label}
+                      </span>
+                      {idx < allShippingStatus.length - 1 && (
+                        <div
+                          className={`h-[2px] flex-1 mx-2 rounded-full 
               ${isPast ? "bg-primary/40" : "bg-gray-300"}
             `}
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
+                        />
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            )}
             <div className="flex  text-sm text-muted gap-2">
               <span>받는 분</span>
               <span>{orderDetail.shippingName}</span>

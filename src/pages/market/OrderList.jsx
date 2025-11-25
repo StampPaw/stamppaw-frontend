@@ -3,12 +3,7 @@ import useOrderStore from "../../stores/useOrderStore";
 import { ShoppingBag, ChevronLeft } from "lucide-react";
 import { useNavigate, Link, useParams } from "react-router-dom";
 import OrderCardHorizontal from "../../components/market/OrderCardHorizontal.jsx";
-
-const formatDate = (isoString) => {
-  const date = isoString.substring(0, 10).replace(/-/g, ".");
-  const time = isoString.substring(11, 16);
-  return `${date} ${time}`;
-};
+import { formatDateTime } from "@/utils/date";
 
 export default function OrderList() {
   const navigate = useNavigate();
@@ -90,7 +85,7 @@ export default function OrderList() {
               className=" bg-white border border-border rounded-xl shadow-soft p-3 space-y-2"
             >
               <div className="flex justify-between items-center text-lg font-semibold">
-                <span>{formatDate(order.registeredAt)} 주문</span>
+                <span>{formatDateTime(order.registeredAt)} 주문</span>
                 <Link
                   to={`/market/order/${order.orderId}`}
                   className="text-sm text-primary hover:underline cursor-pointer"
