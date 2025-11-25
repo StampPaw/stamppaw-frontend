@@ -58,7 +58,6 @@ export default function CartList() {
 
   const shippingFee = totalPrice < 50000 ? 3000 : 0;
   const finalAmount = totalPrice + shippingFee;
-
   const count = selectedProducts.length;
   const firstItemName = selectedProducts[0]?.productName || "상품";
   const orderName =
