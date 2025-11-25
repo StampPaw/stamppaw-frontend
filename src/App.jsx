@@ -24,6 +24,7 @@ import ProductDetail from "./pages/market/ProductDetail";
 import CartList from "./pages/market/CartList";
 import Order from "./pages/market/Order";
 import OrderList from "./pages/market/OrderList";
+import OrderDetail from "./pages/market/OrderDetail";
 import PaymentSuccess from "./pages/market/PaymentSuccess";
 import PaymentFail from "./pages/market/PaymentFail";
 
@@ -118,7 +119,8 @@ function AppLayout() {
               element={<ProductDetail />}
             />
             <Route path="/market/cart" element={<CartList />} />
-            <Route path="/market/orders" element={<OrderList />} />
+            <Route path="/market/orders/:orderStatus" element={<OrderList />} />
+            <Route path="/market/order/:orderId" element={<OrderDetail />} />
             <Route path="/market/order" element={<Order />} />
             <Route
               path="/market/payment/success"
