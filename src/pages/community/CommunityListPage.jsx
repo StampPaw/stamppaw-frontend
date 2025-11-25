@@ -66,11 +66,12 @@ export default function CommunityListPage() {
           {communities.length > 0 ? (
             communities.map((c) => (
               <CommunityCard
-                key={`community-${c.id}-${page}`}
                 title={c.title}
                 description={c.content}
                 image={c.imageUrl}
                 user={c.user}
+                likeCount={c.likeCount}
+                commentCount={c.commentCount}
                 onClick={() => navigate(`/community/${c.id}`)}
               />
             ))
