@@ -11,12 +11,15 @@ export default function SearchPage() {
   const [companions, setCompanions] = useState([]);
   const [walks, setWalks] = useState([]);
   const [products, setProducts] = useState([]);
+  const [parttimes, setParttimes] = useState([]);
+
 
   const handleSearch = async (value) => {
     setQuery(value);
 
     if (!value.trim()) {
       setCompanions([]);
+      setParttimes([]);
       setWalks([]);
       setProducts([]);
       return;
@@ -33,6 +36,16 @@ export default function SearchPage() {
       if (res1.ok) {
         const data1 = await res1.json();
         setCompanions(data1.content || []);
+      }
+
+      // 🟠 알바글
+      const resPT = await fetch(
+        `${import.meta.env.VITE_API_BASE_URL}/parttime/search?title=${encodeURIComponent(value)}&page=0&size=3`
+      );
+
+      if (resPT.ok) {
+        const dataPT = await resPT.json();
+        setParttimes(dataPT.content || []);
       }
 
       // 🔵 산책글 — API 준비되면 URL 교체!
@@ -68,6 +81,7 @@ export default function SearchPage() {
       key={item.id}
       onClick={() => {
         if (type === "companion") navigate(`/companion/${item.id}`);
+        if (type === "parttime") navigate(`/parttime/${item.id}`);
         if (type === "walk") navigate(`/walks/${item.id}`);
         if (type === "market") navigate(`/market/${item.id}`);
       }}
@@ -128,7 +142,31 @@ export default function SearchPage() {
       <hr className="my-6 border-gray-200" />
 
       {/* ----------------------------- */}
-      {/* 섹션 2 - 산책글 */}
+      {/* 섹션 2 - 알바 */}
+      {/* ----------------------------- */}
+      <div className="mt-6">
+        <div className="flex justify-between items-center mb-3">
+          <h2 className="font-semibold text-lg">알바</h2>
+          <button
+            className="text-primary text-sm"
+            onClick={() =>
+              navigate(`/search/parttime?query=${encodeURIComponent(query)}`)
+            }
+          >
+            더보기
+          </button>
+        </div>
+
+        <div className="flex gap-3">
+          {parttimes.map((item) => renderCard(item, "parttime"))}
+        </div>
+      </div>
+
+      <hr className="my-6 border-gray-200" />
+
+
+      {/* ----------------------------- */}
+      {/* 섹션 3 - 산책글 */}
       {/* ----------------------------- */}
       <div className="mt-6">
         <div className="flex justify-between items-center mb-3">
@@ -144,7 +182,7 @@ export default function SearchPage() {
       <hr className="my-6 border-gray-200" />
 
       {/* ----------------------------- */}
-      {/* 섹션 3 - 마켓 */}
+      {/* 섹션 4 - 마켓 */}
       {/* ----------------------------- */}
       <div className="mt-6 mb-16">
         <div className="flex justify-between items-center mb-3">

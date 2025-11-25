@@ -58,6 +58,10 @@ import PartTimeWritePage from "./pages/PartTime/PartTimeWritePage";
 import PartTimeDetailPage from "./pages/PartTime/PartTimeDetailPage";
 import PartTimeEditPage from "./pages/PartTime/PartTimeEditPage";
 
+// 검색
+import SearchCompanionResultPage from "./pages/search/SearchCompanionResultPage";
+import SearchPartTimeResultPage from "./pages/search/SearchPartTimeResultPage";
+
 import CompanionEditPage from "./pages/companion/CompanionEditPage";
 import AllListPage from "./pages/AllListPage";
 import SearchPage from "./pages/search/SearchPage";
@@ -65,7 +69,8 @@ import CommunityListPage from "./pages/community/CommunityListPage";
 import CommunityDetailPage from "./pages/community/CommunityDetailPage";
 import CommunityWritePage from "./pages/community/CommunityWrite";
 import CommunityEditPage from "./pages/community/CommunityEditPage";
-import SearchCompanionResultPage from "./pages/search/SearchCompanionResultPage";
+
+
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -173,17 +178,27 @@ function AppLayout() {
             <Route path="/community/edit/:id" element={<CommunityEditPage />} />
 
             {/* 아르바이트 */}
-             <Route path="/parttime" element={<PartTimeListPage />} />
+            <Route path="/parttime" element={<PartTimeListPage />} />
             <Route path="/parttime/write" element={<PartTimeWritePage />} />
             <Route path="/parttime/:id" element={<PartTimeDetailPage />} />
             <Route path="/parttime/:id/edit" element={<PartTimeEditPage />} />
 
+            {/* 검색 */}
             <Route path="/search" element={<SearchPage />} />
             <Route
               path="/search/companion"
               element={<SearchCompanionResultPage />}
             />
+
+            <Route 
+              path="/search/parttime"
+              element={<SearchPartTimeResultPage />}
+            />
+
           </Routes>
+
+          
+
         </div>
       </main>
 
