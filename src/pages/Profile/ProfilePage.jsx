@@ -6,6 +6,7 @@ import { followUser, unfollowUser } from "@/services/followService";
 import ProfileFreePage from "./ProfileFreePage";
 import WalkListPage from "../walk/WalkListPage";
 import ProfileAccompanyManagePage from "./ProfileAccompanyManagePage";
+import ProfilePartTimeManagePage from "./ProfilePartTimeManagePage.jsx";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -227,6 +228,18 @@ export default function ProfilePage() {
         >
           동행
         </button>
+
+        <button
+          className={`px-4 pb-3 text-sm ${
+            tab === "parttime"
+              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
+              : "text-[#8D7B6C]"
+          }`}
+          onClick={() => setTab("parttime")}
+        >
+          알바
+        </button>
+
       </div>
 
       {/* 탭 렌더링 */}
@@ -235,6 +248,8 @@ export default function ProfilePage() {
         {tab === "walk" && <WalkListPage userId={user.id} />}
 
         {tab === "accompany" && <ProfileAccompanyManagePage user={user} />}
+        {tab === "parttime" && <ProfilePartTimeManagePage user={user} />}
+
       </div>
 
       <div className="h-20" />
