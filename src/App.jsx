@@ -24,6 +24,7 @@ import ProductDetail from "./pages/market/ProductDetail";
 import CartList from "./pages/market/CartList";
 import Order from "./pages/market/Order";
 import OrderList from "./pages/market/OrderList";
+import OrderDetail from "./pages/market/OrderDetail";
 import PaymentSuccess from "./pages/market/PaymentSuccess";
 import PaymentFail from "./pages/market/PaymentFail";
 
@@ -59,11 +60,12 @@ import PartTimeEditPage from "./pages/PartTime/PartTimeEditPage";
 
 import CompanionEditPage from "./pages/companion/CompanionEditPage";
 import AllListPage from "./pages/AllListPage";
-import SearchPage from "./pages/SearchPage";
+import SearchPage from "./pages/search/SearchPage";
 import CommunityListPage from "./pages/community/CommunityListPage";
 import CommunityDetailPage from "./pages/community/CommunityDetailPage";
 import CommunityWritePage from "./pages/community/CommunityWrite";
 import CommunityEditPage from "./pages/community/CommunityEditPage";
+import SearchCompanionResultPage from "./pages/search/SearchCompanionResultPage";
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -123,7 +125,8 @@ function AppLayout() {
               element={<ProductDetail />}
             />
             <Route path="/market/cart" element={<CartList />} />
-            <Route path="/market/orders" element={<OrderList />} />
+            <Route path="/market/orders/:orderStatus" element={<OrderList />} />
+            <Route path="/market/order/:orderId" element={<OrderDetail />} />
             <Route path="/market/order" element={<Order />} />
             <Route
               path="/market/payment/success"
@@ -176,6 +179,10 @@ function AppLayout() {
             <Route path="/parttime/:id/edit" element={<PartTimeEditPage />} />
 
             <Route path="/search" element={<SearchPage />} />
+            <Route
+              path="/search/companion"
+              element={<SearchCompanionResultPage />}
+            />
           </Routes>
         </div>
       </main>
