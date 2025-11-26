@@ -8,7 +8,7 @@ export const useBadgeStore = create((set, get) => ({
   fetchBadges: async () => {
     const data = await badgeService.getMyBadges();
 
-    console.log("badge data:", data); 
+    // console.log("badge data:", data); 
 
     const rep = data.find((b) => b.representative);
 

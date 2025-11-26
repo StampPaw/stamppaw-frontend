@@ -7,21 +7,21 @@ import WalkListPage from "../walk/WalkListPage";
 import ProfileAccompanyManagePage from "./ProfileAccompanyManagePage";
 import ProfilePartTimeManagePage from "./ProfilePartTimeManagePage.jsx";
 import { useBadgeStore } from "../../stores/useBadgeStore";
-import BadgeList from "../../components/badge/BadgeList";
 import ProfileMyFreePage from "./ProfileMyFreePage.jsx";
+import BadgeList from "../../components/badge/BadgeList";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
-  const { id } = useParams(); // URL 파라미터 (다른 유저 프로필일 때 사용)
+  const { id } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [tab, setTab] = useState("free");
 
-  // 로컬 유저 (내 정보)
+  // 로컬 유저
   const localUser = JSON.parse(localStorage.getItem("user"));
   const totalPoint = localUser?.totalPoint ?? 0;
 
-  // 내 프로필인지 판별 (URL id와 localUser.id 비교)
+  // 내 프로필인지 판별
   const isMyProfile = !id || Number(id) === Number(localUser?.id);
 
   // 대표 뱃지
@@ -66,15 +66,10 @@ export default function ProfilePage() {
             className="w-full h-full rounded-full object-cover border border-gray-200"
           />
 
-          {/* 내 프로필일 때만 수정 버튼 보임 */}
           {isMyProfile && (
             <button
               onClick={() => navigate("/profile/edit")}
-              className="
-                absolute bottom-0 right-0 
-                w-9 h-9 bg-[#F6C343] rounded-full shadow 
-                flex items-center justify-center overflow-hidden
-              "
+              className="absolute bottom-0 right-0 w-9 h-9 bg-[#F6C343] rounded-full shadow flex items-center justify-center overflow-hidden"
             >
               <img src="/Edit.svg" className="w-[60%]" />
             </button>
@@ -85,14 +80,10 @@ export default function ProfilePage() {
         <div className="flex flex-col w-full">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <p className="text-2xl font-bold text-[#4C3728]">
-                {user.nickname}
-              </p>
-
+              <p className="text-2xl font-bold text-[#4C3728]">{user.nickname}</p>
               {repBadge && <img src={repBadge.iconUrl} className="w-7 h-7" />}
             </div>
 
-            {/* 내 프로필이 아닐 때만 팔로우 버튼 표시 */}
             {!isMyProfile && (
               <button
                 onClick={async () => {
@@ -108,19 +99,15 @@ export default function ProfilePage() {
                     console.error("팔로우/언팔 오류:", err);
                   }
                 }}
-                className={`px-6 py-2 rounded-full text-lg font-semibold 
-                  ${
-                    user.isFollowing
-                      ? "bg-gray-300 text-[#4C3728]"
-                      : "bg-[#EDA258] text-white"
-                  }`}
+                className={`px-6 py-2 rounded-full text-lg font-semibold ${
+                  user.isFollowing ? "bg-gray-300 text-[#4C3728]" : "bg-[#EDA258] text-white"
+                }`}
               >
                 {user.isFollowing ? "언팔로우" : "팔로우"}
               </button>
             )}
           </div>
 
-          {/* 자기소개 */}
           <p className="text-[#6B5B4A] text-lg mt-1">
             {user.bio || "자기소개를 입력해 보세요!"}
           </p>
@@ -131,24 +118,29 @@ export default function ProfilePage() {
               <p className="text-lg font-semibold">{user.recordCount ?? 0}</p>
               <p className="text-xs text-[#B38A6A]">기록</p>
             </div>
-            <div className="text-center">
+
+            {/* 팔로워 */}
+            <div
+              className={`text-center ${isMyProfile ? "cursor-pointer" : "cursor-default"}`}
+              onClick={() => isMyProfile && navigate(`/follow?type=follower`)}
+            >
               <p className="text-lg font-semibold">{user.followerCount ?? 0}</p>
               <p className="text-xs text-[#B38A6A]">팔로워</p>
             </div>
-            <div className="text-center">
-              <p className="text-lg font-semibold">
-                {user.followingCount ?? 0}
-              </p>
+
+            {/* 팔로잉 */}
+            <div
+              className={`text-center ${isMyProfile ? "cursor-pointer" : "cursor-default"}`}
+              onClick={() => isMyProfile && navigate(`/follow?type=following`)}
+            >
+              <p className="text-lg font-semibold">{user.followingCount ?? 0}</p>
               <p className="text-xs text-[#B38A6A]">팔로잉</p>
             </div>
 
-            {/* 포인트는 내 프로필에서만 표시 */}
             {isMyProfile && (
               <div className="flex items-center gap-1">
                 <p className="text-xs text-[#B38A6A]">💰 적립 포인트</p>
-                <p className="text-sm font-semibold text-[#B5802A]">
-                  {totalPoint} P
-                </p>
+                <p className="text-sm font-semibold text-[#B5802A]">{totalPoint} P</p>
               </div>
             )}
           </div>
@@ -174,14 +166,12 @@ export default function ProfilePage() {
                     src={dog.imageUrl || "/dog.png"}
                     alt={dog.name}
                     className="w-full h-full object-cover scale-[1.5] translate-y-3"
-                    style={{ transformOrigin: "center" }}
                   />
                 </div>
                 <p className="text-xs text-[#6B5B4A] mt-1">{dog.name}</p>
               </div>
             ))}
 
-            {/* 내 프로필일 때만 반려견 추가 버튼 표시 */}
             {isMyProfile && (
               <div className="flex flex-col items-center">
                 <button
@@ -190,7 +180,6 @@ export default function ProfilePage() {
                 >
                   <span className="text-[#D4A055] text-3xl font-bold">+</span>
                 </button>
-                <p className="text-xs text-[#F3E9D2] mt-1"> </p>
               </div>
             )}
           </div>
@@ -210,60 +199,31 @@ export default function ProfilePage() {
 
       {/* 탭 메뉴 */}
       <div className="flex px-5 mt-8 border-b border-[#F4E4C2]">
-        <button
-          className={`px-4 pb-3 text-sm ${
-            tab === "free"
-              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
-              : "text-[#8D7B6C]"
-          }`}
-          onClick={() => setTab("free")}
-        >
-          자유
-        </button>
-
-        <button
-          className={`px-4 pb-3 text-sm ${
-            tab === "walk"
-              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
-              : "text-[#8D7B6C]"
-          }`}
-          onClick={() => setTab("walk")}
-        >
-          산책
-        </button>
-
-        <button
-          className={`px-4 pb-3 text-sm ${
-            tab === "accompany"
-              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
-              : "text-[#8D7B6C]"
-          }`}
-          onClick={() => setTab("accompany")}
-        >
-          동행
-        </button>
-
-        <button
-          className={`px-4 pb-3 text-sm ${
-            tab === "parttime"
-              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
-              : "text-[#8D7B6C]"
-          }`}
-          onClick={() => setTab("parttime")}
-        >
-          알바
-        </button>
-
+        {["free", "walk", "accompany", "parttime","badge", ].map((t) => (
+          <button
+            key={t}
+            className={`px-4 pb-3 text-sm ${
+              tab === t
+                ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
+                : "text-[#8D7B6C]"
+            }`}
+            onClick={() => setTab(t)}
+          >
+            {t === "free" && "자유"}
+            {t === "walk" && "산책"}
+            {t === "accompany" && "동행"}
+            {t === "badge" && "뱃지"}
+            {t === "parttime" && "알바"}
+          </button>
+        ))}
       </div>
 
-      {/* 탭 렌더링 */}
       <div className="mt-5 px-5">
         {tab === "free" && <ProfileMyFreePage />}
         {tab === "walk" && <WalkListPage userId={user.id} />}
-
         {tab === "accompany" && <ProfileAccompanyManagePage user={user} />}
         {tab === "parttime" && <ProfilePartTimeManagePage user={user} />}
-
+        {tab === "badge" && <BadgeList user={user} />}
       </div>
 
       <div className="h-20" />
