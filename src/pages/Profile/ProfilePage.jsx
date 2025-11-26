@@ -7,6 +7,8 @@ import ProfileFreePage from "./ProfileFreePage";
 import WalkListPage from "../walk/WalkListPage";
 import ProfileAccompanyManagePage from "./ProfileAccompanyManagePage";
 import ProfilePartTimeManagePage from "./ProfilePartTimeManagePage.jsx";
+import { useBadgeStore } from "../../stores/useBadgeStore";
+import BadgeList from "../../components/badge/BadgeList";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -21,6 +23,10 @@ export default function ProfilePage() {
 
   // 내 프로필인지 판별 (URL id와 localUser.id 비교)
   const isMyProfile = !id || Number(id) === Number(localUser?.id);
+
+  // 대표 뱃지
+  const { representative, badges } = useBadgeStore();
+  const repBadge = badges.find((b) => b.badgeId === representative);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -78,7 +84,13 @@ export default function ProfilePage() {
         {/* 닉네임 / 자기소개 / 팔로우 */}
         <div className="flex flex-col w-full">
           <div className="flex items-center justify-between">
-            <p className="text-2xl font-bold text-[#4C3728]">{user.nickname}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-2xl font-bold text-[#4C3728]">
+                {user.nickname}
+              </p>
+
+              {repBadge && <img src={repBadge.iconUrl} className="w-7 h-7" />}
+            </div>
 
             {/* 내 프로필이 아닐 때만 팔로우 버튼 표시 */}
             {!isMyProfile && (
@@ -124,7 +136,9 @@ export default function ProfilePage() {
               <p className="text-xs text-[#B38A6A]">팔로워</p>
             </div>
             <div className="text-center">
-              <p className="text-lg font-semibold">{user.followingCount ?? 0}</p>
+              <p className="text-lg font-semibold">
+                {user.followingCount ?? 0}
+              </p>
               <p className="text-xs text-[#B38A6A]">팔로잉</p>
             </div>
 
@@ -240,6 +254,17 @@ export default function ProfilePage() {
           알바
         </button>
 
+
+        <button
+          className={`px-4 pb-3 text-sm ${
+            tab === "badge"
+              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
+              : "text-[#8D7B6C]"
+          }`}
+          onClick={() => setTab("badge")}
+        >
+          뱃지
+        </button>
       </div>
 
       {/* 탭 렌더링 */}
@@ -250,6 +275,7 @@ export default function ProfilePage() {
         {tab === "accompany" && <ProfileAccompanyManagePage user={user} />}
         {tab === "parttime" && <ProfilePartTimeManagePage user={user} />}
 
+        {tab === "badge" && <BadgeList user={user} />}
       </div>
 
       <div className="h-20" />

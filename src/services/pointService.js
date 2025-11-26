@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./api";
 
 const API_BASE = `${import.meta.env.VITE_API_BASE_URL}/points`;
 
@@ -10,7 +10,7 @@ const getAuthHeader = () => {
 export const pointService = {
   // 누적 포인트 합계
   async getTotal() {
-    const res = await axios.get(`${API_BASE}/total`, {
+    const res = await api.get(`${API_BASE}/total`, {
       headers: getAuthHeader(),
     });
     return res.data;
@@ -18,7 +18,7 @@ export const pointService = {
 
   // 포인트 내역
   async getHistory() {
-    const res = await axios.get(API_BASE, {
+    const res = await api.get(API_BASE, {
       headers: getAuthHeader(),
     });
     // [{ id, amount, reason }]
