@@ -23,7 +23,7 @@ const fetchData = async () => {
       },
     });
 
-    console.log("API 응답:", res);
+    // console.log("API 응답:", res);
 
     const data = res.data;
 
