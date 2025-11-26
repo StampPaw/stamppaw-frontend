@@ -45,6 +45,7 @@ import Signup from "./pages/Auth/Signup";
 import ProfilePage from "./pages/Profile/ProfilePage";
 import ProfileEditPage from "./pages/Profile/ProfileEditPage";
 import SettingsPage from "./pages/Profile/SettingsPage";
+import FollowListPage from "./pages/Profile/FollowListPage";
 
 // 반려견
 import DogAddPage from "./pages/Dog/DogAddPage";
@@ -164,6 +165,7 @@ function AppLayout() {
             <Route path="/profile/settings" element={<SettingsPage />} />
             <Route path="/users/me" element={<ProfilePage />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
+            <Route path="/follow" element={<FollowListPage />} />
 
             {/* 반려견 */}
             <Route path="/dogs/add" element={<DogAddPage />} />
