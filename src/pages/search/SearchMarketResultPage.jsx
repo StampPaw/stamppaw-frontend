@@ -15,7 +15,7 @@ export default function SearchWalkResultPage() {
 
   const fetchData = async () => {
     try {
-      const res = await api.post("/market/products/search", {
+      const res = await api.get("/market/products/search", {
         params: {
           title: query,
           page,
@@ -23,7 +23,7 @@ export default function SearchWalkResultPage() {
         },
       });
 
-      // console.log("API 응답:", res);
+      console.log("API 응답:", res);
 
       const data = res.data;
 
