@@ -110,17 +110,16 @@ export default function ChatRoomPage() {
 
   return (
     <div className="max-w-[500px] mx-auto bg-[#FFF9F3] min-h-screen flex flex-col">
-      <div className="sticky top-0 bg-[#FFF8EE] z-30 flex items-center gap-3 p-4 shadow-sm border-b border-gray-200">
-        <button
-          onClick={() => navigate(-1)}
-          className="p-2 rounded-full hover:bg-gray-100 transition"
-        >
-          <ArrowLeft className="text-gray-700" size={22} />
-        </button>
-        <h2 className="text-lg font-semibold text-gray-800">채팅방</h2>
-      </div>
-
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 pt-16">
+      <div className="flex-1 overflow-y-auto p-4 pt-[70px] pb-[90px] flex flex-col justify-end gap-4">
+        <div className="fixed top-[60px] left-1/2 -translate-x-1/2 w-full max-w-[500px] bg-[#FFF8EE] z-50 flex items-center gap-3 p-4 shadow-sm border-b border-gray-200">
+          <button
+            onClick={() => navigate(-1)}
+            className="p-2 rounded-full hover:bg-gray-100 transition"
+          >
+            <ArrowLeft className="text-gray-700" size={22} />
+          </button>
+          <h2 className="text-lg font-semibold text-gray-800">채팅방</h2>
+        </div>
         {messages.map((msg, i) => {
           const sender = msg.sender || {};
           const senderId = sender.id != null ? Number(sender.id) : null;
@@ -156,7 +155,7 @@ export default function ChatRoomPage() {
               {!isOwn && (
                 <div className="flex flex-col items-start max-w-[70%]">
                   <p className="text-xs text-gray-500 mb-1 ml-1">
-                    {sender.nickName || sender.username || sender.email}
+                    {sender.nickname || sender.username || sender.email}
                   </p>
                   <div className="bg-yellow-100 text-gray-800 rounded-2xl px-4 py-2 shadow">
                     <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
@@ -184,7 +183,7 @@ export default function ChatRoomPage() {
         <div ref={messagesEndRef} />
       </div>
 
-      <div className="sticky bottom-0 bg-yellow-50 p-3 flex items-center gap-2 shadow-inner">
+      <div className="fixed bottom-[70px] left-1/2 -translate-x-1/2 w-full max-w-[500px] bg-yellow-50 p-3 flex items-center gap-2 shadow-inner z-50">
         <input
           type="text"
           placeholder="메시지를 입력하세요"
