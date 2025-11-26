@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";  // ⭐ 추가
 import { Pencil } from "lucide-react";
 
 import Tag from "../../components/ui/Tag";
@@ -9,11 +9,23 @@ import PartTimeCard from "./PartTimeCard";
 
 export default function PartTimeListPage() {
   const [parttimes, setParttimes] = useState([]);
-  const [selectedTag, setSelectedTag] = useState("알바 모집");
+  const [selectedTag, setSelectedTag] = useState("알바 구인");
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const loaderRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation(); 
+  
+  // 🔥 탭에 들어올 때 초기 선택값 세팅
+  useEffect(() => {
+    setSelectedTag("알바 구인");
+  }, []);
+
+  // 🔥 탭 변경 시 리스트 및 페이지 초기화
+  useEffect(() => {
+    setParttimes([]);
+    setPage(0);
+  }, [selectedTag]);
 
   useEffect(() => {
     const fetchPartTimes = async () => {
@@ -49,14 +61,23 @@ export default function PartTimeListPage() {
     return () => observer.disconnect();
   }, [hasMore]);
 
+  // 🚫 setSelectedTag 제거하여 "알바 구인"에서 다시 클릭 시 상태 변동 X
   const handleTagClick = (tag) => {
     if (tag === "전체") {
-      navigate("/");
-    } else if (tag === "자유") {
-      setSelectedTag(tag);
+      navigate("/all-list");
+      return;
+    }
+    if (tag === "자유") {
       navigate("/community");
-    } else {
-      setSelectedTag(tag);
+      return;
+    }
+    if (tag === "알바 구인") {
+      navigate("/parttime");
+      return;
+    }
+    if (tag === "동행 모집") {
+      navigate("/companion");
+      return;
     }
   };
 

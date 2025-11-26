@@ -1,36 +1,47 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import { Pencil } from "lucide-react";
 import Tag from "../components/ui/Tag";
 
 import { getAllCompanions } from "../services/companionService";
+import { getAllCommunity } from "../services/communityService";
+import { getPartTimeList } from "../services/partTimeService";
+
 import CompanionCard from "../pages/companion/CompanionCard";
+import CommunityCard from "../pages/community/CommunityCard";
+import PartTimeCard from "../pages/PartTime/PartTimeCard";
 
 export default function AllListPage() {
   const [companions, setCompanions] = useState([]);
+  const [freePosts, setFreePosts] = useState([]);
+  const [partTimes, setPartTimes] = useState([]);
+
   const [selectedTag, setSelectedTag] = useState("전체");
   const navigate = useNavigate();
+  const loaderRef = useRef(null);
 
   useEffect(() => {
-    const fetchCompanions = async () => {
+    const fetchAll = async () => {
       try {
-        const data = await getAllCompanions(0, 10);
-        setCompanions(data.content);
-      } catch (error) {
-        console.error("동행 모집글 불러오기 실패:", error);
+        const comp = await getAllCompanions(0, 10);
+        const free = await getAllCommunity(0, 10);
+        const part = await getPartTimeList(0, 10);
+
+        setCompanions(comp.content);
+        setFreePosts(free.content);
+        setPartTimes(part.content);
+      } catch (err) {
+        console.error("전체 불러오기 실패:", err);
       }
     };
-    fetchCompanions();
+    fetchAll();
   }, []);
 
   const handleTagClick = (tag) => {
-    if (tag === "동행 모집") {
-      navigate("/companion");
-    } else if (tag === "전체") {
-      navigate("/all-list"); // ✅ 전체 클릭 시 홈으로 이동
-    } else {
-      navigate("/all-list");
-    }
+    setSelectedTag(tag);
+    if (tag === "동행 모집") navigate("/companion");
+    else if (tag === "자유") navigate("/community");
+    else if (tag === "알바 구인") navigate("/parttime");
+    else navigate("/all-list");
   };
 
   return (
@@ -39,31 +50,39 @@ export default function AllListPage() {
         <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-3">
           <Tag selectedTag={selectedTag} onTagClick={handleTagClick} />
 
-          {companions.length > 0 ? (
-            companions.map((c) => (
-              <CompanionCard
-                key={c.id}
-                title={c.title}
-                description={c.content}
-                image={c.image}
-                user={c.user}
-                status={c.status}
-                onClick={() => navigate(`/companion/${c.id}`)}
-              />
-            ))
-          ) : (
-            <p className="text-center text-gray-500 mt-5">
-              등록된 동행 모집글이 없습니다.
-            </p>
-          )}
+          {companions.map((c) => (
+            <CompanionCard
+              key={`comp-${c.id}`}
+              title={c.title}
+              description={c.content}
+              image={c.image}
+              user={c.user}
+              status={c.status}
+              onClick={() => navigate(`/companion/${c.id}`)}
+            />
+          ))}
+          {freePosts.map((c) => (
+            <CommunityCard
+              key={`free-${c.id}`}
+              title={c.title}
+              description={c.content}
+              image={c.imageUrl}
+              user={c.user}
+              onClick={() => navigate(`/community/${c.id}`)}
+            />
+          ))}
+          {partTimes.map((p) => (
+            <PartTimeCard
+              key={`part-${p.id}`}
+              title={p.title}
+              description={p.content}
+              image={p.image}
+              user={p.user}
+              status={p.status}
+              onClick={() => navigate(`/parttime/${p.id}`)}
+            />
+          ))}
         </main>
-
-        <button
-          className="fixed bottom-20 right-6 z-50 bg-[#FCA652] p-3 rounded-full shadow-lg text-white hover:bg-[#e59545] transition"
-          onClick={() => navigate("/companion/write")}
-        >
-          <Pencil size={20} />
-        </button>
       </div>
     </div>
   );
