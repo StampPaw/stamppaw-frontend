@@ -245,6 +245,17 @@ export default function ProfilePage() {
 
         <button
           className={`px-4 pb-3 text-sm ${
+            tab === "badge"
+              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
+              : "text-[#8D7B6C]"
+          }`}
+          onClick={() => setTab("badge")}
+        >
+          뱃지
+        </button>
+
+        <button
+          className={`px-4 pb-3 text-sm ${
             tab === "parttime"
               ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
               : "text-[#8D7B6C]"
@@ -264,6 +275,7 @@ export default function ProfilePage() {
         {tab === "accompany" && <ProfileAccompanyManagePage user={user} />}
         {tab === "parttime" && <ProfilePartTimeManagePage user={user} />}
 
+        {tab === "badge" && <BadgeList user={user} />}
       </div>
 
       <div className="h-20" />

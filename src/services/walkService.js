@@ -8,15 +8,19 @@ const getAuthHeader = () => {
 };
 
 export const walkService = {
+  
   async searchWalks(keyword, page = 0, size = 10) {
     if (!keyword || keyword.trim().length === 0)
       return { content: [], totalElements: 0 };
 
-    const res = await api.post("/walks/search", {
-      keyword: keyword.trim(),
-      page,
-      size,
+    const res = await api.get("/walks/search", {
+      params: {
+        memo: keyword.trim(),
+        page,
+        size,
+      },
     });
+
     return res.data;
   },
 

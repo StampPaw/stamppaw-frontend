@@ -25,7 +25,7 @@ export const login = async (credentials) => {
   localStorage.setItem("token", token);
   localStorage.setItem("user", JSON.stringify(user));
 
-  console.log("[authService] 저장된 토큰:", token);
+  // console.log("[authService] 저장된 토큰:", token);
 
   return token;
 };
