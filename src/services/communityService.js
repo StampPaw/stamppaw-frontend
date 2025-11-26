@@ -44,3 +44,8 @@ export const updateCommunity = async (id, formData) => {
     throw error;
   }
 };
+
+export const getMyCommunityPosts = async (page = 0, size = 10) => {
+  const res = await api.get(`/community/user?page=${page}&size=${size}`);
+  return res.data;
+};

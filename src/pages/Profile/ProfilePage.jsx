@@ -3,12 +3,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getMyInfo, getUserInfo } from "@/services/userService";
 import { followUser, unfollowUser } from "@/services/followService";
 
-import ProfileFreePage from "./ProfileFreePage";
 import WalkListPage from "../walk/WalkListPage";
 import ProfileAccompanyManagePage from "./ProfileAccompanyManagePage";
 import ProfilePartTimeManagePage from "./ProfilePartTimeManagePage.jsx";
 import { useBadgeStore } from "../../stores/useBadgeStore";
 import BadgeList from "../../components/badge/BadgeList";
+import ProfileMyFreePage from "./ProfileMyFreePage.jsx";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -254,28 +254,16 @@ export default function ProfilePage() {
           알바
         </button>
 
-
-        <button
-          className={`px-4 pb-3 text-sm ${
-            tab === "badge"
-              ? "text-[#4C3728] font-semibold border-b-2 border-[#EDA258]"
-              : "text-[#8D7B6C]"
-          }`}
-          onClick={() => setTab("badge")}
-        >
-          뱃지
-        </button>
       </div>
 
       {/* 탭 렌더링 */}
       <div className="mt-5 px-5">
-        {tab === "free" && <ProfileFreePage user={user} />}
+        {tab === "free" && <ProfileMyFreePage />}
         {tab === "walk" && <WalkListPage userId={user.id} />}
 
         {tab === "accompany" && <ProfileAccompanyManagePage user={user} />}
         {tab === "parttime" && <ProfilePartTimeManagePage user={user} />}
 
-        {tab === "badge" && <BadgeList user={user} />}
       </div>
 
       <div className="h-20" />
