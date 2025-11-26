@@ -47,14 +47,12 @@ export default function CommunityListPage() {
   }, [hasMore]);
 
   const handleTagClick = (tag) => {
-    if (tag === "전체") {
-      navigate("/");
-    } else if (tag === "동행 모집") {
-      setSelectedTag(tag);
-      navigate("/companion");
-    } else {
-      setSelectedTag(tag);
-    }
+    setSelectedTag(tag);
+
+    if (tag === "전체") navigate("/all-list");
+    else if (tag === "동행 모집") navigate("/companion");
+    else if (tag === "알바 구인") navigate("/parttime");
+    else navigate("/community");  // 자유
   };
 
   return (

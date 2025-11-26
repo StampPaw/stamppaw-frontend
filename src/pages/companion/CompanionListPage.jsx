@@ -15,6 +15,17 @@ export default function CompanionListPage() {
   const loaderRef = useRef(null);
   const navigate = useNavigate();
 
+  // 🔥 페이지 진입 시 탭 초기화
+  useEffect(() => {
+    setSelectedTag("동행 모집");
+  }, []);
+
+  // 🔥 탭 변경 시 데이터 초기화
+  useEffect(() => {
+    setCompanions([]);
+    setPage(0);
+  }, [selectedTag]);
+
   useEffect(() => {
     const fetchCompanions = async () => {
       try {
@@ -51,11 +62,15 @@ export default function CompanionListPage() {
     if (tag === "전체") {
       navigate("/");
     } else if (tag === "자유") {
-      setSelectedTag(tag);
       navigate("/community");
+    } else if (tag === "알바 구인") {
+      navigate("/parttime");
     } else {
-      setSelectedTag(tag);
+      // 동행 모집
+      navigate("/companion");
     }
+
+    setSelectedTag(tag);
   };
 
   return (
