@@ -8,6 +8,7 @@ import ProfileAccompanyManagePage from "./ProfileAccompanyManagePage";
 import ProfilePartTimeManagePage from "./ProfilePartTimeManagePage.jsx";
 import { useBadgeStore } from "../../stores/useBadgeStore";
 import ProfileMyFreePage from "./ProfileMyFreePage.jsx";
+import BadgeList from "../../components/badge/BadgeList";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -198,7 +199,7 @@ export default function ProfilePage() {
 
       {/* 탭 메뉴 */}
       <div className="flex px-5 mt-8 border-b border-[#F4E4C2]">
-        {["free", "walk", "accompany", "parttime"].map((t) => (
+        {["free", "walk", "accompany", "badge", "parttime"].map((t) => (
           <button
             key={t}
             className={`px-4 pb-3 text-sm ${
@@ -211,6 +212,7 @@ export default function ProfilePage() {
             {t === "free" && "자유"}
             {t === "walk" && "산책"}
             {t === "accompany" && "동행"}
+            {t === "badge" && "뱃지"}
             {t === "parttime" && "알바"}
           </button>
         ))}
@@ -221,6 +223,7 @@ export default function ProfilePage() {
         {tab === "walk" && <WalkListPage userId={user.id} />}
         {tab === "accompany" && <ProfileAccompanyManagePage user={user} />}
         {tab === "parttime" && <ProfilePartTimeManagePage user={user} />}
+        {tab === "badge" && <BadgeList user={user} />}
       </div>
 
       <div className="h-20" />

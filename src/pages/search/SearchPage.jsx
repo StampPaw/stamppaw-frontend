@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import SearchBar from "../../components/ui/SearchBar";
 import { useNavigate } from "react-router-dom";
+import api from "../../services/api";
 
 export default function SearchPage() {
   const navigate = useNavigate();
@@ -13,7 +14,12 @@ export default function SearchPage() {
   const [products, setProducts] = useState([]);
   const [parttimes, setParttimes] = useState([]);
 
+  // 토큰 최초 렌더 캐싱
+  const token = useMemo(() => localStorage.getItem("token"), []);
 
+  const BASE = import.meta.env.VITE_API_BASE_URL;
+
+  // 검색
   const handleSearch = async (value) => {
     setQuery(value);
 
@@ -26,91 +32,102 @@ export default function SearchPage() {
     }
 
     try {
-      // 🟡 동행글
-      const res1 = await fetch(
-        `${
-          import.meta.env.VITE_API_BASE_URL
-        }/companion/search?title=${encodeURIComponent(value)}&page=0&size=3`
-      );
+      // 동행 / 알바 / 산책글 동시 검색 (promise.all)
+      const [cRes, pRes, wRes, mRes] = await Promise.all([
+        // 🟡 동행글
+        fetch(
+          `${BASE}/companion/search?title=${encodeURIComponent(
+            value
+          )}&page=0&size=3`
+        ).then((r) => (r.ok ? r.json() : null)),
 
-      if (res1.ok) {
-        const data1 = await res1.json();
-        setCompanions(data1.content || []);
-      }
+        // 🟠 알바글
+        fetch(
+          `${BASE}/parttime/search?title=${encodeURIComponent(
+            value
+          )}&page=0&size=3`
+        ).then((r) => (r.ok ? r.json() : null)),
 
-      // 🟠 알바글
-      const resPT = await fetch(
-        `${import.meta.env.VITE_API_BASE_URL}/parttime/search?title=${encodeURIComponent(value)}&page=0&size=3`
-      );
+        // 🔵 산책글 (axios 사용)
+        api
+          .get("/walks/search", {
+            params: { memo: value, page: 0, size: 3 },
+          })
+          .then((r) => r.data)
+          .catch(() => null),
 
-      if (resPT.ok) {
-        const dataPT = await resPT.json();
-        setParttimes(dataPT.content || []);
-      }
+        //마켓
+        api
+          .get("/market/products/search", {
+            params: { title: value, page: 0, size: 3 },
+          })
+          .then((r) => r.data)
+          .catch(() => null),
+      ]);
 
-      // 🔵 산책글 — API 준비되면 URL 교체!
-      //   const res2 = await fetch(
-      //     `${
-      //       import.meta.env.VITE_API_BASE_URL
-      //     }/walks/search?title=${encodeURIComponent(value)}&page=0&size=3`
-      //   );
+      // 🟡 동행
+      setCompanions(cRes?.content || []);
 
-      //   if (res2.ok) {
-      //     const data2 = await res2.json();
-      //     setWalks(data2.content || []);
-      //   }
+      // 🟠 알바
+      setParttimes(pRes?.content || []);
 
-      //   // 🟢 마켓 — API 준비되면 URL 교체!
-      //   const res3 = await fetch(
-      //     `${
-      //       import.meta.env.VITE_API_BASE_URL
-      //     }/market/search?title=${encodeURIComponent(value)}&page=0&size=3`
-      //   );
+      // 🔵 산책글
+      setWalks(wRes?.content || []);
 
-      //   if (res3.ok) {
-      //     const data3 = await res3.json();
-      //     setProducts(data3.content || []);
-      //   }
-    } catch (e) {
-      console.error("검색 오류:", e);
+      // 마켓
+      setProducts(mRes?.content || []);
+    } catch (err) {
+      console.error("검색 오류:", err);
     }
   };
 
-  const renderCard = (item, type) => (
-    <div
-      key={item.id}
-      onClick={() => {
-        if (type === "companion") navigate(`/companion/${item.id}`);
-        if (type === "parttime") navigate(`/parttime/${item.id}`);
-        if (type === "walk") navigate(`/walks/${item.id}`);
-        if (type === "market") navigate(`/market/${item.id}`);
-      }}
-      className="w-40 bg-white rounded-xl shadow-md overflow-hidden cursor-pointer border hover:shadow-lg transition"
-    >
-      <div className="h-24 w-full bg-gray-200 overflow-hidden">
-        {item.image ? (
-          <img
-            src={item.image}
-            alt={item.title}
-            className="w-full h-full object-cover"
-          />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-gray-400 text-sm">
-            No Image
-          </div>
-        )}
-      </div>
+  // 카드 렌더링
+  const renderCard = (item, type) => {
+    const thumb = item.image || "/walk/walk-thumbnail.png";
 
-      <div className="p-3">
-        <h3 className="font-semibold text-sm text-gray-800 line-clamp-2">
-          {item.title}
-        </h3>
-        <p className="text-xs text-gray-500 mt-1 line-clamp-2">
-          {item.content}
-        </p>
+    return (
+      <div
+        key={item.id}
+        onClick={() => {
+          if (type === "companion") navigate(`/companion/${item.id}`);
+          if (type === "parttime") navigate(`/parttime/${item.id}`);
+          if (type === "walk") navigate(`/walk/${item.id}`);
+          if (type === "market") navigate(`/market/${item.id}`);
+        }}
+        className="bg-white rounded-xl shadow-soft overflow-hidden 
+                 border border-border cursor-pointer 
+                 hover:shadow-md transition-all w-40"
+      >
+        <img
+          src={thumb}
+          alt={item.title}
+          className="w-full h-32 object-cover"
+        />
+
+        <div className="p-2">
+          <p className="font-semibold text-sm text-text line-clamp-2">
+            {item.title || "제목 없음"}
+          </p>
+
+          {type !== "walk" && item.content && (
+            <p className="text-muted text-xs mt-1 line-clamp-2">
+              {item.content}
+            </p>
+          )}
+
+          {type === "walk" && item.startTime && (
+            <p className="text-muted text-xs mt-1">
+              {new Date(item.startTime).toLocaleDateString()}{" "}
+              {new Date(item.startTime).toLocaleTimeString([], {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </p>
+          )}
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="px-5 py-6">
@@ -118,82 +135,59 @@ export default function SearchPage() {
 
       <SearchBar onChange={handleSearch} />
 
-      {/* ----------------------------- */}
-      {/* 섹션 1 - 동행 */}
-      {/* ----------------------------- */}
-      <div className="mt-8">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="font-semibold text-lg">동행</h2>
-          <button
-            className="text-primary text-sm"
-            onClick={() =>
-              navigate(`/search/companion?query=${encodeURIComponent(query)}`)
-            }
-          >
-            더보기
-          </button>
-        </div>
+      <Section
+        title="동행"
+        items={companions}
+        onMore={() =>
+          navigate(`/search/companion?query=${encodeURIComponent(query)}`)
+        }
+        render={(i) => renderCard(i, "companion")}
+      />
 
-        <div className="flex gap-3">
-          {companions.map((item) => renderCard(item, "companion"))}
-        </div>
+      <Section
+        title="알바"
+        items={parttimes}
+        onMore={() =>
+          navigate(`/search/parttime?query=${encodeURIComponent(query)}`)
+        }
+        render={(i) => renderCard(i, "parttime")}
+      />
+
+      <Section
+        title="산책글"
+        items={walks}
+        onMore={() =>
+          navigate(`/search/walks?query=${encodeURIComponent(query)}`)
+        }
+        render={(i) => renderCard(i, "walk")}
+      />
+
+      <Section
+        title="마켓"
+        items={products}
+        onMore={() =>
+          navigate(`/search/market?query=${encodeURIComponent(query)}`)
+        }
+        render={(i) => renderCard(i, "market")}
+      />
+    </div>
+  );
+}
+
+/* 공통 컴포넌트 */
+function Section({ title, items, onMore, render }) {
+  return (
+    <div className="mt-8">
+      <div className="flex justify-between items-center mb-3">
+        <h2 className="font-semibold text-lg">{title}</h2>
+        <button className="text-primary text-sm" onClick={onMore}>
+          더보기
+        </button>
       </div>
+
+      <div className="flex gap-3">{items.map(render)}</div>
 
       <hr className="my-6 border-gray-200" />
-
-      {/* ----------------------------- */}
-      {/* 섹션 2 - 알바 */}
-      {/* ----------------------------- */}
-      <div className="mt-6">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="font-semibold text-lg">알바</h2>
-          <button
-            className="text-primary text-sm"
-            onClick={() =>
-              navigate(`/search/parttime?query=${encodeURIComponent(query)}`)
-            }
-          >
-            더보기
-          </button>
-        </div>
-
-        <div className="flex gap-3">
-          {parttimes.map((item) => renderCard(item, "parttime"))}
-        </div>
-      </div>
-
-      <hr className="my-6 border-gray-200" />
-
-
-      {/* ----------------------------- */}
-      {/* 섹션 3 - 산책글 */}
-      {/* ----------------------------- */}
-      <div className="mt-6">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="font-semibold text-lg">산책글</h2>
-          <button className="text-primary text-sm">더보기</button>
-        </div>
-
-        <div className="flex gap-3">
-          {walks.map((item) => renderCard(item, "walk"))}
-        </div>
-      </div>
-
-      <hr className="my-6 border-gray-200" />
-
-      {/* ----------------------------- */}
-      {/* 섹션 4 - 마켓 */}
-      {/* ----------------------------- */}
-      <div className="mt-6 mb-16">
-        <div className="flex justify-between items-center mb-3">
-          <h2 className="font-semibold text-lg">마켓</h2>
-          <button className="text-primary text-sm">더보기</button>
-        </div>
-
-        <div className="flex gap-3">
-          {products.map((item) => renderCard(item, "market"))}
-        </div>
-      </div>
     </div>
   );
 }
