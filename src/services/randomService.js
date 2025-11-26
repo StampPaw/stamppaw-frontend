@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./api";
 
 const API_BASE = `${import.meta.env.VITE_API_BASE_URL}/random`;
 
@@ -10,7 +10,7 @@ const getAuthHeader = () => {
 export const randomService = {
   // 위치 업데이트
   async updateLocation({ lat, lng, timestampMillis, walkId }) {
-    const res = await axios.post(
+    const res = await api.post(
       `${API_BASE}/location/update`,
       { lat, lng, timestampMillis, walkId },
       { headers: { ...getAuthHeader() } }
@@ -20,7 +20,7 @@ export const randomService = {
 
   // 랜덤 포인트 조회
   async fetchRandomPoints() {
-    const res = await axios.get(`${API_BASE}/points`, {
+    const res = await api.get(`${API_BASE}/points`, {
       headers: getAuthHeader(),
     });
     return res.data; // [{lat, lng, visited}]

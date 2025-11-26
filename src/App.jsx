@@ -124,18 +124,12 @@ function AppLayout() {
             {/* 마켓 */}
             <Route path="/market" element={<Market />} />
             <Route path="/market/products" element={<ProductList />} />
-            <Route
-              path="/market/product/:productId"
-              element={<ProductDetail />}
-            />
+            <Route path="/market/product/:productId" element={<ProductDetail />} />
             <Route path="/market/cart" element={<CartList />} />
             <Route path="/market/orders/:orderStatus" element={<OrderList />} />
             <Route path="/market/order/:orderId" element={<OrderDetail />} />
             <Route path="/market/order" element={<Order />} />
-            <Route
-              path="/market/payment/success"
-              element={<PaymentSuccess />}
-            />
+            <Route path="/market/payment/success" element={<PaymentSuccess />} />
             <Route path="/market/payment/fail" element={<PaymentFail />} />
 
             {/* 동행 */}
@@ -143,10 +137,7 @@ function AppLayout() {
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
             <Route path="/profile/apply" element={<ProfileApplyPage />} />
-            <Route
-              path="/companion/review/write/:applyId"
-              element={<CompanionReviewWritePage />}
-            />
+            <Route path="/companion/review/write/:applyId" element={<CompanionReviewWritePage />} />
             <Route path="/companion/edit/:id" element={<CompanionEditPage />} />
 
             {/* 채팅 */}
