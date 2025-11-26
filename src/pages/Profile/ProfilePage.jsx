@@ -199,7 +199,7 @@ export default function ProfilePage() {
 
       {/* 탭 메뉴 */}
       <div className="flex px-5 mt-8 border-b border-[#F4E4C2]">
-        {["free", "walk", "accompany", "badge", "parttime"].map((t) => (
+        {["free", "walk", "accompany", "parttime","badge", ].map((t) => (
           <button
             key={t}
             className={`px-4 pb-3 text-sm ${
