@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "./api";
 
 const API_BASE = `${import.meta.env.VITE_API_BASE_URL}/walks`;
 
@@ -8,9 +8,20 @@ const getAuthHeader = () => {
 };
 
 export const walkService = {
+  async searchWalks(keyword, page = 0, size = 10) {
+    if (!keyword || keyword.trim().length === 0)
+      return { content: [], totalElements: 0 };
+
+    const res = await api.post("/walks/search", {
+      keyword: keyword.trim(),
+      page,
+      size,
+    });
+    return res.data;
+  },
 
   async startWalk({ lat, lng, timestamp }) {
-    const response = await axios.post(
+    const response = await api.post(
       `${API_BASE}/start`,
       { lat, lng, timestamp },
       {
@@ -26,7 +37,7 @@ export const walkService = {
   },
 
   async addPoint(walkId, { lat, lng, timestamp }) {
-    await axios.post(
+    await api.post(
       `${API_BASE}/${walkId}/point`,
       { lat, lng, timestamp },
       {
@@ -39,7 +50,7 @@ export const walkService = {
   },
 
   async endWalk(walkId, { lat, lng, timestamp }) {
-    const response = await axios.post(
+    const response = await api.post(
       `${API_BASE}/${walkId}/end`,
       { lat, lng, timestamp },
       {
@@ -53,21 +64,17 @@ export const walkService = {
   },
 
   async recordWalk(walkId, formData) {
-    const response = await axios.put(
-      `${API_BASE}/${walkId}/record`,
-      formData,
-      {
-        headers: {
-          ...getAuthHeader(),
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await api.put(`${API_BASE}/${walkId}/record`, formData, {
+      headers: {
+        ...getAuthHeader(),
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response.data;
   },
 
   async getWalkDetail(walkId) {
-    const response = await axios.get(`${API_BASE}/${walkId}`, {
+    const response = await api.get(`${API_BASE}/${walkId}`, {
       headers: {
         ...getAuthHeader(),
       },
@@ -76,7 +83,7 @@ export const walkService = {
   },
 
   async deleteWalk(walkId) {
-    const response = await axios.delete(`${API_BASE}/${walkId}`, {
+    const response = await api.delete(`${API_BASE}/${walkId}`, {
       headers: {
         ...getAuthHeader(),
       },
@@ -85,7 +92,7 @@ export const walkService = {
   },
 
   async getMyWalks(page = 0, size = 12) {
-    const response = await axios.get(`${API_BASE}/my`, {
+    const response = await api.get(`${API_BASE}/my`, {
       params: { page, size },
       headers: {
         ...getAuthHeader(),
@@ -101,7 +108,7 @@ export const walkService = {
   },
 
   async getWalksByUser(userId, page = 0, size = 12) {
-    const response = await axios.get(`${API_BASE}/user/${userId}`, {
+    const response = await api.get(`${API_BASE}/user/${userId}`, {
       params: { page, size },
       headers: {
         ...getAuthHeader(),
