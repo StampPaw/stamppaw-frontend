@@ -33,21 +33,33 @@ export default function SearchPage() {
 
     try {
       // 동행 / 알바 / 산책글 동시 검색 (promise.all)
-      const [cRes, pRes, wRes] = await Promise.all([
+      const [cRes, pRes, wRes, mRes] = await Promise.all([
         // 🟡 동행글
         fetch(
-          `${BASE}/companion/search?title=${encodeURIComponent(value)}&page=0&size=3`
+          `${BASE}/companion/search?title=${encodeURIComponent(
+            value
+          )}&page=0&size=3`
         ).then((r) => (r.ok ? r.json() : null)),
 
         // 🟠 알바글
         fetch(
-          `${BASE}/parttime/search?title=${encodeURIComponent(value)}&page=0&size=3`
+          `${BASE}/parttime/search?title=${encodeURIComponent(
+            value
+          )}&page=0&size=3`
         ).then((r) => (r.ok ? r.json() : null)),
 
         // 🔵 산책글 (axios 사용)
         api
           .get("/walks/search", {
             params: { memo: value, page: 0, size: 3 },
+          })
+          .then((r) => r.data)
+          .catch(() => null),
+
+        //마켓
+        api
+          .get("/market/products/search", {
+            params: { title: value, page: 0, size: 3 },
           })
           .then((r) => r.data)
           .catch(() => null),
@@ -61,6 +73,9 @@ export default function SearchPage() {
 
       // 🔵 산책글
       setWalks(wRes?.content || []);
+
+      // 마켓
+      setProducts(mRes?.content || []);
     } catch (err) {
       console.error("검색 오류:", err);
     }
@@ -83,7 +98,11 @@ export default function SearchPage() {
                  border border-border cursor-pointer 
                  hover:shadow-md transition-all w-40"
       >
-        <img src={thumb} alt={item.title} className="w-full h-32 object-cover" />
+        <img
+          src={thumb}
+          alt={item.title}
+          className="w-full h-32 object-cover"
+        />
 
         <div className="p-2">
           <p className="font-semibold text-sm text-text line-clamp-2">
@@ -146,7 +165,9 @@ export default function SearchPage() {
       <Section
         title="마켓"
         items={products}
-        onMore={() => {}}
+        onMore={() =>
+          navigate(`/search/market?query=${encodeURIComponent(query)}`)
+        }
         render={(i) => renderCard(i, "market")}
       />
     </div>

@@ -62,6 +62,7 @@ import PartTimeEditPage from "./pages/PartTime/PartTimeEditPage";
 import SearchCompanionResultPage from "./pages/search/SearchCompanionResultPage";
 import SearchPartTimeResultPage from "./pages/search/SearchPartTimeResultPage";
 import SearchWalkResultPage from "./pages/search/SearchWalkResultPage";
+import SearchMarketResultPage from "./pages/search/SearchMarketResultPage";
 
 import CompanionEditPage from "./pages/companion/CompanionEditPage";
 import AllListPage from "./pages/AllListPage";
@@ -70,7 +71,6 @@ import CommunityListPage from "./pages/community/CommunityListPage";
 import CommunityDetailPage from "./pages/community/CommunityDetailPage";
 import CommunityWritePage from "./pages/community/CommunityWrite";
 import CommunityEditPage from "./pages/community/CommunityEditPage";
-
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -125,12 +125,18 @@ function AppLayout() {
             {/* 마켓 */}
             <Route path="/market" element={<Market />} />
             <Route path="/market/products" element={<ProductList />} />
-            <Route path="/market/product/:productId" element={<ProductDetail />} />
+            <Route
+              path="/market/product/:productId"
+              element={<ProductDetail />}
+            />
             <Route path="/market/cart" element={<CartList />} />
             <Route path="/market/orders/:orderStatus" element={<OrderList />} />
             <Route path="/market/order/:orderId" element={<OrderDetail />} />
             <Route path="/market/order" element={<Order />} />
-            <Route path="/market/payment/success" element={<PaymentSuccess />} />
+            <Route
+              path="/market/payment/success"
+              element={<PaymentSuccess />}
+            />
             <Route path="/market/payment/fail" element={<PaymentFail />} />
 
             {/* 동행 */}
@@ -138,7 +144,10 @@ function AppLayout() {
             <Route path="/companion/write" element={<CompanionWritePage />} />
             <Route path="/companion/:id" element={<CompanionDetailPage />} />
             <Route path="/profile/apply" element={<ProfileApplyPage />} />
-            <Route path="/companion/review/write/:applyId" element={<CompanionReviewWritePage />} />
+            <Route
+              path="/companion/review/write/:applyId"
+              element={<CompanionReviewWritePage />}
+            />
             <Route path="/companion/edit/:id" element={<CompanionEditPage />} />
 
             {/* 채팅 */}
@@ -181,20 +190,14 @@ function AppLayout() {
               element={<SearchCompanionResultPage />}
             />
 
-            <Route 
+            <Route
               path="/search/parttime"
               element={<SearchPartTimeResultPage />}
             />
 
-            <Route 
-              path="/search/walks"
-              element={<SearchWalkResultPage />}
-            />
-
+            <Route path="/search/walks" element={<SearchWalkResultPage />} />
+            <Route path="/search/market" element={<SearchMarketResultPage />} />
           </Routes>
-
-          
-
         </div>
       </main>
 
