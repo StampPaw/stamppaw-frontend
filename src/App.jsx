@@ -61,6 +61,7 @@ import PartTimeEditPage from "./pages/PartTime/PartTimeEditPage";
 // 검색
 import SearchCompanionResultPage from "./pages/search/SearchCompanionResultPage";
 import SearchPartTimeResultPage from "./pages/search/SearchPartTimeResultPage";
+import SearchWalkResultPage from "./pages/search/SearchWalkResultPage";
 
 import CompanionEditPage from "./pages/companion/CompanionEditPage";
 import AllListPage from "./pages/AllListPage";
@@ -183,6 +184,11 @@ function AppLayout() {
             <Route 
               path="/search/parttime"
               element={<SearchPartTimeResultPage />}
+            />
+
+            <Route 
+              path="/search/walks"
+              element={<SearchWalkResultPage />}
             />
 
           </Routes>
