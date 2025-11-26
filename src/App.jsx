@@ -71,7 +71,6 @@ import CommunityWritePage from "./pages/community/CommunityWrite";
 import CommunityEditPage from "./pages/community/CommunityEditPage";
 
 
-
 export default function App() {
   useKakaoLoaderOnce({
     appkey: import.meta.env.VITE_KAKAO_MAP_KEY,
