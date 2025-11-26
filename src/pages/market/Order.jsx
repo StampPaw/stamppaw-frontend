@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import useOrderStore from "../../stores/useOrderStore.js";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
+import KakaoAddressSearch from "../../components/market/KakaoAddressSearch.jsx";
 import api from "../../services/api";
 
 export default function Order() {
@@ -15,6 +16,7 @@ export default function Order() {
   const [shippingName, setShippingName] = useState("");
   const [shippingMobile, setShippingMobile] = useState("");
   const [shippingAddress, setShippingAddress] = useState("");
+  const [shippingAddressDetail, setShippingAddressDetail] = useState("");
   const [paymentWidget, setPaymentWidget] = useState(null);
   const [isOrdering, setIsOrdering] = useState(false);
 
@@ -37,8 +39,6 @@ export default function Order() {
         const customerKey = payload?.userId
           ? `user_${payload.userId}`
           : `guest_${crypto.randomUUID()}`;
-
-        //console.log("🔵 customerKey:", customerKey);
 
         const widget = await loadPaymentWidget(
           import.meta.env.VITE_TOSS_CLIENT_KEY,
@@ -66,7 +66,7 @@ export default function Order() {
 
   useEffect(() => {
     if (orderData) {
-      console.log("📦 주문 페이지로 전달된 CartId:", orderData);
+      console.log("📦 주문 페이지로 전달된 CartId:", orderData.orderName);
     }
   }, [orderData]);
 
@@ -86,13 +86,6 @@ export default function Order() {
     );
   }
 
-  // 상품명 생성
-  const firstItemName = orderData.items?.[0]?.productName || "상품";
-  const itemCount = orderData.items?.length || 1;
-
-  const orderName =
-    itemCount > 1 ? `${firstItemName} 외 ${itemCount - 1}개` : firstItemName;
-
   const handleOrder = async () => {
     if (isOrdering) return;
 
@@ -108,7 +101,9 @@ export default function Order() {
       cartItemIds: orderData.cartItemIds,
       shippingName,
       shippingMobile,
-      shippingAddress,
+      shippingAddress: `${shippingAddress} ${
+        shippingAddressDetail || ""
+      }`.trim(),
       shippingFee: orderData.shippingFee,
     });
 
@@ -116,17 +111,16 @@ export default function Order() {
       alert("주문 생성에 실패했습니다. 다시 시도해주세요.");
       return;
     }
-    console.log("🚩", order.orderId);
+    console.log("🚩", order.orderName);
 
     const readyRes = await api.post("/payment/checkout", {
       amount: Number(orderData.finalAmount),
-      orderName: "상품 구매", // orderName, tossOrderId는 backend가 생성
+      orderName: orderData.orderName, // "상품 구매", tossOrderId는 backend가 생성
       orderId: order.orderId,
     });
 
     const { payment } = readyRes.data;
-    console.log("💫", payment);
-
+    //console.log("💫", payment);
     const tossOrderId = payment.tossOrderId;
 
     await paymentWidget.requestPayment({
@@ -142,7 +136,7 @@ export default function Order() {
   return (
     <div className="bg-white text-text font-sans">
       <div className="w-full sm:max-w-[500px] bg-bg flex flex-col relative mx-auto">
-        <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-5">
+        <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-5 mt-5">
           <h2 className="flex items-center justify-between text-xl font-semibold mb-4 w-full">
             <div className="flex items-center gap-1">
               <button onClick={() => navigate(-1)}>
@@ -156,7 +150,7 @@ export default function Order() {
                 장바구니
               </span>
               <ChevronRight className="text-primary/50" />
-              <span className="bg-primary/80 text-white px-2 py-1 rounded-full shadow">
+              <span className="bg-primary text-white px-2 py-1 rounded-full shadow">
                 주문/결제
               </span>
               <ChevronRight className="text-primary/50" />
@@ -222,17 +216,21 @@ export default function Order() {
               </span>
             </div>
 
-            <div className="flex justify-between text-sm text-muted">
-              <span className="w-full">
-                <textarea
-                  placeholder="받는 분 주소"
-                  name="shippingAddress"
-                  value={shippingAddress}
-                  onChange={(e) => setShippingAddress(e.target.value)}
-                  className="w-full bg-white border border-border rounded-lg px-4 py-2 h-21 
-                 placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
-                ></textarea>
-              </span>
+            <div className="flex flex-col w-full gap-2">
+              <label className="text-sm text-muted">받는 분 주소</label>
+
+              <KakaoAddressSearch
+                value={shippingAddress}
+                onChange={setShippingAddress}
+              />
+
+              <textarea
+                placeholder="상세 주소를 입력하세요"
+                value={shippingAddressDetail}
+                onChange={(e) => setShippingAddressDetail(e.target.value)}
+                className="w-full bg-white border border-border rounded-lg px-4 py-2 h-16 
+               placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-primary"
+              ></textarea>
             </div>
           </div>
 

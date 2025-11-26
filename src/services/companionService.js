@@ -1,7 +1,7 @@
 import api from "./api";
 
 // ✅ 동행 목록 조회
-export const getAllCompanions = async (page = 0, size = 10) => {
+export const getAllCompanions = async (page = 0, size = 20) => {
   const response = await api.get("/companion", {
     params: { page, size },
   });
@@ -63,7 +63,7 @@ export const deleteCompanion = async (id) => {
 // 동행 글 수정
 export const updateCompanion = async (id, formData) => {
   try {
-    const response = await api.put(`/companion/${id}`, formData);
+    const response = await api.patch(`/companion/${id}`, formData);
     return response.data;
   } catch (error) {
     console.error("[updateCompanion] Error:", error.response || error);

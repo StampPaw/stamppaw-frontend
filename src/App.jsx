@@ -24,6 +24,7 @@ import ProductDetail from "./pages/market/ProductDetail";
 import CartList from "./pages/market/CartList";
 import Order from "./pages/market/Order";
 import OrderList from "./pages/market/OrderList";
+import OrderDetail from "./pages/market/OrderDetail";
 import PaymentSuccess from "./pages/market/PaymentSuccess";
 import PaymentFail from "./pages/market/PaymentFail";
 
@@ -51,9 +52,24 @@ import DogListPage from "./pages/Dog/DogListPage";
 import DogDetailPage from "./pages/Dog/DogDetailPage";
 import DogEditPage from "./pages/Dog/DogEditPage";
 
+//아르바이트
+import PartTimeListPage from "./pages/PartTime/PartTimeListPage";
+import PartTimeWritePage from "./pages/PartTime/PartTimeWritePage";
+import PartTimeDetailPage from "./pages/PartTime/PartTimeDetailPage";
+import PartTimeEditPage from "./pages/PartTime/PartTimeEditPage";
+
+// 검색
+import SearchCompanionResultPage from "./pages/search/SearchCompanionResultPage";
+import SearchPartTimeResultPage from "./pages/search/SearchPartTimeResultPage";
+
 import CompanionEditPage from "./pages/companion/CompanionEditPage";
 import AllListPage from "./pages/AllListPage";
-import SearchPage from "./pages/SearchPage";
+import SearchPage from "./pages/search/SearchPage";
+import CommunityListPage from "./pages/community/CommunityListPage";
+import CommunityDetailPage from "./pages/community/CommunityDetailPage";
+import CommunityWritePage from "./pages/community/CommunityWrite";
+import CommunityEditPage from "./pages/community/CommunityEditPage";
+
 
 export default function App() {
   useKakaoLoaderOnce({
@@ -84,7 +100,6 @@ function AppLayout() {
 
   return (
     <div className="relative min-h-screen bg-white text-text font-sans overflow-hidden">
-
       {/* Header */}
       {!hideLayout && (
         <header className="fixed top-0 left-0 w-full z-50">
@@ -95,7 +110,7 @@ function AppLayout() {
       )}
 
       {/* 메인 */}
-      <main className={`relative z-0 ${mainPadding}`}>
+      <main className={`relative z-0 pb-20 ${mainPadding}`}>
         <div className="w-full sm:max-w-[500px] mx-auto">
           <Routes>
             {/* 홈 */}
@@ -111,7 +126,8 @@ function AppLayout() {
             <Route path="/market/products" element={<ProductList />} />
             <Route path="/market/product/:productId" element={<ProductDetail />} />
             <Route path="/market/cart" element={<CartList />} />
-            <Route path="/market/orders" element={<OrderList />} />
+            <Route path="/market/orders/:orderStatus" element={<OrderList />} />
+            <Route path="/market/order/:orderId" element={<OrderDetail />} />
             <Route path="/market/order" element={<Order />} />
             <Route path="/market/payment/success" element={<PaymentSuccess />} />
             <Route path="/market/payment/fail" element={<PaymentFail />} />
@@ -145,8 +161,34 @@ function AppLayout() {
             <Route path="/dogs/:dogId/edit" element={<DogEditPage />} />
             <Route path="/dogs" element={<DogListPage />} />
 
+            {/* 커뮤니티 */}
+            <Route path="/community" element={<CommunityListPage />} />
+            <Route path="/community/:id" element={<CommunityDetailPage />} />
+            <Route path="/community/write" element={<CommunityWritePage />} />
+            <Route path="/community/edit/:id" element={<CommunityEditPage />} />
+
+            {/* 아르바이트 */}
+            <Route path="/parttime" element={<PartTimeListPage />} />
+            <Route path="/parttime/write" element={<PartTimeWritePage />} />
+            <Route path="/parttime/:id" element={<PartTimeDetailPage />} />
+            <Route path="/parttime/:id/edit" element={<PartTimeEditPage />} />
+
+            {/* 검색 */}
             <Route path="/search" element={<SearchPage />} />
+            <Route
+              path="/search/companion"
+              element={<SearchCompanionResultPage />}
+            />
+
+            <Route 
+              path="/search/parttime"
+              element={<SearchPartTimeResultPage />}
+            />
+
           </Routes>
+
+          
+
         </div>
       </main>
 

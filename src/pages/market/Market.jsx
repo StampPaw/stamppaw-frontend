@@ -37,7 +37,7 @@ export default function Market() {
         <main className="flex-1 overflow-y-auto pb-24 p-5 space-y-1">
           <div className="flex justify-end gap-2">
             <Link
-              to="/market/orders"
+              to="/market/orders/ORDER"
               className="group p-1 rounded-xl hover:bg-primary/20 cursor-pointer transition"
             >
               <ShoppingBag
