@@ -3,10 +3,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getMyInfo, getUserInfo } from "@/services/userService";
 import { followUser, unfollowUser } from "@/services/followService";
 
-import ProfileFreePage from "./ProfileFreePage";
 import WalkListPage from "../walk/WalkListPage";
 import ProfileAccompanyManagePage from "./ProfileAccompanyManagePage";
 import ProfilePartTimeManagePage from "./ProfilePartTimeManagePage.jsx";
+import ProfileMyFreePage from "./ProfileMyFreePage.jsx";
 
 export default function ProfilePage() {
   const navigate = useNavigate();
@@ -124,7 +124,9 @@ export default function ProfilePage() {
               <p className="text-xs text-[#B38A6A]">팔로워</p>
             </div>
             <div className="text-center">
-              <p className="text-lg font-semibold">{user.followingCount ?? 0}</p>
+              <p className="text-lg font-semibold">
+                {user.followingCount ?? 0}
+              </p>
               <p className="text-xs text-[#B38A6A]">팔로잉</p>
             </div>
 
@@ -239,17 +241,15 @@ export default function ProfilePage() {
         >
           알바
         </button>
-
       </div>
 
       {/* 탭 렌더링 */}
       <div className="mt-5 px-5">
-        {tab === "free" && <ProfileFreePage user={user} />}
+        {tab === "free" && <ProfileMyFreePage />}
         {tab === "walk" && <WalkListPage userId={user.id} />}
 
         {tab === "accompany" && <ProfileAccompanyManagePage user={user} />}
         {tab === "parttime" && <ProfilePartTimeManagePage user={user} />}
-
       </div>
 
       <div className="h-20" />
