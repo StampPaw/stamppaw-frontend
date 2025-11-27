@@ -18,6 +18,7 @@ import { getMyInfo } from "../../services/userService";
 // import UserMarker from "../../components/walk/UserMarker";
 import PointModal from "../../components/walk/PointModal";
 import MissionModal from "../../components/walk/MissionModal";
+import ProfileOverlay from "../../components/walk/ProfileOverlay";
 
 export default function WalkPage() {
   /** ----------------------------------------
@@ -363,23 +364,22 @@ export default function WalkPage() {
           }}
         >
           {/* 사용자 위치 마커 */}
-
           {position && (
-            <MapMarker
-              position={position}
-              image={{
-                // src: user?.profileImage
-                //   ? `http://localhost:8080/uploads/profile/${user.profileImage}`
-                //   : "/walk/marker3.png",
-                src: "/walk/marker3.png",
-                size: { width: 70, height: 70 },
-                options: {
-                  // origin: new kakao.maps.Point(0, 0),
-                  // offset: new kakao.maps.Point(35, 70),
-                },
-              }}
-              title={user?.name || "User"}
-            />
+            <>
+              <MapMarker
+                position={position}
+                image={{
+                  src: "/walk/marker3.png",
+                  size: { width: 70, height: 70 },
+                }}
+              />
+
+              {/* 🔥 사용자 프로필 오버레이 */}
+              <ProfileOverlay
+                position={position}
+                imageUrl={user?.profileImage}
+              />
+            </>
           )}
 
           {position && <RandomPointMarkers userLocation={position} />}

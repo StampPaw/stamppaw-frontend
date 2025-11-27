@@ -152,7 +152,7 @@ export default function WalkDetailPage() {
     : { lat: 37.5665, lng: 126.978 };
 
   return (
-    <div className="min-h-screen bg-bg text-gray-800 pt-12 pb-10">
+    <div className="min-h-screen bg-bg text-gray-800 pb-10">
       <div className="max-w-[600px] mx-auto px-6 pt-8">
         <div className="flex justify-between mb-6">
           <h1 className="text-2xl font-bold">🐾 산책 기록</h1>
