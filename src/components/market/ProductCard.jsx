@@ -52,20 +52,6 @@ export default function ProductCard({ product }) {
       .map(([key, value]) => `${key}:${value}`)
       .join("  / ");
 
-    let uploadedUrl = "";
-
-    // CLOTHING_GOODS라면 사진 선택 먼저 실행
-    if (
-      product.category === "CLOTHING_GOODS" ||
-      product.category === "의류굿즈"
-    ) {
-      if (!userImage) {
-        return alert(
-          "해당 상품은 반려견 사진이 필요합니다.\n사진을 업로드해주세요!"
-        );
-      }
-    }
-
     // 3) item 생성
     const item = {
       productId: product.id,
@@ -155,33 +141,6 @@ export default function ProductCard({ product }) {
               </div>
             ))}
           </div>
-          {product.category === "CLOTHING_GOODS" && (
-            <div className="space-y-3">
-              <p className="font-semibold text-sm mb-2">반려견 사진 업로드</p>
-              <input
-                id="dogImage"
-                type="file"
-                accept="image/*"
-                onChange={handleImageSelect}
-                className="hidden"
-              />
-              <label
-                htmlFor="dogImage"
-                className="inline-block bg-secondary px-4 py-2 rounded-lg border border-primary text-primary font-medium text-sm cursor-pointer hover:bg-primary hover:text-white transition"
-              >
-                사진 선택하기
-              </label>
-              {previewUrl && (
-                <div className="w-full aspect-square overflow-hidden rounded-lg border border-primary">
-                  <img
-                    src={previewUrl}
-                    alt="preview"
-                    className="w-full h-full object-cover"
-                  />
-                </div>
-              )}
-            </div>
-          )}
 
           <div className="flex items-center gap-3 mt-2 font-semibold text-sm">
             수량
