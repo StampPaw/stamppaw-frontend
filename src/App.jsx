@@ -98,7 +98,7 @@ function AppLayout() {
   const isWalkPage = noHeaderPaddingPages.includes(location.pathname);
 
   // 나머지 페이지에 padding top 적용
-  const mainPadding = !hideLayout && !isWalkPage ? "pt-12" : "";
+  const mainPadding = !hideLayout && !isWalkPage ? "pt-16" : "";
 
   return (
     <div className="relative min-h-screen bg-white text-text font-sans overflow-hidden">
